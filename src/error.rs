@@ -36,6 +36,10 @@ pub enum Error {
     /// Content directory not found.
     #[error("content directory not found: {0}")]
     ContentDirNotFound(PathBuf),
+
+    /// Failed to parse configuration file.
+    #[error("invalid config in {path}: {message}")]
+    Config { path: PathBuf, message: String },
 }
 
 /// Result type alias for compiler operations.

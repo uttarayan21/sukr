@@ -2,6 +2,7 @@
 //!
 //! Transforms markdown content into a minimal static site.
 
+mod config;
 mod content;
 mod css;
 mod error;
@@ -25,23 +26,27 @@ fn run() -> Result<()> {
     let content_dir = Path::new("content");
     let output_dir = Path::new("public");
     let static_dir = Path::new("static");
+    let config_path = Path::new("site.toml");
 
     if !content_dir.exists() {
         return Err(Error::ContentDirNotFound(content_dir.to_path_buf()));
     }
 
+    // Load site configuration
+    let config = config::SiteConfig::load(config_path)?;
+
     // 0. Copy static assets
     copy_static_assets(static_dir, output_dir)?;
 
     // 1. Process blog posts
-    let mut posts = process_blog_posts(content_dir, output_dir)?;
+    let mut posts = process_blog_posts(content_dir, output_dir, &config)?;
 
     // 2. Generate blog index (sorted by date, newest first)
     posts.sort_by(|a, b| b.frontmatter.date.cmp(&a.frontmatter.date));
-    generate_blog_index(output_dir, &posts)?;
+    generate_blog_index(output_dir, &posts, &config)?;
 
     // 3. Process standalone pages (about, collab)
-    process_pages(content_dir, output_dir)?;
+    process_pages(content_dir, output_dir, &config)?;
 
     // 4. Process projects and generate project index
     let mut projects = process_projects(content_dir)?;
@@ -51,17 +56,21 @@ fn run() -> Result<()> {
             .unwrap_or(99)
             .cmp(&b.frontmatter.weight.unwrap_or(99))
     });
-    generate_projects_index(output_dir, &projects)?;
+    generate_projects_index(output_dir, &projects, &config)?;
 
     // 5. Generate homepage
-    generate_homepage(content_dir, output_dir)?;
+    generate_homepage(content_dir, output_dir, &config)?;
 
     eprintln!("done!");
     Ok(())
 }
 
 /// Process all blog posts in content/blog/
-fn process_blog_posts(content_dir: &Path, output_dir: &Path) -> Result<Vec<Content>> {
+fn process_blog_posts(
+    content_dir: &Path,
+    output_dir: &Path,
+    config: &config::SiteConfig,
+) -> Result<Vec<Content>> {
     let blog_dir = content_dir.join("blog");
     let mut posts = Vec::new();
 
@@ -78,7 +87,8 @@ fn process_blog_posts(content_dir: &Path, output_dir: &Path) -> Result<Vec<Conte
 
         let content = Content::from_path(path, ContentKind::Post)?;
         let html_body = render::markdown_to_html(&content.body);
-        let page = templates::render_post(&content.frontmatter, &html_body, 1);
+        let page_path = format!("/{}", content.output_path(content_dir).display());
+        let page = templates::render_post(&content.frontmatter, &html_body, &page_path, config);
 
         write_output(output_dir, content_dir, &content, page.into_string())?;
         posts.push(content);
@@ -88,11 +98,15 @@ fn process_blog_posts(content_dir: &Path, output_dir: &Path) -> Result<Vec<Conte
 }
 
 /// Generate the blog listing page
-fn generate_blog_index(output_dir: &Path, posts: &[Content]) -> Result<()> {
+fn generate_blog_index(
+    output_dir: &Path,
+    posts: &[Content],
+    config: &config::SiteConfig,
+) -> Result<()> {
     let out_path = output_dir.join("blog/index.html");
     eprintln!("generating: {}", out_path.display());
 
-    let page = templates::render_blog_index("Blog", posts, 1);
+    let page = templates::render_blog_index("Blog", posts, "/blog/index.html", config);
 
     fs::create_dir_all(out_path.parent().unwrap()).map_err(|e| Error::CreateDir {
         path: out_path.parent().unwrap().to_path_buf(),
@@ -109,7 +123,7 @@ fn generate_blog_index(output_dir: &Path, posts: &[Content]) -> Result<()> {
 }
 
 /// Process standalone pages in content/ (about.md, collab.md)
-fn process_pages(content_dir: &Path, output_dir: &Path) -> Result<()> {
+fn process_pages(content_dir: &Path, output_dir: &Path, config: &config::SiteConfig) -> Result<()> {
     for name in ["about.md", "collab.md"] {
         let path = content_dir.join(name);
         if path.exists() {
@@ -117,7 +131,8 @@ fn process_pages(content_dir: &Path, output_dir: &Path) -> Result<()> {
 
             let content = Content::from_path(&path, ContentKind::Page)?;
             let html_body = render::markdown_to_html(&content.body);
-            let page = templates::render_page(&content.frontmatter, &html_body, 0);
+            let page_path = format!("/{}", content.output_path(content_dir).display());
+            let page = templates::render_page(&content.frontmatter, &html_body, &page_path, config);
 
             write_output(output_dir, content_dir, &content, page.into_string())?;
         }
@@ -146,11 +161,16 @@ fn process_projects(content_dir: &Path) -> Result<Vec<Content>> {
 }
 
 /// Generate the projects listing page
-fn generate_projects_index(output_dir: &Path, projects: &[Content]) -> Result<()> {
+fn generate_projects_index(
+    output_dir: &Path,
+    projects: &[Content],
+    config: &config::SiteConfig,
+) -> Result<()> {
     let out_path = output_dir.join("projects/index.html");
     eprintln!("generating: {}", out_path.display());
 
-    let page = templates::render_projects_index("Projects", projects, 1);
+    let page =
+        templates::render_projects_index("Projects", projects, "/projects/index.html", config);
 
     fs::create_dir_all(out_path.parent().unwrap()).map_err(|e| Error::CreateDir {
         path: out_path.parent().unwrap().to_path_buf(),
@@ -167,13 +187,17 @@ fn generate_projects_index(output_dir: &Path, projects: &[Content]) -> Result<()
 }
 
 /// Generate the homepage from content/_index.md
-fn generate_homepage(content_dir: &Path, output_dir: &Path) -> Result<()> {
+fn generate_homepage(
+    content_dir: &Path,
+    output_dir: &Path,
+    config: &config::SiteConfig,
+) -> Result<()> {
     let index_path = content_dir.join("_index.md");
     eprintln!("generating: homepage");
 
     let content = Content::from_path(&index_path, ContentKind::Section)?;
     let html_body = render::markdown_to_html(&content.body);
-    let page = templates::render_homepage(&content.frontmatter, &html_body, 0);
+    let page = templates::render_homepage(&content.frontmatter, &html_body, "/index.html", config);
 
     let out_path = output_dir.join("index.html");
 

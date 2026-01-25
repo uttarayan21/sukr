@@ -1,5 +1,6 @@
 //! HTML templates using maud.
 
+use crate::config::SiteConfig;
 use crate::content::{Content, Frontmatter};
 use maud::{html, Markup, PreEscaped, DOCTYPE};
 
@@ -16,7 +17,13 @@ fn relative_prefix(depth: usize) -> String {
 }
 
 /// Render a blog post with the base layout.
-pub fn render_post(frontmatter: &Frontmatter, content_html: &str, depth: usize) -> Markup {
+pub fn render_post(
+    frontmatter: &Frontmatter,
+    content_html: &str,
+    page_path: &str,
+    config: &SiteConfig,
+) -> Markup {
+    let depth = page_path.matches('/').count();
     let prefix = relative_prefix(depth);
     base_layout(
         &frontmatter.title,
@@ -43,12 +50,18 @@ pub fn render_post(frontmatter: &Frontmatter, content_html: &str, depth: usize) 
                 }
             }
         },
-        depth,
+        page_path,
+        config,
     )
 }
 
 /// Render a standalone page (about, collab, etc.)
-pub fn render_page(frontmatter: &Frontmatter, content_html: &str, depth: usize) -> Markup {
+pub fn render_page(
+    frontmatter: &Frontmatter,
+    content_html: &str,
+    page_path: &str,
+    config: &SiteConfig,
+) -> Markup {
     base_layout(
         &frontmatter.title,
         html! {
@@ -59,12 +72,18 @@ pub fn render_page(frontmatter: &Frontmatter, content_html: &str, depth: usize) 
                 }
             }
         },
-        depth,
+        page_path,
+        config,
     )
 }
 
 /// Render the homepage.
-pub fn render_homepage(frontmatter: &Frontmatter, content_html: &str, depth: usize) -> Markup {
+pub fn render_homepage(
+    frontmatter: &Frontmatter,
+    content_html: &str,
+    page_path: &str,
+    config: &SiteConfig,
+) -> Markup {
     base_layout(
         &frontmatter.title,
         html! {
@@ -78,12 +97,18 @@ pub fn render_homepage(frontmatter: &Frontmatter, content_html: &str, depth: usi
                 (PreEscaped(content_html))
             }
         },
-        depth,
+        page_path,
+        config,
     )
 }
 
 /// Render the blog listing page.
-pub fn render_blog_index(title: &str, posts: &[Content], depth: usize) -> Markup {
+pub fn render_blog_index(
+    title: &str,
+    posts: &[Content],
+    page_path: &str,
+    config: &SiteConfig,
+) -> Markup {
     base_layout(
         title,
         html! {
@@ -105,12 +130,18 @@ pub fn render_blog_index(title: &str, posts: &[Content], depth: usize) -> Markup
                 }
             }
         },
-        depth,
+        page_path,
+        config,
     )
 }
 
 /// Render the projects page with cards.
-pub fn render_projects_index(title: &str, projects: &[Content], depth: usize) -> Markup {
+pub fn render_projects_index(
+    title: &str,
+    projects: &[Content],
+    page_path: &str,
+    config: &SiteConfig,
+) -> Markup {
     base_layout(
         title,
         html! {
@@ -135,25 +166,30 @@ pub fn render_projects_index(title: &str, projects: &[Content], depth: usize) ->
                 }
             }
         },
-        depth,
+        page_path,
+        config,
     )
 }
 
 /// Base HTML layout wrapper.
-fn base_layout(title: &str, content: Markup, depth: usize) -> Markup {
+fn base_layout(title: &str, content: Markup, page_path: &str, config: &SiteConfig) -> Markup {
+    let depth = page_path.matches('/').count();
     let prefix = relative_prefix(depth);
+    let canonical_url = format!("{}{}", config.base_url.trim_end_matches('/'), page_path);
+
     html! {
         (DOCTYPE)
         html lang="en" {
             head {
                 meta charset="utf-8";
                 meta name="viewport" content="width=device-width, initial-scale=1";
-                title { (title) " | nrd.sh" }
+                title { (title) " | " (config.title) }
+                link rel="canonical" href=(canonical_url);
                 link rel="stylesheet" href=(format!("{}/style.css", prefix));
             }
             body {
                 nav {
-                    a href=(format!("{}/index.html", prefix)) { "nrd.sh" }
+                    a href=(format!("{}/index.html", prefix)) { (config.title) }
                     a href=(format!("{}/blog/index.html", prefix)) { "blog" }
                     a href=(format!("{}/projects/index.html", prefix)) { "projects" }
                     a href=(format!("{}/about.html", prefix)) { "about" }
@@ -162,7 +198,7 @@ fn base_layout(title: &str, content: Markup, depth: usize) -> Markup {
                     (content)
                 }
                 footer {
-                    p { "© nrdxp" }
+                    p { "© " (config.author) }
                 }
             }
         }

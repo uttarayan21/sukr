@@ -20,3 +20,7 @@ tree-sitter-rust      = "0.23"
 
 # CSS processing
 lightningcss = "1.0.0-alpha.70"
+
+# Config parsing
+serde = { version = "1", features = ["derive"] }
+toml  = "0.8"
