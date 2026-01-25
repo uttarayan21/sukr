@@ -1,3 +1,6 @@
 [submodule "themes/apollo"]
 	path = themes/apollo
 	url = https://github.com/not-matthias/apollo
+[submodule ".agent"]
+	path = .agent
+	url = https://github.com/nrdxp/predicate.git
