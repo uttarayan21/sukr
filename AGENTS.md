@@ -40,7 +40,7 @@ The agent MUST read and adhere to the global engineering ruleset and any active 
 
 - **Suckless:** No bloated runtimes, no unnecessary JavaScript
 - **Hermetic:** Single binary with all dependencies compiled in
-- **Elegant:** State-of-the-art syntax highlighting via Tree-sitter
+- **Elegant:** Syntax highlighting via Tree-sitter
 
 ### Architecture
 
@@ -85,15 +85,17 @@ nix build            # Build hermetic release binary
 .
 ├── Cargo.toml           # Rust manifest
 ├── flake.nix            # Nix build environment
+├── site.toml            # Site configuration
 ├── src/
 │   ├── main.rs          # Pipeline orchestrator
+│   ├── config.rs        # TOML config loader
+│   ├── feed.rs          # Atom feed generation
 │   ├── highlight.rs     # Tree-sitter highlighting
 │   ├── render.rs        # Pulldown-cmark interception
-│   └── assets.rs        # CSS processing
-├── queries/             # Tree-sitter S-expression queries
-├── content/             # Blog content (Markdown + TOML frontmatter)
-├── theme/               # Maud templates and CSS
-└── deprecated/          # Legacy Zola infrastructure (archived)
+│   └── templates.rs     # Maud HTML templates
+├── content/             # Blog content (Markdown + YAML frontmatter)
+├── static/              # CSS, images, _headers
+└── public/              # Generated output
 ```
 
 ---
@@ -116,12 +118,10 @@ nix build            # Build hermetic release binary
 
 ## Configuration
 
-Site configuration will be defined in `site.toml` (future):
+Site configuration lives in `site.toml`:
 
 ```toml
+title    = "nrd.sh"
+author   = "nrdxp"
 base_url = "https://nrd.sh/"
-title = "nrdxp"
-# ...
 ```
-
-Currently using hardcoded defaults during initial development.

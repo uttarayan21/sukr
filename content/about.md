@@ -2,13 +2,13 @@
 title: About
 ---
 
-I'm Tim DeHerrera (nrdxp), an engineer at [IOG](https://iog.io) where I help develop interoperable blockchain infrastructure for the Cardano ecosystem.
+I'm Tim DeHerrera (nrdxp), an engineer at [IOG](https://iog.io) where I work on blockchain infrastructure for the Cardano ecosystem.
 
-As co-founder of the [Ekala Project](https://github.com/ekala-project), I'm building next-generation tooling for reproducible builds and declarative systems.
+I co-founded the [Ekala Project](https://github.com/ekala-project) to build better tooling for reproducible builds and declarative systems.
 
-With a decade of experience in distributed systems, build infrastructure, and network optimization, I craft tools that emphasize reproducibility and determinism. My engineering approach leverages expressive type systems and functional programming paradigms, with current focus on the Rust and Nix ecosystems.
+I've spent about a decade working on distributed systems, build infrastructure, and network optimization. I mostly work in Rust and Nix these days, though I'll pick up whatever gets the job done. Reproducibility and determinism matter to me—probably more than they should.
 
-If you're interested in working together, supporting open source, or just want to discuss something interesting, consider [collaborating](/collab) with me or reaching out through any of the social links above.
+If any of this sounds interesting, check out the [collab](/collab.html) page or hit me up through the social links above.
 
 ## Sigs
 
