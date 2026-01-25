@@ -33,7 +33,7 @@ pub fn render_post(frontmatter: &Frontmatter, content_html: &str, depth: usize) 
                     @if !frontmatter.tags.is_empty() {
                         ul.tags {
                             @for tag in &frontmatter.tags {
-                                li { a href=(format!("{}/tags/{}/", prefix, tag)) { (tag) } }
+                                li { a href=(format!("{}/tags/{}.html", prefix, tag)) { (tag) } }
                             }
                         }
                     }
@@ -91,8 +91,8 @@ pub fn render_blog_index(title: &str, posts: &[Content], depth: usize) -> Markup
             ul.post-list {
                 @for post in posts {
                     li {
-                        // Posts are siblings in the same directory
-                        a href=(format!("./{}/", post.slug)) {
+                        // Posts are .html files in the same directory
+                        a href=(format!("./{}.html", post.slug)) {
                             span.title { (post.frontmatter.title) }
                             @if let Some(ref date) = post.frontmatter.date {
                                 time.date { (date) }
@@ -153,10 +153,10 @@ fn base_layout(title: &str, content: Markup, depth: usize) -> Markup {
             }
             body {
                 nav {
-                    a href=(format!("{}/", prefix)) { "nrd.sh" }
-                    a href=(format!("{}/blog/", prefix)) { "blog" }
-                    a href=(format!("{}/projects/", prefix)) { "projects" }
-                    a href=(format!("{}/about/", prefix)) { "about" }
+                    a href=(format!("{}/index.html", prefix)) { "nrd.sh" }
+                    a href=(format!("{}/blog/index.html", prefix)) { "blog" }
+                    a href=(format!("{}/projects/index.html", prefix)) { "projects" }
+                    a href=(format!("{}/about.html", prefix)) { "about" }
                 }
                 main {
                     (content)

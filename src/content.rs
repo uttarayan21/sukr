@@ -75,7 +75,7 @@ impl Content {
     }
 
     /// Compute the output path relative to the output directory.
-    /// e.g., content/blog/foo.md → blog/foo/index.html
+    /// e.g., content/blog/foo.md → blog/foo.html
     pub fn output_path(&self, content_root: &Path) -> PathBuf {
         let relative = self
             .source_path
@@ -84,14 +84,14 @@ impl Content {
 
         match self.kind {
             ContentKind::Section => {
-                // _index.md → parent/index.html
+                // _index.md → parent/index.html (listing pages stay as index.html)
                 let parent = relative.parent().unwrap_or(Path::new(""));
                 parent.join("index.html")
             }
             _ => {
-                // Regular content → parent/slug/index.html
+                // Regular content → parent/slug.html (flat structure)
                 let parent = relative.parent().unwrap_or(Path::new(""));
-                parent.join(&self.slug).join("index.html")
+                parent.join(format!("{}.html", self.slug))
             }
         }
     }

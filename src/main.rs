@@ -78,7 +78,7 @@ fn process_blog_posts(content_dir: &Path, output_dir: &Path) -> Result<Vec<Conte
 
         let content = Content::from_path(path, ContentKind::Post)?;
         let html_body = render::markdown_to_html(&content.body);
-        let page = templates::render_post(&content.frontmatter, &html_body, 2);
+        let page = templates::render_post(&content.frontmatter, &html_body, 1);
 
         write_output(output_dir, content_dir, &content, page.into_string())?;
         posts.push(content);
@@ -117,7 +117,7 @@ fn process_pages(content_dir: &Path, output_dir: &Path) -> Result<()> {
 
             let content = Content::from_path(&path, ContentKind::Page)?;
             let html_body = render::markdown_to_html(&content.body);
-            let page = templates::render_page(&content.frontmatter, &html_body, 1);
+            let page = templates::render_page(&content.frontmatter, &html_body, 0);
 
             write_output(output_dir, content_dir, &content, page.into_string())?;
         }
