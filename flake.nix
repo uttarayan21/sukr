@@ -30,21 +30,26 @@
         let
           pkgs = nixpkgs.legacyPackages.${system};
           fenixPkgs = fenix.packages.${system};
-          toolchain = fenixPkgs.fromToolchainFile { file = ./rust-toolchain.toml; sha256 = "sha256-vra6TkHITpwRyA5oBKAHSX0Mi6CBDNQD+ryPSpxFsfg=";};
+          toolchain = fenixPkgs.fromToolchainFile {
+            file = ./rust-toolchain.toml;
+            sha256 = "sha256-vra6TkHITpwRyA5oBKAHSX0Mi6CBDNQD+ryPSpxFsfg=";
+          };
         in
         {
           default = pkgs.mkShell.override { stdenv = pkgs.clangStdenv; } {
             RUST_SRC_PATH = "${toolchain}/lib/rustlib/src/rust/library";
-            packages =
-              [
-                toolchain
-                fenixPkgs.default.rustfmt
-                pkgs.pkg-config
-              ]
-              ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
-                pkgs.apple-sdk
-                pkgs.libiconv
-              ];
+            packages = [
+              toolchain
+              pkgs.treefmt
+              pkgs.shfmt
+              pkgs.taplo
+              pkgs.pkg-config
+              pkgs.nixfmt
+            ]
+            ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+              pkgs.apple-sdk
+              pkgs.libiconv
+            ];
           };
         }
       );

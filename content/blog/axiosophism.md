@@ -51,7 +51,7 @@ Let us review, building hierarchically, starting from our [axiom](../code-of-reb
 
 2.  Its **Purpose**? To preserve **Coherence**, where action effectively reduces entropy, like a well-tended garden against weeds.
 
-3.  The State is **Responsible** to *act* Coherently, exercising **Authority** to uphold its Purpose.
+3.  The State is **Responsible** to _act_ Coherently, exercising **Authority** to uphold its Purpose.
 
 4.  **Justice** is the consistent pruning and application of unambiguous rules which hold to this Purpose, fostering lasting stability. Thus, Justice is defined in terms of the Responsible application of Authority toward a coherent Purpose.
 
@@ -151,7 +151,7 @@ our z-axis moves downward from the rim, approaching a fifth dot: Justice
 
 Axiosophism derives realism from its axioms: a true world exists beyond perception, as evidenced by what empirically sustains coherence against entropy. Deeper inquiry converges us toward it, optimistically suggesting that challenging assumptions leads to greater unity in a Just society.
 
-This is a crucial obeservation, as it flies in the face of modern conventions of "position posturing", where vehemently denouncing your enemy's position is assumed a great moral "virtue". Worse still are the technologies that *automate* this purity spiral, systematically censoring dissent, when it is demonstrably *inquiry*, not denunciation, which cultivates Coherence and, in the proper Spirit, Justice. Axiosophy demands we address these "engines" of Corruption, redoubling a sense of urgency in decisive, coherent action.
+This is a crucial obeservation, as it flies in the face of modern conventions of "position posturing", where vehemently denouncing your enemy's position is assumed a great moral "virtue". Worse still are the technologies that _automate_ this purity spiral, systematically censoring dissent, when it is demonstrably _inquiry_, not denunciation, which cultivates Coherence and, in the proper Spirit, Justice. Axiosophy demands we address these "engines" of Corruption, redoubling a sense of urgency in decisive, coherent action.
 
 Still further, our new z-axis gauges viewpoint depth, exposing extremism's often shallow perspective. Policies are judged by real outcomes, not relativistic "inclusion" or affiliatory appeals.
 

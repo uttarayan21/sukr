@@ -40,7 +40,7 @@ But the platform's darker side is impossible to ignore. There's this growing exi
 
 And it's not just me. In a year that's already seen unprecedented attacks in the Red Sea, devastating fires & floods in California, and mounting global tensions, our collective ability to process and respond to crisis seems more important than ever. Yet social media's constant doom cycle paradoxically numbs us to real issues while amplifying manufactured ones.
 
- As if this cascade of global crises wasn't enough — from supply chain disruptions to social upheavals to AI regulation battles — the tech community seems to be fracturing right when we need collaboration most. All of this has me reconsidering my approach.
+As if this cascade of global crises wasn't enough — from supply chain disruptions to social upheavals to AI regulation battles — the tech community seems to be fracturing right when we need collaboration most. All of this has me reconsidering my approach.
 
 What started as an experiment in engagement has become an unwitting study in human nature and power dynamics. It's also, frankly, an exercise in self control, even for someone who has grown to rely on their own ability to remain disciplined. Perhaps I need to take planned hiatus periodically, or hire an account manager? Not yet sure...
 
@@ -64,7 +64,7 @@ And, to be clear, a mentoring culture isn't just about the teacher, it's just as
 
 As far as I can tell, this mentorship crisis reflects a deeper cultural confusion about strength and leadership. And whatever the cause, we clearly have a very hard time, nowadays, understanding and agreeing on the productive role of masculinity in all of it. It's worse, in fact: we can't even seem to agree on a definition.
 
-And just now, more than ever, we really seem to need to know the answer to move forward in *any* meaningful direction.
+And just now, more than ever, we really seem to need to know the answer to move forward in _any_ meaningful direction.
 
 ## What Is a Man?
 
@@ -72,9 +72,9 @@ The real challenge of masculinity isn't in rejecting or fully embracing our aggr
 
 What we're missing isn't less masculinity, but rather its mature expression: the kind that builds up rather than tears down, that guides rather than dominates, that acts rather than merely postures. True masculinity isn't about performative strength on social media — it's about having the backbone to stand up for what's right, the wisdom to know when and how to act, and the patience to guide others along their journey.
 
-Yet the endless rhetoric around gender has left little room for discussing the unique strengths and contributions of either of the sexes. I can only speak for myself and say it goes beyond mere protection or equality — as a man, I am glad; even honored, to consider the women in my life *more* precious than myself. This protective instinct — this drive to shield and support those we care about most with our lives — represents, to me, masculinity at its most refined.
+Yet the endless rhetoric around gender has left little room for discussing the unique strengths and contributions of either of the sexes. I can only speak for myself and say it goes beyond mere protection or equality — as a man, I am glad; even honored, to consider the women in my life _more_ precious than myself. This protective instinct — this drive to shield and support those we care about most with our lives — represents, to me, masculinity at its most refined.
 
-Still, we've heard *ad nauseum*, that acknowledging any fundamental differences between men and women is heresy. Perhaps I shouldn't, but I'll just say that the growing chorus of female athletes speaking out against the erosion of their sports stands as testament to the real-world consequences of ignoring biological reality. But I'm not here to argue these points — I'm here to highlight how this ideological enforcement has begun to poison technical spaces that once transcended such divisions.
+Still, we've heard _ad nauseum_, that acknowledging any fundamental differences between men and women is heresy. Perhaps I shouldn't, but I'll just say that the growing chorus of female athletes speaking out against the erosion of their sports stands as testament to the real-world consequences of ignoring biological reality. But I'm not here to argue these points — I'm here to highlight how this ideological enforcement has begun to poison technical spaces that once transcended such divisions.
 
 Throughout my career, I've maintained that technical spaces should remain focused on technical merit. When forced to engage in politically charged debates — often deliberately instigated — my argument has consistently been for maintaining neutral, technical spaces where our shared mission takes precedence over individual ideologies. Yet even this basic advocacy for political neutrality has been recast as aggression — a clever but transparent attempt to claim moral authority while actively undermining the very "inclusivity" they claim to protect.
 

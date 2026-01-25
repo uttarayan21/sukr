@@ -1,11 +1,11 @@
 [package]
-name = "nrd-sh"
-version = "0.1.0"
-edition = "2024"
 description = "Bespoke static site compiler for nrd.sh"
-license = "MIT"
+edition     = "2024"
+license     = "MIT"
+name        = "nrd-sh"
+version     = "0.1.0"
 
 [dependencies]
+gray_matter    = "0.2"
+maud           = "0.26"
 pulldown-cmark = "0.12"
-gray_matter = "0.2"
-maud = "0.26"

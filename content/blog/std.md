@@ -214,7 +214,7 @@ all the way up to a large organization's monorepo. Stay tuned...
 
 [digga]: https://github.com/divnix/digga
 [nosys]: https://github.com/divnix/nosys
-[action]: https://github.com/divnix/std-action 
+[action]: https://github.com/divnix/std-action
 [grow]: https://std.divnix.com/guides/growing-cells.html
 [harvest]: https://github.com/divnix/std/blob/main/src/harvest.nix
 [n2c]: https://github.com/nlewo/nix2container

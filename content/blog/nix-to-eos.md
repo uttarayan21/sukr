@@ -23,7 +23,7 @@ This piece explores the evolution of store-based systems and our vision for thei
 
 It's important to note that this post specifically outlines my personal plans and intended contributions to Ekala. There are several other significant [related efforts](https://github.com/ekala-project/ekapkgs-roadmap) already in progress, driven by our other founders and contributors, which complement and extend beyond what's discussed here.
 
-## Reflections 
+## Reflections
 
 I recently decided to take an extended vacation—a choice that might seem odd right after a major public announcement and development push. But this time was vital for introspection. During this pause, I stumbled upon a concept that, while humbling, is proving invaluable: "Thought Driven Development." The rule is simple yet profound: if you don’t have the answer, don’t rush to write the code. This approach has illuminated my path, emphasizing that realizing Ekala’s potential requires a deep understanding of our origins and intentions, without drowning in unnecessary details.
 
@@ -90,6 +90,7 @@ The complexity cost is equally concerning. The system's computational bounds are
 What makes this particularly insidious is how the module system has become the _de facto_ standard for configuration in the Nix ecosystem, creating an unbounded cataclysm with no meaningful alternatives. Even seasoned Nix developers with extraordinary debugging skills and monk-like patience find themselves trapped in an endless cycle—documenting meta-wrappers around functionality that should have been properly documented upstream. This is especially evident in nixpkgs, one of the largest collaborative software efforts in existence. Despite its impressive scale, a significant portion of development effort is consumed by maintaining complex module semantics that fundamentally shouldn't exist.
 
 What we need instead is a true module system—one that provides:
+
 - Clear semantic boundaries between components
 - Predictable evaluation characteristics
 - First-class support for proper information hiding

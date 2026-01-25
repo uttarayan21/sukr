@@ -2,10 +2,10 @@
 title: "No-Fault Tyranny: An Indictment of Title IV-D and the Assault Upon Family and Freedom"
 description: "Exposing the Lies Once and For All"
 taxonomies:
-   tags:
-      - law
-      - justice
-      - balance
+  tags:
+    - law
+    - justice
+    - balance
 author: "Tim D"
 authorGithub: "nrdxp"
 authorImage: "https://avatars.githubusercontent.com/u/34083928?v=4"
@@ -46,16 +46,17 @@ Now I shall conclude this introduction with a question to the reader. How free i
 
 ---
 
+# IN THE UNITED STATES DISTRICT COURT
 
-# IN THE UNITED STATES DISTRICT COURT  
-# FOR THE EASTERN DISTRICT OF TENNESSEE  
-# GREENEVILLE DIVISION  
+# FOR THE EASTERN DISTRICT OF TENNESSEE
 
-TIMOTHY WILLIAMS,  
+# GREENEVILLE DIVISION
 
-Plaintiff,  
+TIMOTHY WILLIAMS,
 
-v.  
+Plaintiff,
+
+v.
 
 THE STATE OF COLORADO;  
 PHIL WEISER, in his official capacity as Attorney General of Colorado;  
@@ -64,200 +65,197 @@ COLORADO DISTRICT ATTORNEYS' COUNCIL;
 ROBERT F. KENNEDY JR., in his official capacity as Secretary of Health and Human Services;  
 U.S. DEPARTMENT OF HEALTH AND HUMAN SERVICES;  
 OFFICE OF CHILD SUPPORT ENFORCEMENT;  
-DOES 1-20  
+DOES 1-20
 
-Defendants.  
+Defendants.
 
-Case No. \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_  
+Case No. \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 **CIVIL RIGHTS COMPLAINT UNDER 42 U.S.C. § 1983**  
 **FACIAL CONSTITUTIONAL CHALLENGE TO TITLE IV-D RACKETEERING ENTERPRISE**  
-**WITH REQUEST FOR EMERGENCY NATIONWIDE RELIEF**  
+**WITH REQUEST FOR EMERGENCY NATIONWIDE RELIEF**
 
 Timothy Williams, Pro Se  
 [Address]  
 [Phone Number]  
-[Email Address]  
+[Email Address]
 
-## Table of Contents  
+## Table of Contents
 
-- [Nature of the Action](#nature-of-the-action)  
-- [Jurisdiction and Venue](#jurisdiction-and-venue)  
-- [Parties](#parties)  
-- [Standing, Ripeness, and Justiciability](#standing-ripeness-and-justiciability)  
-- [Discovery of Title IV-D Racketeering Enterprise](#discovery-of-title-iv-d-racketeering-enterprise)  
-- [The Systemic Funnel of Constitutional Violations](#the-systemic-funnel-of-constitutional-violations)  
-- [Substantive Due Process Violations](#substantive-due-process-violations)  
-- [Procedural Due Process Violations](#procedural-due-process-violations)  
-- [Other Constitutional Violations](#other-constitutional-violations)  
-- [Colorado's Systematic Bias Necessitating Forum Change](#forum-change)  
-- [Title IV-D as a Criminal Racketeering Organization Masquerading Under Color of Law](#title-iv-d-as-a-criminal-racketeering-organization-masquerading-under-color-of-law)  
-- [Summary of Constitutional Claims Facial Challenge to Title IV-D Racketeering Scheme](#summary-of-constitutional-claims-facial-challenge-to-title-iv-d-racketeering-scheme)  
-- [Prayer for Relief](#prayer-for-relief)  
+- [Nature of the Action](#nature-of-the-action)
+- [Jurisdiction and Venue](#jurisdiction-and-venue)
+- [Parties](#parties)
+- [Standing, Ripeness, and Justiciability](#standing-ripeness-and-justiciability)
+- [Discovery of Title IV-D Racketeering Enterprise](#discovery-of-title-iv-d-racketeering-enterprise)
+- [The Systemic Funnel of Constitutional Violations](#the-systemic-funnel-of-constitutional-violations)
+- [Substantive Due Process Violations](#substantive-due-process-violations)
+- [Procedural Due Process Violations](#procedural-due-process-violations)
+- [Other Constitutional Violations](#other-constitutional-violations)
+- [Colorado's Systematic Bias Necessitating Forum Change](#forum-change)
+- [Title IV-D as a Criminal Racketeering Organization Masquerading Under Color of Law](#title-iv-d-as-a-criminal-racketeering-organization-masquerading-under-color-of-law)
+- [Summary of Constitutional Claims Facial Challenge to Title IV-D Racketeering Scheme](#summary-of-constitutional-claims-facial-challenge-to-title-iv-d-racketeering-scheme)
+- [Prayer for Relief](#prayer-for-relief)
 
-## Table of Authorities  
+## Table of Authorities
 
-### Cases  
+### Cases
 
-- Aetna Life Ins. Co. v. Lavoie, 475 U.S. 813 (1986)  
-- Allied Structural Steel Co. v. Spannaus, 438 U.S. 234 (1978)  
-- Bailey v. Alabama, 219 U.S. 219 (1911)  
-- Board of Directors of Rotary International v. Rotary Club, 481 U.S. 537 (1987)  
-- Boy Scouts of America v. Dale, 530 U.S. 640 (2000)  
-- Caperton v. A.T. Massey Coal Co., 556 U.S. 868 (2009)  
-- Cedric Kushner Promotions, Ltd. v. King, 533 U.S. 158 (2001)  
-- Church of the Lukumi Babalu Aye v. Hialeah, 508 U.S. 520 (1993)  
-- Clyatt v. United States, 197 U.S. 207 (1905)  
-- Coffin v. United States, 156 U.S. 432 (1895)  
-- County of Sacramento v. Lewis, 523 U.S. 833 (1998)  
-- Cox v. Louisiana, 379 U.S. 559 (1965)  
-- Dartmouth College v. Woodward, 17 U.S. 518 (1819)  
-- DeShaney v. Winnebago County, 489 U.S. 189 (1989)  
-- Employment Div. v. Smith, 494 U.S. 872 (1990)  
-- Energy Reserves Group v. Kansas Power & Light, 459 U.S. 400 (1983)  
-- Ex parte Young, 209 U.S. 123 (1908)  
-- Fletcher v. Peck, 10 U.S. 87 (1810)  
-- Gibson v. Berryhill, 411 U.S. 564 (1973)  
-- Goldberg v. Kelly, 397 U.S. 254 (1970)  
-- Gonzales v. Raich, 545 U.S. 1 (2005)  
-- Griffin v. Illinois, 351 U.S. 12 (1956)  
-- Gulf Oil Corp. v. Gilbert, 330 U.S. 501 (1947)  
+- Aetna Life Ins. Co. v. Lavoie, 475 U.S. 813 (1986)
+- Allied Structural Steel Co. v. Spannaus, 438 U.S. 234 (1978)
+- Bailey v. Alabama, 219 U.S. 219 (1911)
+- Board of Directors of Rotary International v. Rotary Club, 481 U.S. 537 (1987)
+- Boy Scouts of America v. Dale, 530 U.S. 640 (2000)
+- Caperton v. A.T. Massey Coal Co., 556 U.S. 868 (2009)
+- Cedric Kushner Promotions, Ltd. v. King, 533 U.S. 158 (2001)
+- Church of the Lukumi Babalu Aye v. Hialeah, 508 U.S. 520 (1993)
+- Clyatt v. United States, 197 U.S. 207 (1905)
+- Coffin v. United States, 156 U.S. 432 (1895)
+- County of Sacramento v. Lewis, 523 U.S. 833 (1998)
+- Cox v. Louisiana, 379 U.S. 559 (1965)
+- Dartmouth College v. Woodward, 17 U.S. 518 (1819)
+- DeShaney v. Winnebago County, 489 U.S. 189 (1989)
+- Employment Div. v. Smith, 494 U.S. 872 (1990)
+- Energy Reserves Group v. Kansas Power & Light, 459 U.S. 400 (1983)
+- Ex parte Young, 209 U.S. 123 (1908)
+- Fletcher v. Peck, 10 U.S. 87 (1810)
+- Gibson v. Berryhill, 411 U.S. 564 (1973)
+- Goldberg v. Kelly, 397 U.S. 254 (1970)
+- Gonzales v. Raich, 545 U.S. 1 (2005)
+- Griffin v. Illinois, 351 U.S. 12 (1956)
+- Gulf Oil Corp. v. Gilbert, 330 U.S. 501 (1947)
 - Haines v. Kerner, 404 U.S. 519 (1972)
-- H.J. Inc. v. Northwestern Bell Telephone Co., 492 U.S. 229 (1989)  
-- Holmes v. Securities Investor Protection Corp., 503 U.S. 258 (1992)  
-- Home Building & Loan Ass'n v. Blaisdell, 290 U.S. 398 (1934)  
-- In re Murchison, 349 U.S. 133 (1955)  
-- In re National Presto Industries, Inc., 347 F.3d 662 (7th Cir. 2003)  
-- In re Winship, 397 U.S. 358 (1970)  
-- Little v. Streater, 452 U.S. 1 (1981)  
-- Lochner v. New York, 198 U.S. 45 (1905)  
-- Lujan v. Defenders of Wildlife, 504 U.S. 555 (1992)  
-- Mathews v. Eldridge, 424 U.S. 319 (1976)  
-- Maynard v. Hill, 125 U.S. 190 (1888)  
-- Meyer v. Nebraska, 262 U.S. 390 (1923)  
-- Murphy v. National Collegiate Athletic Ass'n, 138 S. Ct. 1461 (2018)  
-- New York v. United States, 505 U.S. 144 (1992)  
+- H.J. Inc. v. Northwestern Bell Telephone Co., 492 U.S. 229 (1989)
+- Holmes v. Securities Investor Protection Corp., 503 U.S. 258 (1992)
+- Home Building & Loan Ass'n v. Blaisdell, 290 U.S. 398 (1934)
+- In re Murchison, 349 U.S. 133 (1955)
+- In re National Presto Industries, Inc., 347 F.3d 662 (7th Cir. 2003)
+- In re Winship, 397 U.S. 358 (1970)
+- Little v. Streater, 452 U.S. 1 (1981)
+- Lochner v. New York, 198 U.S. 45 (1905)
+- Lujan v. Defenders of Wildlife, 504 U.S. 555 (1992)
+- Mathews v. Eldridge, 424 U.S. 319 (1976)
+- Maynard v. Hill, 125 U.S. 190 (1888)
+- Meyer v. Nebraska, 262 U.S. 390 (1923)
+- Murphy v. National Collegiate Athletic Ass'n, 138 S. Ct. 1461 (2018)
+- New York v. United States, 505 U.S. 144 (1992)
 - Northern Pipeline Construction Co. v. Marathon Pipe Line Co., 458 U.S. 50, 58 (1982)
-- Parham v. J.R., 442 U.S. 584 (1979)  
-- Parratt v. Taylor, 451 U.S. 527 (1981)  
-- Pierce v. Society of Sisters, 268 U.S. 510 (1925)  
-- Pollock v. Williams, 322 U.S. 4 (1944)  
-- Printz v. United States, 521 U.S. 898 (1997)  
-- Reed v. Reed, 404 U.S. 71 (1971)  
-- Reno v. Flores, 507 U.S. 292 (1993)  
-- Research Automation, Inc. v. Schrader-Bridgeport Int'l, Inc., 626 F.3d 973 (7th Cir. 2010)  
-- Reves v. Ernst & Young, 507 U.S. 170 (1993)  
-- Roberts v. United States Jaycees, 468 U.S. 609 (1984)  
-- Rochin v. California, 342 U.S. 165 (1952)  
-- Rotella v. Wood, 528 U.S. 549 (2000)  
-- Santosky v. Kramer, 455 U.S. 745 (1982)  
-- Sedima, S.P.R.L. v. Imrex Co., 473 U.S. 479 (1985)  
-- Sherbert v. Verner, 374 U.S. 398 (1963)  
-- Stanley v. Illinois, 405 U.S. 645 (1972)  
-- Steffel v. Thompson, 415 U.S. 452 (1974)  
+- Parham v. J.R., 442 U.S. 584 (1979)
+- Parratt v. Taylor, 451 U.S. 527 (1981)
+- Pierce v. Society of Sisters, 268 U.S. 510 (1925)
+- Pollock v. Williams, 322 U.S. 4 (1944)
+- Printz v. United States, 521 U.S. 898 (1997)
+- Reed v. Reed, 404 U.S. 71 (1971)
+- Reno v. Flores, 507 U.S. 292 (1993)
+- Research Automation, Inc. v. Schrader-Bridgeport Int'l, Inc., 626 F.3d 973 (7th Cir. 2010)
+- Reves v. Ernst & Young, 507 U.S. 170 (1993)
+- Roberts v. United States Jaycees, 468 U.S. 609 (1984)
+- Rochin v. California, 342 U.S. 165 (1952)
+- Rotella v. Wood, 528 U.S. 549 (2000)
+- Santosky v. Kramer, 455 U.S. 745 (1982)
+- Sedima, S.P.R.L. v. Imrex Co., 473 U.S. 479 (1985)
+- Sherbert v. Verner, 374 U.S. 398 (1963)
+- Stanley v. Illinois, 405 U.S. 645 (1972)
+- Steffel v. Thompson, 415 U.S. 452 (1974)
 - Stern v. Marshall, 564 U.S. 462, 484 (2011)
-- Sturges v. Crowninshield, 17 U.S. 122 (1819)  
-- Susan B. Anthony List v. Driehaus, 573 U.S. 149 (2014)  
-- Troxel v. Granville, 530 U.S. 57 (2000)  
-- Tumey v. Ohio, 273 U.S. 510 (1927)  
+- Sturges v. Crowninshield, 17 U.S. 122 (1819)
+- Susan B. Anthony List v. Driehaus, 573 U.S. 149 (2014)
+- Troxel v. Granville, 530 U.S. 57 (2000)
+- Tumey v. Ohio, 273 U.S. 510 (1927)
 - Turner v. Rogers, 564 U.S. 431, 435 (2011)
-- United States v. Angelilli, 660 F.2d 23 (2d Cir. 1981)  
-- United States v. Maloney, 71 F.3d 645 (7th Cir. 1995)  
-- United States v. Robertson, 514 U.S. 669 (1995)  
-- United States v. Shenberg, 89 F.3d 1461 (11th Cir. 1996)  
-- United States v. Thompson, 685 F.2d 993 (6th Cir. 1982)  
+- United States v. Angelilli, 660 F.2d 23 (2d Cir. 1981)
+- United States v. Maloney, 71 F.3d 645 (7th Cir. 1995)
+- United States v. Robertson, 514 U.S. 669 (1995)
+- United States v. Shenberg, 89 F.3d 1461 (11th Cir. 1996)
+- United States v. Thompson, 685 F.2d 993 (6th Cir. 1982)
 - United States v. Jackson, 196 F.3d 383, 387 (2d Cir. 1999)
-- United States Trust Co. v. New Jersey, 431 U.S. 1 (1977)  
-- Ward v. Village of Monroeville, 409 U.S. 57 (1972)  
-- Washington v. Glucksberg, 521 U.S. 702 (1997)  
-- Washington v. Harper, 494 U.S. 210 (1990)  
+- United States Trust Co. v. New Jersey, 431 U.S. 1 (1977)
+- Ward v. Village of Monroeville, 409 U.S. 57 (1972)
+- Washington v. Glucksberg, 521 U.S. 702 (1997)
+- Washington v. Harper, 494 U.S. 210 (1990)
 - Wilkie v. Robbins, 551 U.S. 537 (2007)
-- Wisconsin v. Yoder, 406 U.S. 205 (1972)  
-- Younger v. Harris, 401 U.S. 37 (1971)  
+- Wisconsin v. Yoder, 406 U.S. 205 (1972)
+- Younger v. Harris, 401 U.S. 37 (1971)
 
-## Nature of the Action  
+## Nature of the Action
 
-This facial constitutional challenge exposes Colorado's family law system as a federally-incentivized racketeering enterprise that systematically violates fundamental parental rights for financial profit. State and federal actors, operating under color of law, have created a criminal organization masquerading as legitimate government function, generating hundreds of millions in federal Title IV-D revenue through constitutional deprivations affecting Plaintiff and similarly situated individuals nationwide. This § 1983 action seeks to dismantle this illegal enterprise and restore constitutional governance while establishing binding precedent that states cannot claim federal mandate immunity when enforcing facially unconstitutional federal programs that commandeer state judicial systems into systematic constitutional violations. By holding states liable for enforcing such mandates, this action aims to re-establish the originally intended federalist balance in America, preventing federal overreach that coerces states into violating citizens' rights.  
+This facial constitutional challenge exposes Colorado's family law system as a federally-incentivized racketeering enterprise that systematically violates fundamental parental rights for financial profit. State and federal actors, operating under color of law, have created a criminal organization masquerading as legitimate government function, generating hundreds of millions in federal Title IV-D revenue through constitutional deprivations affecting Plaintiff and similarly situated individuals nationwide. This § 1983 action seeks to dismantle this illegal enterprise and restore constitutional governance while establishing binding precedent that states cannot claim federal mandate immunity when enforcing facially unconstitutional federal programs that commandeer state judicial systems into systematic constitutional violations. By holding states liable for enforcing such mandates, this action aims to re-establish the originally intended federalist balance in America, preventing federal overreach that coerces states into violating citizens' rights.
 
-Plaintiff's claims are not barred by Younger abstention, as this is a facial constitutional challenge to state and federal statutes of national importance, and Plaintiff intends to withdraw any ongoing state proceedings to avoid interference. See Steffel v. Thompson, 415 U.S. 452 (1974) (federal courts should not abstain from hearing constitutional challenges to state statutes merely because related state proceedings exist, particularly in facial challenges). Moreover, the ongoing harms are capable of repetition yet evading review, warranting federal intervention regardless of state proceedings.  
+Plaintiff's claims are not barred by Younger abstention, as this is a facial constitutional challenge to state and federal statutes of national importance, and Plaintiff intends to withdraw any ongoing state proceedings to avoid interference. See Steffel v. Thompson, 415 U.S. 452 (1974) (federal courts should not abstain from hearing constitutional challenges to state statutes merely because related state proceedings exist, particularly in facial challenges). Moreover, the ongoing harms are capable of repetition yet evading review, warranting federal intervention regardless of state proceedings.
 
-## Jurisdiction and Venue  
+## Jurisdiction and Venue
 
-1. This Court has subject matter jurisdiction under 28 U.S.C. §§ 1331 (federal question), 1343 (civil rights), and the Declaratory Judgment Act, 28 U.S.C. § 2201. This action arises under 42 U.S.C. § 1983, 18 U.S.C. § 1961 et seq. (RICO), and the First, Fourth, Fifth, Sixth, Eighth, Ninth, Tenth, Thirteenth, and Fourteenth Amendments to the United States Constitution, Article I, Section 10 (Contracts Clause), and Article III (judicial power limitations).  
+1. This Court has subject matter jurisdiction under 28 U.S.C. §§ 1331 (federal question), 1343 (civil rights), and the Declaratory Judgment Act, 28 U.S.C. § 2201. This action arises under 42 U.S.C. § 1983, 18 U.S.C. § 1961 et seq. (RICO), and the First, Fourth, Fifth, Sixth, Eighth, Ninth, Tenth, Thirteenth, and Fourteenth Amendments to the United States Constitution, Article I, Section 10 (Contracts Clause), and Article III (judicial power limitations).
 
-2. Venue is proper under 28 U.S.C. § 1391(e) as this action challenges federal programs with nationwide application administered by federal defendants, and under § 1391(b) as constitutional violations have interstate effects. Plaintiff has established Tennessee residency and resides within the Eastern District of Tennessee, Greeneville Division, seeking constitutional refuge from systematic bias in Colorado's judicial system that renders fair adjudication impossible due to institutional financial dependency on the challenged Title IV-D revenue streams. Additional defendants may be joined under the Federal Rules of Civil Procedure without affecting venue, as the action involves federal agencies and officials. See 28 U.S.C. § 1391(e)(1)(C) (venue proper where plaintiff resides in actions against federal officials where no real property is involved).  
+2. Venue is proper under 28 U.S.C. § 1391(e) as this action challenges federal programs with nationwide application administered by federal defendants, and under § 1391(b) as constitutional violations have interstate effects. Plaintiff has established Tennessee residency and resides within the Eastern District of Tennessee, Greeneville Division, seeking constitutional refuge from systematic bias in Colorado's judicial system that renders fair adjudication impossible due to institutional financial dependency on the challenged Title IV-D revenue streams. Additional defendants may be joined under the Federal Rules of Civil Procedure without affecting venue, as the action involves federal agencies and officials. See 28 U.S.C. § 1391(e)(1)(C) (venue proper where plaintiff resides in actions against federal officials where no real property is involved).
 
-3. Constitutional Necessity of Forum Change: Plaintiff originally filed constitutional claims in the District of Colorado (Case No. [redacted]) but discovered systematic judicial bias that makes impartial adjudication structurally impossible. Colorado's financial dependency on Title IV-D revenue creates institutional conflicts of interest that violate due process requirements for neutral tribunals, as evidenced by eight weeks of systematic obstruction regarding missing children and arbitrary denial followed by acceptance of identical emergency motions. Plaintiff intends to voluntarily dismiss the Colorado federal action upon filing here to consolidate proceedings and avoid duplication.  
+3. Constitutional Necessity of Forum Change: Plaintiff originally filed constitutional claims in the District of Colorado (Case No. [redacted]) but discovered systematic judicial bias that makes impartial adjudication structurally impossible. Colorado's financial dependency on Title IV-D revenue creates institutional conflicts of interest that violate due process requirements for neutral tribunals, as evidenced by eight weeks of systematic obstruction regarding missing children and arbitrary denial followed by acceptance of identical emergency motions. Plaintiff intends to voluntarily dismiss the Colorado federal action upon filing here to consolidate proceedings and avoid duplication.
 
-## Parties  
+## Parties
 
-### Plaintiff:  
+### Plaintiff:
 
-4. Timothy Williams, a United States citizen who has established Tennessee residency to escape systematic constitutional violations spanning his entire adult life in Colorado. Plaintiff seeks constitutional refuge in this Court due to Colorado's demonstrated inability to provide impartial adjudication of challenges to the federal funding programs supporting their judicial operations. Plaintiff has standing based on ongoing harms, including deprivation of parental rights, threats of economic coercion, and systematic bias in enforcement, which are redressable through the requested relief.  
+4. Timothy Williams, a United States citizen who has established Tennessee residency to escape systematic constitutional violations spanning his entire adult life in Colorado. Plaintiff seeks constitutional refuge in this Court due to Colorado's demonstrated inability to provide impartial adjudication of challenges to the federal funding programs supporting their judicial operations. Plaintiff has standing based on ongoing harms, including deprivation of parental rights, threats of economic coercion, and systematic bias in enforcement, which are redressable through the requested relief.
 
-### State Defendants:  
+### State Defendants:
 
-5. The State of Colorado, sued under Ex parte Young, 209 U.S. 123 (1908), for systematic enforcement of facially unconstitutional statutes in violation of federal civil rights, including C.R.S. § 14-10-124 (best interest determinations), C.R.S. § 14-14-107.5 (parental responsibility allocations), C.R.S. § 19-1-103 (state intervention standards), C.R.S. § 18-6-801 (domestic violence), C.R.S. § 14-10-106 (no-fault divorce provisions), C.R.S. § 13-14-102 (protection orders), C.R.S. § 14-10-115 (child support), C.R.S. § 14-10-114 (maintenance), C.R.S. § 14-14-107 (income withholding), C.R.S. § 14-14-111 (contempt enforcement), and C.R.S. § 18-3-304 (parental kidnapping).  
+5. The State of Colorado, sued under Ex parte Young, 209 U.S. 123 (1908), for systematic enforcement of facially unconstitutional statutes in violation of federal civil rights, including C.R.S. § 14-10-124 (best interest determinations), C.R.S. § 14-14-107.5 (parental responsibility allocations), C.R.S. § 19-1-103 (state intervention standards), C.R.S. § 18-6-801 (domestic violence), C.R.S. § 14-10-106 (no-fault divorce provisions), C.R.S. § 13-14-102 (protection orders), C.R.S. § 14-10-115 (child support), C.R.S. § 14-10-114 (maintenance), C.R.S. § 14-14-107 (income withholding), C.R.S. § 14-14-111 (contempt enforcement), and C.R.S. § 18-3-304 (parental kidnapping).
 
-6. Phil Weiser, in his official capacity as Attorney General of Colorado, sued for enforcement of unconstitutional statutes and failure to protect constitutional rights while enabling systematic Title IV-D revenue generation through constitutional violations.  
+6. Phil Weiser, in his official capacity as Attorney General of Colorado, sued for enforcement of unconstitutional statutes and failure to protect constitutional rights while enabling systematic Title IV-D revenue generation through constitutional violations.
 
-7. Colorado Judicial Department, sued for systematic constitutional violations and institutional bias created by Title IV-D financial conflicts, including physical denial of court access and arbitrary enforcement of procedural requirements designed to obstruct constitutional challenges.  
+7. Colorado Judicial Department, sued for systematic constitutional violations and institutional bias created by Title IV-D financial conflicts, including physical denial of court access and arbitrary enforcement of procedural requirements designed to obstruct constitutional challenges.
 
-8. Colorado District Attorneys' Council, sued for systematic prosecutorial policies that violate constitutional rights to generate federal revenue, including selective enforcement based on Title IV-D funding incentives.  
+8. Colorado District Attorneys' Council, sued for systematic prosecutorial policies that violate constitutional rights to generate federal revenue, including selective enforcement based on Title IV-D funding incentives.
 
-### Federal Defendants:  
+### Federal Defendants:
 
-9. Robert F. Kennedy Jr., in his official capacity as Secretary of Health and Human Services, sued for administering the unconstitutional Title IV-D program under 42 U.S.C. § 658a that commandeers states into constitutional violations through financial incentives.  
+9. Robert F. Kennedy Jr., in his official capacity as Secretary of Health and Human Services, sued for administering the unconstitutional Title IV-D program under 42 U.S.C. § 658a that commandeers states into constitutional violations through financial incentives.
 
-10. U.S. Department of Health and Human Services, sued for creating and maintaining federal programs that systematically violate constitutional rights by conditioning funding on enforcement of facially unconstitutional procedures.  
+10. U.S. Department of Health and Human Services, sued for creating and maintaining federal programs that systematically violate constitutional rights by conditioning funding on enforcement of facially unconstitutional procedures.
 
-11. Office of Child Support Enforcement, sued for direct administration of Title IV-D programs that incentivize constitutional violations through performance-based funding formulas that reward family destruction and parental rights violations.  
+11. Office of Child Support Enforcement, sued for direct administration of Title IV-D programs that incentivize constitutional violations through performance-based funding formulas that reward family destruction and parental rights violations.
 
-12. Does 1-20, unknown federal and state actors who participated in the systematic deprivation of constitutional rights under this racketeering enterprise.  
+12. Does 1-20, unknown federal and state actors who participated in the systematic deprivation of constitutional rights under this racketeering enterprise.
 
-## Standing, Ripeness, and Justiciability  
+## Standing, Ripeness, and Justiciability
 
-13. Plaintiff has standing under Lujan v. Defenders of Wildlife, 504 U.S. 555 (1992), as he suffers concrete injuries from the challenged statutes, including ongoing deprivation of parental rights, economic coercion, and threats of selective enforcement, directly caused by the Title IV-D enterprise and redressable through declaratory and injunctive relief.  
+13. Plaintiff has standing under Lujan v. Defenders of Wildlife, 504 U.S. 555 (1992), as he suffers concrete injuries from the challenged statutes, including ongoing deprivation of parental rights, economic coercion, and threats of selective enforcement, directly caused by the Title IV-D enterprise and redressable through declaratory and injunctive relief.
 
-14. The claims are ripe as the harms are ongoing and imminent, with Plaintiff facing active threats from the system. See Susan B. Anthony List v. Driehaus, 573 U.S. 149 (2014) (pre-enforcement challenges ripe where credible threat of enforcement exists).  
+14. The claims are ripe as the harms are ongoing and imminent, with Plaintiff facing active threats from the system. See Susan B. Anthony List v. Driehaus, 573 U.S. 149 (2014) (pre-enforcement challenges ripe where credible threat of enforcement exists).
 
-15. The action is justiciable as it presents facial challenges to statutes with nationwide implications, not abstract disputes.  
+15. The action is justiciable as it presents facial challenges to statutes with nationwide implications, not abstract disputes.
 
-## Discovery of Title IV-D Racketeering Enterprise  
+## Discovery of Title IV-D Racketeering Enterprise
 
-16. Post-Filing Discovery of Federal Conspiracy: Subsequent to filing constitutional claims in Colorado, Plaintiff discovered the underlying financial mechanism driving systematic constitutional violations: the Title IV-D federal funding program under 42 U.S.C. § 658a that creates direct financial incentives for state actors to violate constitutional rights.  
+16. Post-Filing Discovery of Federal Conspiracy: Subsequent to filing constitutional claims in Colorado, Plaintiff discovered the underlying financial mechanism driving systematic constitutional violations: the Title IV-D federal funding program under 42 U.S.C. § 658a that creates direct financial incentives for state actors to violate constitutional rights.
 
-17. Title IV-D Revenue Structure: Federal defendants provide billions in incentive payments to states based on:  
+17. Title IV-D Revenue Structure: Federal defendants provide billions in incentive payments to states based on:
+    - Family dissolution rates (more divorces = more federal funding)
+    - Custody enforcement actions (more parental conflicts = higher federal payments)
+    - Support collection volumes (more financial extractions = increased federal revenue sharing)
+    - Parental rights restrictions (more state control = enhanced federal grant eligibility)
 
-    - Family dissolution rates (more divorces = more federal funding)  
-    - Custody enforcement actions (more parental conflicts = higher federal payments)  
-    - Support collection volumes (more financial extractions = increased federal revenue sharing)  
-    - Parental rights restrictions (more state control = enhanced federal grant eligibility)  
+18. Colorado's Financial Dependency: Colorado receives approximately $200+ million annually in Title IV-D federal funding, creating institutional dependency that makes constitutional compliance economically impossible and explains systematic constitutional violations.
 
-18. Colorado's Financial Dependency: Colorado receives approximately $200+ million annually in Title IV-D federal funding, creating institutional dependency that makes constitutional compliance economically impossible and explains systematic constitutional violations.  
+19. Racketeering Enterprise Structure: The Title IV-D program operates as a criminal enterprise under 18 U.S.C. § 1961 wherein:
+    - Federal defendants provide financial incentives for constitutional violations
+    - State defendants systematically violate constitutional rights to generate federal revenue
+    - Both levels coordinate to maximize profit through family destruction while minimizing constitutional compliance
 
-19. Racketeering Enterprise Structure: The Title IV-D program operates as a criminal enterprise under 18 U.S.C. § 1961 wherein:  
+    This enterprise involves a pattern of racketeering activity, including mail and wire fraud in support collections, extortion through coerced payments, and obstruction of justice in family courts, causing injury to Plaintiff's property and business interests.
 
-    - Federal defendants provide financial incentives for constitutional violations  
-    - State defendants systematically violate constitutional rights to generate federal revenue  
-    - Both levels coordinate to maximize profit through family destruction while minimizing constitutional compliance  
-
-    This enterprise involves a pattern of racketeering activity, including mail and wire fraud in support collections, extortion through coerced payments, and obstruction of justice in family courts, causing injury to Plaintiff's property and business interests.  
-
-## The Systemic Funnel of Constitutional Violations  
+## The Systemic Funnel of Constitutional Violations
 
 20. The Title IV-D enterprise creates an interconnected statutory funnel that traps individuals in a cycle of escalating constitutional deprivations, where each violation feeds into the next, generating revenue at every stage while making escape constitutionally and practically impossible. This funnel operates through ostensibly separate but deliberately integrated civil and criminal schemes, including:
-
-    - C.R.S. § 18-6-801 (domestic violence proceedings that presume guilt and enable weaponization of unsubstantiated allegations);  
-    - C.R.S. § 13-14-102 (protection orders issued ex parte without meaningful evidentiary standards);  
-    - C.R.S. § 14-10-106 (no-fault divorce eliminating fault-based grounds and remedies);  
-    - C.R.S. § 14-10-124 (best interest determinations substituting state judgment for parental authority);  
-    - C.R.S. § 14-14-107.5 (parental responsibility allocations imposing indefinite state supervision);  
-    - C.R.S. § 14-10-115 (child support obligations creating perpetual financial extractions);  
-    - C.R.S. § 14-10-114 (maintenance awards enforcing spousal support without regard to fault);  
-    - C.R.S. § 14-14-107 (income withholding for automatic enforcement);  
-    - C.R.S. § 14-14-111 (contempt enforcement through incarceration for non-compliance); and  
-    - C.R.S. § 18-3-304 (parental kidnapping statute requiring pre-existing custody orders for enforcement, thereby conditioning protection on prior financial expenditure).  
+    - C.R.S. § 18-6-801 (domestic violence proceedings that presume guilt and enable weaponization of unsubstantiated allegations);
+    - C.R.S. § 13-14-102 (protection orders issued ex parte without meaningful evidentiary standards);
+    - C.R.S. § 14-10-106 (no-fault divorce eliminating fault-based grounds and remedies);
+    - C.R.S. § 14-10-124 (best interest determinations substituting state judgment for parental authority);
+    - C.R.S. § 14-14-107.5 (parental responsibility allocations imposing indefinite state supervision);
+    - C.R.S. § 14-10-115 (child support obligations creating perpetual financial extractions);
+    - C.R.S. § 14-10-114 (maintenance awards enforcing spousal support without regard to fault);
+    - C.R.S. § 14-14-107 (income withholding for automatic enforcement);
+    - C.R.S. § 14-14-111 (contempt enforcement through incarceration for non-compliance); and
+    - C.R.S. § 18-3-304 (parental kidnapping statute requiring pre-existing custody orders for enforcement, thereby conditioning protection on prior financial expenditure).
 
     These statutes function as components of a single revenue-generating conspiracy, incentivized by Title IV-D funding formulas under 42 U.S.C. § 658a that reward family conflict, parental alienation, and prolonged judicial involvement. This creates perverse incentives for bad faith actors (e.g., abusive spouses or partners) to collaborate with the state in exploiting good faith parties for mutual financial gain—the state profits from federal reimbursements tied to collection volumes and enforcement actions, while the bad faith actor secures economic advantages without accountability for misconduct. The funnel ensnares both married and unmarried individuals: unmarried parents are channeled directly into custody proceedings under C.R.S. § 14-10-124 and § 14-14-107.5, while Colorado's low threshold for common law marriage (e.g., cohabitation and mutual agreement implying marital intent) can retroactively impose marital status to trigger dissolution requirements, ensuring no relationship structure evades the system's grasp.
 
@@ -335,7 +333,7 @@ Plaintiff's claims are not barred by Younger abstention, as this is a facial con
 
 26. This funnel is not unique to any individual but exemplifies how the Title IV-D incentives systematically entrap families nationwide, as evidenced by statistics showing mothers awarded custody in approximately 80% of cases (79.9% of custodial parents are mothers per U.S. Census Bureau data), with women initiating 69% of divorces and filing 85% of protection orders in domestic violence cases that often favor women due to gender bias (men arrested in 77% of intimate partner violence incidents despite similar victimization rates), rewarding violations at each stage through federal reimbursements that generated $6.4 billion in total child support expenditures in FY2023 (with states collecting $4.37 per $1 spent) while penalizing attempts at resolution or escape (e.g., via retaliatory enforcement and wealth-based barriers). Bad faith actors and the state form a de facto alliance against good faith parties to maximize financial extractions, as father absence—exacerbated by bias favoring women—leads to 4x higher child poverty rates, 20x higher incarceration risk, and elevated mental health issues like depression and suicide (CDC and National Fatherhood Initiative data), ensuring perpetual servitude in every conceivable path through the system while states profit from government overreach (e.g., $353 million retained from assigned collections in 2023, down from $927 million in 2004 but still incentivizing collections over family stability).
 
-## Substantive Due Process Violations  
+## Substantive Due Process Violations
 
 27. Fundamental Parental Rights Deprivation: Defendants systematically violate substantive due process by depriving individuals of fundamental parental rights without compelling state interest through statutes like C.R.S. § 14-10-124 (authorizing courts to impose "best interest" determinations that arbitrarily substitute state judgment for parental authority), § 14-14-107.5 (allocating parental responsibilities in a manner that creates indefinite state supervision and overrides natural parental prerogatives), and § 19-1-103 (establishing state intervention standards that presume governmental superiority over fit parents without clear evidence of harm). These statutes grant the state unchecked power to define "best interest" arbitrarily, usurping the paramount and protected role of parents in child-rearing, in direct violation of longstanding Supreme Court precedents that establish parental authority as a fundamental liberty interest immune from such interference absent parental unfitness or imminent harm. The funnel overrides this authority by manufacturing artificial conflicts—through incentivized accusations, coerced separations, and wealth-based barriers—that justify revenue-driven state intrusion, turning families into profit centers rather than protected institutions.
 
@@ -369,7 +367,7 @@ Plaintiff's claims are not barred by Younger abstention, as this is a facial con
 
     b. Reno v. Flores, 507 U.S. 292, 302 (1993): "[T]he custody, care and nurture of the child reside first in the parents, whose primary function and freedom include preparation for obligations the state can neither supply nor hinder," affirming strict protection for parental rights.
 
-## Procedural Due Process Violations  
+## Procedural Due Process Violations
 
 30. Denial of Fair Tribunal: The Title IV-D enterprise's financial conflicts inherently bias judicial tribunals, transforming them into revenue-collection arms of a racketeering scheme where constitutional compliance threatens funding streams, ensuring arbitrary denials, selective enforcement, and predetermined outcomes that serve profit over justice. This systemic corruption denies the neutral forum essential to due process, as the funnel's incentives create an inescapable appearance—and reality—of bias, funneling victims through rigged proceedings that prioritize federal reimbursements over fair hearings.
 
@@ -389,7 +387,7 @@ Plaintiff's claims are not barred by Younger abstention, as this is a facial con
 
     b. Parratt v. Taylor, 451 U.S. 527, 541 (1981): "The justifications which we have found sufficient to uphold takings of property without any predeprivation process are applicable to a situation such as the present one involving a tortious loss of a prisoner's property as a result of a random and unauthorized act by a state employee... [but] where the State provides a meaningful postdeprivation remedy," post-deprivation options suffice only for random acts—not, as here, systematic, policy-driven deprivations under Title IV-D, where biased pre-deprivation processes demand full hearings that are deliberately withheld to sustain the racketeering cycle.
 
-## Other Constitutional Violations  
+## Other Constitutional Violations
 
 32. Equal Protection Violations: The funnel enforces gender and wealth-based discrimination, systematically presuming male guilt in disputes, denying equal protection to male victims, and conditioning rights on wealth—violating Reed v. Reed, 404 U.S. 71 (1971). This bias exists to facilitate father exclusion, as science shows fathers' unique contributions (e.g., promoting emotional resilience and risk-taking skills) are essential, yet the system perpetuates absence that harms children and sustains the cycle.
 
@@ -499,7 +497,7 @@ Plaintiff's claims are not barred by Younger abstention, as this is a facial con
 
     b. In re Murchison, 349 U.S. 133, 136 (1955): Interest in outcome prohibits judging.
 
-## Title IV-D as a Criminal Racketeering Organization Masquerading Under Color of Law  
+## Title IV-D as a Criminal Racketeering Organization Masquerading Under Color of Law
 
 43. The Title IV-D enterprise, operating under the veneer of child welfare, constitutes a full-fledged criminal racketeering operation masquerading as legitimate government function, meticulously engineered to monetize constitutional violations through a pattern of predicate acts that meet every element of RICO under 18 U.S.C. § 1961 et seq.
 
@@ -521,8 +519,7 @@ Plaintiff's claims are not barred by Younger abstention, as this is a facial con
 
 46. Institutional Corruption: By design, Title IV-D corrupts courts into revenue enterprises, where judges and officials—dependent on funding tied to violations—cannot act in good faith, making impartiality impossible and fulfilling RICO's enterprise element through systemic perversion of public trust. Precedents abound for such judicial racketeering: United States v. Shenberg, 89 F.3d 1461 (11th Cir. 1996) (judges in bribery enterprise); United States v. Maloney, 71 F.3d 645 (7th Cir. 1995) (judicial corruption as RICO).
 
-
-## Summary of Constitutional Claims Facial Challenge to Title IV-D Racketeering Scheme  
+## Summary of Constitutional Claims Facial Challenge to Title IV-D Racketeering Scheme
 
 As exhaustively documented through systematic constitutional violations, comprehensive statutory analysis, and empirical evidence, the Supreme Court unequivocally holds that no bureaucratic state power may, without parental consent, usurp the fundamental parental authority to determine the best interests of one's children. This principle is established in Troxel v. Granville, 530 U.S. 57 (2000) (parental rights as oldest fundamental liberty); Pierce v. Society of Sisters, 268 U.S. 510 (1925) (child not mere creature of state); Meyer v. Nebraska, 262 U.S. 390 (1923) (right to raise children essential); and numerous controlling precedents including Stanley v. Illinois, 405 U.S. 645 (1972); Santosky v. Kramer, 455 U.S. 745 (1982); Parham v. J.R., 442 U.S. 584 (1979); and Wisconsin v. Yoder, 406 U.S. 205 (1972). Scientific evidence reinforces this, showing father involvement yields equivalent or superior child outcomes (e.g., single-father homes match two-parent in health/poverty metrics, reducing delinquency by 50%), yet the system ignores this to perpetuate harm and revenue.
 
@@ -538,68 +535,68 @@ Defendants cannot and have not demonstrated any compelling justification for thi
 
 The foundation—precedent, conflicts, science, national scale—conclusively renders Title IV-D facially unconstitutional under any scrutiny and actionable as a criminal enterprise under 18 U.S.C. § 1962: constitutional governance and this profit system cannot coexist.
 
-## Prayer for Relief  
+## Prayer for Relief
 
-WHEREFORE, Plaintiff demands this Court:  
+WHEREFORE, Plaintiff demands this Court:
 
-### A. EMERGENCY RELIEF:  
+### A. EMERGENCY RELIEF:
 
-1. Issue immediate emergency injunctive relief halting enforcement of all Title IV-D related statutes nationwide pending constitutional adjudication;  
+1. Issue immediate emergency injunctive relief halting enforcement of all Title IV-D related statutes nationwide pending constitutional adjudication;
 
-2. Order immediate federal investigation and location of Plaintiff's missing children;  
+2. Order immediate federal investigation and location of Plaintiff's missing children;
 
-3. Order immediate preservation of all evidence related to Title IV-D revenue generation and constitutional violations;  
+3. Order immediate preservation of all evidence related to Title IV-D revenue generation and constitutional violations;
 
-### B. DECLARATORY RELIEF:  
+### B. DECLARATORY RELIEF:
 
-4. Declare the Title IV-D program under 42 U.S.C. § 658a facially unconstitutional as violating fundamental parental rights protected by the Ninth and Fourteenth Amendments;  
+4. Declare the Title IV-D program under 42 U.S.C. § 658a facially unconstitutional as violating fundamental parental rights protected by the Ninth and Fourteenth Amendments;
 
-5. Declare C.R.S. § 14-10-106, § 14-10-124, § 14-14-107.5, § 14-10-115, § 18-6-801, § 13-14-102, § 14-10-114, § 14-14-107, § 14-14-111, § 18-3-304, and related statutes facially unconstitutional;  
+5. Declare C.R.S. § 14-10-106, § 14-10-124, § 14-14-107.5, § 14-10-115, § 18-6-801, § 13-14-102, § 14-10-114, § 14-14-107, § 14-14-111, § 18-3-304, and related statutes facially unconstitutional;
 
-6. Declare that states cannot claim federal mandate immunity when enforcing facially unconstitutional federal programs;  
+6. Declare that states cannot claim federal mandate immunity when enforcing facially unconstitutional federal programs;
 
-7. Establish binding precedent that federal funding cannot be conditioned upon state constitutional violations;  
+7. Establish binding precedent that federal funding cannot be conditioned upon state constitutional violations;
 
-### C. INJUNCTIVE RELIEF:  
+### C. INJUNCTIVE RELIEF:
 
-8. Permanently enjoin enforcement of all enumerated statutes that constitute this racketeering scheme;  
+8. Permanently enjoin enforcement of all enumerated statutes that constitute this racketeering scheme;
 
-9. Order complete dismantlement of Title IV-D revenue-generation apparatus;  
+9. Order complete dismantlement of Title IV-D revenue-generation apparatus;
 
-10. Mandate structural reform eliminating financial incentives for constitutional violations;  
+10. Mandate structural reform eliminating financial incentives for constitutional violations;
 
-### D. COMPENSATORY RELIEF:  
+### D. COMPENSATORY RELIEF:
 
-11. Award compensatory damages to Plaintiff in the amount of $10,000,000 for a lifetime of systematic constitutional deprivations, including loss of parental rights, economic coercion, financial destruction and emotional distress;  
+11. Award compensatory damages to Plaintiff in the amount of $10,000,000 for a lifetime of systematic constitutional deprivations, including loss of parental rights, economic coercion, financial destruction and emotional distress;
 
-12. Award punitive damages in the amount of $50,000,000 to deter future violations;  
+12. Award punitive damages in the amount of $50,000,000 to deter future violations;
 
-13. Order redirection of all Title IV-D enforcement funds toward compensation for families systematically victimized by this unconstitutional criminal bureaucracy;  
+13. Order redirection of all Title IV-D enforcement funds toward compensation for families systematically victimized by this unconstitutional criminal bureaucracy;
 
-### E. PRECEDENTIAL RELIEF:  
+### E. PRECEDENTIAL RELIEF:
 
-14. Establish constitutional precedent protecting families from federal-state racketeering enterprises;  
+14. Establish constitutional precedent protecting families from federal-state racketeering enterprises;
 
-15. Create binding authority for constitutional challenges to federal commandeering programs;  
+15. Create binding authority for constitutional challenges to federal commandeering programs;
 
-16. Establish "The Colorado Doctrine" holding states liable for enforcing unconstitutional federal programs to restore federalist balance;  
+16. Establish "The Colorado Doctrine" holding states liable for enforcing unconstitutional federal programs to restore federalist balance;
 
-### F. SUCH OTHER RELIEF as this Court deems just and proper to restore constitutional governance and protect fundamental parental rights.  
+### F. SUCH OTHER RELIEF as this Court deems just and proper to restore constitutional governance and protect fundamental parental rights.
 
 Respectfully submitted,  
 **TIMOTHY WILLIAMS, Pro Se**  
 [Address]  
 [Phone Number]  
-[Email Address]  
+[Email Address]
 
-**VERIFICATION**  
+**VERIFICATION**
 
-I, Timothy Williams, declare under penalty of perjury under the laws of the United States that the foregoing is true and correct to the best of my knowledge and belief.  
+I, Timothy Williams, declare under penalty of perjury under the laws of the United States that the foregoing is true and correct to the best of my knowledge and belief.
 
 **/s/ Timothy Williams**  
 Timothy Williams  
 Date: August 18, 2025
 
---- 
+---
 
-*Break the criminal enterprise. Restore constitutional supremacy. End the monetization of constitutional violations.*
+_Break the criminal enterprise. Restore constitutional supremacy. End the monetization of constitutional violations._

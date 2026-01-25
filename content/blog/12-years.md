@@ -2,10 +2,10 @@
 title: "Twelve Years as a Digital Hermit"
 description: "Why I left Social Media a Over a Decade Ago, and Why I Now Return"
 taxonomies:
-   tags:
-      - ramblings
-      - propaganda
-      - philosophy
+  tags:
+    - ramblings
+    - propaganda
+    - philosophy
 author: "Tim D"
 authorGithub: "nrdxp"
 authorImage: "https://avatars.githubusercontent.com/u/34083928?v=4"
@@ -19,7 +19,7 @@ extra:
 
 **Reader Advisory:** This post is sarcastic, and a bit raw. Those without a sense of humor, or an aversion to hard facts, venture no further. Also, these opinions are my own; subject to change, etc, etc.
 
-*(not that I should have to say any of that to grown adults, imho, but alas...)*
+_(not that I should have to say any of that to grown adults, imho, but alas...)_
 
 ## My Life the Contradiction
 
@@ -55,10 +55,9 @@ And of course, the government would have you believe they're on your side. They 
 
 You wanna know my race or ethnicity to "track" progress? Haha, yeah right. Read a history book, buddy - I know better. Of course, it's not just big daddy Gov's fault. Indeed, these large tech firms have become nearly indistinguishable from governments in some ways, trying to enforce all kinds of arbitrary rules for the sake of nothing but ~their own profit~ "the good of the people".
 
-But therein lies something close to the core issue for me: governments and private companies alike are *both* quite incompetent at defining and upholding moral behavior. The former simply has no incentive but to continue growing, even beyond all sense or reason, until everything you do - even taking a breath - is illegal and, more importantly, taxable. The latter will change their so-called "values" on a dime to appease the masses, quite happy to talk down to you from both angles.
+But therein lies something close to the core issue for me: governments and private companies alike are _both_ quite incompetent at defining and upholding moral behavior. The former simply has no incentive but to continue growing, even beyond all sense or reason, until everything you do - even taking a breath - is illegal and, more importantly, taxable. The latter will change their so-called "values" on a dime to appease the masses, quite happy to talk down to you from both angles.
 
 And what has social media given us then? Global mob rule; utter stupidity so obvious even children can see it, yet nobody dares address it for fear of facing the mob. Guess what? A mob of rabid idiots on the internet isn't actually that scary anyway. What are they gonna do? Sure, there are the psychos doxxing and swatting and all that nonsense, but psychos have always been around - they're just the canary in the coal mine for a much larger issue - one that strikes at the very heart of our modern delusions.
-
 
 ## No Right to Safety; The New Religion
 
@@ -84,13 +83,13 @@ No, you're not being compassionate, no you don't fucking care about their genita
 
 What I will do, however, is unapologetically ridicule the ridiculous. Go figure...
 
-In all seriousness, we live in an era ruled by bitterness and delusion. And in such a short time - a generation and a half - from likely the least racist society that has ever been (the 90s children) to today; all because *you* won't stand up and say what we all know you likely think. The only people who actually believe any of the modern rhetoric are parrots who gave up their right to think independently long ago. As was said by a far more brilliant man (gendered speech, OMG!) than myself, "it takes someone of great intelligence to come up with ideas so colossally and utterly ***stupid***."
+In all seriousness, we live in an era ruled by bitterness and delusion. And in such a short time - a generation and a half - from likely the least racist society that has ever been (the 90s children) to today; all because _you_ won't stand up and say what we all know you likely think. The only people who actually believe any of the modern rhetoric are parrots who gave up their right to think independently long ago. As was said by a far more brilliant man (gendered speech, OMG!) than myself, "it takes someone of great intelligence to come up with ideas so colossally and utterly **_stupid_**."
 
-Don't believe for a second that just because someone has some fancy pieces of paper on a wall that they have any right - even a little - to tell you how to think. In fact, that's a sign of incompetence in my book. Real masters of any craft should be able to trivially *demonstrate* what is true and correct. If you have to force it down my throat, perhaps you're just a bit insecure about your own abilities; just maybe?
+Don't believe for a second that just because someone has some fancy pieces of paper on a wall that they have any right - even a little - to tell you how to think. In fact, that's a sign of incompetence in my book. Real masters of any craft should be able to trivially _demonstrate_ what is true and correct. If you have to force it down my throat, perhaps you're just a bit insecure about your own abilities; just maybe?
 
 Another one to remember (thanks Batman): "you will never be ridiculed by someone doing more than you." In other words, if someone thinks less of you, who cares? It's just a sign they probably feel like you're ahead of them in some way, and they're simply trying to pull you back down. Take it as a compliment and move on.
 
-Paper means nothing. Like I said, the brain is a muscle - doesn't matter if you were a world-class bodybuilder with all the trophies to boot, if you stop working, you start dying. Yet we live in a world where we take all our orders, *all* our opinions, spoon-fed from idiots with fancy papers, which are dutifully repeated over and over by every "influencer" and their grandma (yes, grandma has a channel now too).
+Paper means nothing. Like I said, the brain is a muscle - doesn't matter if you were a world-class bodybuilder with all the trophies to boot, if you stop working, you start dying. Yet we live in a world where we take all our orders, _all_ our opinions, spoon-fed from idiots with fancy papers, which are dutifully repeated over and over by every "influencer" and their grandma (yes, grandma has a channel now too).
 
 You want to influence something real? Think for your damn self. I know, it's scary after all this time, but if you really give a damn about "staying safe," it's your best bet. Or don't, and sit comfortable in your delusion until the day comes that you're no longer part of the acceptable and "righteous" crowd. That day is coming - in fact, for very many it's already here.
 
@@ -124,9 +123,9 @@ Countries are not supposed to give in to terrorism (whatever the fuck that means
 
 I digress though - I may dislike it (despise it even), but social media is the only playground anyone wants to play on. It's the only place to make any sort of stand, like it or not.
 
-And I really want to stress this: the most important lesson I've learned from my study of history is that it can, and will *always* get worse, unless and until somebody says, "No, that's enough. I'm quite finished with your little tyranny, thank you - hang me if you must."
+And I really want to stress this: the most important lesson I've learned from my study of history is that it can, and will _always_ get worse, unless and until somebody says, "No, that's enough. I'm quite finished with your little tyranny, thank you - hang me if you must."
 
-And so I'll end on that note. Hang me if you must... As much as I have always loved technology - I wouldn't even know what to do with myself if I didn't do what I'm doing now - I absolutely and positively *refuse* to perpetuate or feed into this nonsense, even a little bit.
+And so I'll end on that note. Hang me if you must... As much as I have always loved technology - I wouldn't even know what to do with myself if I didn't do what I'm doing now - I absolutely and positively _refuse_ to perpetuate or feed into this nonsense, even a little bit.
 
 If the open-source ecosystem had half the spirit of the pioneers who founded it, we would be on the front lines against such rabid propaganda. But instead, we stand quietly on the sidelines, at best asking questions that go perpetually ignored by the zealots, all the while apologizing for our intrusive thoughts.
 

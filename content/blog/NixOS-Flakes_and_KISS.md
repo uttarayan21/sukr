@@ -32,7 +32,7 @@ flakes were introduced called [DevOS][DevOS].
 
 After years of working with NixOS, I strongly felt that the community as a whole
 could benefit from a standardized structure and format for NixOS configurations
-in general. It appears that every developer is  essentially reinventing the
+in general. It appears that every developer is essentially reinventing the
 wheel when it comes to the "shape" of their deployments, leading to a lot of
 confusion as to what the idioms and best practices should be, especially for
 newcomers.
@@ -231,6 +231,7 @@ That should just about do it for DevOS's current quality of life features, but
 there are more ideas brewing.
 
 # What's next?
+
 I'm working on a system for seamlessly importing modules, packages and
 overlays from other flakes, which isn't too hard as it is, but it's messy
 because the current "flake.nix" has a lot of business logic that gets in the way.
@@ -252,6 +253,7 @@ We really have no tests to speak of as is. The auto import functions for the
 "hosts" and "overlays" directory are good examples.
 
 ## A call to arms!
+
 If you'd like to help, please jump in. I am very much open to any ideas that
 could reduce the complexity or simplify the UI. If you have a profile you
 believe would be useful to others, please open a [Pull Request][pr].
@@ -261,7 +263,6 @@ typically find critical feedback to be some of the most helpful. Most of all,
 if you made it this far, thanks for taking some time to read about my efforts
 and please consider giving DevOS a shot!
 
-
 [nix]: https://nixos.org
 [DevOS]: https://github.com/divnix/DevOS
 [rfcs]: https://github.com/NixOS/rfcs
@@ -269,6 +270,6 @@ and please consider giving DevOS a shot!
 [profiles]: https://github.com/divnix/devos/tree/template/profiles
 [develop]: https://github.com/divnix/devos/tree/template/profiles/develop
 [hosts]: https://github.com/divnix/devos/tree/template/hosts
-[deploy-rs]:  https://serokell.io/blog/deploy-rs
+[deploy-rs]: https://serokell.io/blog/deploy-rs
 [home-manager]: https://github.com/nix-community/home-manager
 [pr]: https://github.com/divnix/devos/pulls
