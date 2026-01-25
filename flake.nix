@@ -45,6 +45,7 @@
               pkgs.taplo
               pkgs.pkg-config
               pkgs.nixfmt
+              pkgs.miniserve # Dev server for testing
             ]
             ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
               pkgs.apple-sdk
