@@ -16,6 +16,17 @@ fn relative_prefix(depth: usize) -> String {
     }
 }
 
+/// Calculate directory depth from page path.
+/// "/index.html" → 0
+/// "/about.html" → 0  
+/// "/blog/index.html" → 1
+/// "/blog/slug.html" → 1
+fn path_depth(page_path: &str) -> usize {
+    // Count segments: split by '/', filter empties, subtract 1 for filename
+    let segments: Vec<_> = page_path.split('/').filter(|s| !s.is_empty()).collect();
+    segments.len().saturating_sub(1)
+}
+
 /// Render a blog post with the base layout.
 pub fn render_post(
     frontmatter: &Frontmatter,
@@ -23,7 +34,7 @@ pub fn render_post(
     page_path: &str,
     config: &SiteConfig,
 ) -> Markup {
-    let depth = page_path.matches('/').count();
+    let depth = path_depth(page_path);
     let prefix = relative_prefix(depth);
     base_layout(
         &frontmatter.title,
@@ -173,7 +184,7 @@ pub fn render_projects_index(
 
 /// Base HTML layout wrapper.
 fn base_layout(title: &str, content: Markup, page_path: &str, config: &SiteConfig) -> Markup {
-    let depth = page_path.matches('/').count();
+    let depth = path_depth(page_path);
     let prefix = relative_prefix(depth);
     let canonical_url = format!("{}{}", config.base_url.trim_end_matches('/'), page_path);
 
