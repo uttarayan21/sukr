@@ -4,6 +4,7 @@
 
 mod content;
 mod error;
+mod highlight;
 mod render;
 mod templates;
 
