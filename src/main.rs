@@ -3,6 +3,7 @@
 //! Transforms markdown content into a minimal static site.
 
 mod content;
+mod css;
 mod error;
 mod highlight;
 mod render;
@@ -214,8 +215,11 @@ fn write_output(
     Ok(())
 }
 
-/// Copy static assets (CSS, etc.) to output directory
+/// Copy static assets (CSS, images, etc.) to output directory.
+/// CSS files are minified before writing.
 fn copy_static_assets(static_dir: &Path, output_dir: &Path) -> Result<()> {
+    use crate::css::minify_css;
+
     if !static_dir.exists() {
         return Ok(()); // No static dir is fine
     }
@@ -241,12 +245,31 @@ fn copy_static_assets(static_dir: &Path, output_dir: &Path) -> Result<()> {
             })?;
         }
 
-        fs::copy(src, &dest).map_err(|e| Error::WriteFile {
-            path: dest.clone(),
-            source: e,
-        })?;
-
-        eprintln!("copying: {} → {}", src.display(), dest.display());
+        // Minify CSS files, copy others directly
+        if src.extension().is_some_and(|ext| ext == "css") {
+            let css = fs::read_to_string(src).map_err(|e| Error::ReadFile {
+                path: src.to_path_buf(),
+                source: e,
+            })?;
+            let minified = minify_css(&css);
+            fs::write(&dest, &minified).map_err(|e| Error::WriteFile {
+                path: dest.clone(),
+                source: e,
+            })?;
+            eprintln!(
+                "minifying: {} → {} ({} → {} bytes)",
+                src.display(),
+                dest.display(),
+                css.len(),
+                minified.len()
+            );
+        } else {
+            fs::copy(src, &dest).map_err(|e| Error::WriteFile {
+                path: dest.clone(),
+                source: e,
+            })?;
+            eprintln!("copying: {} → {}", src.display(), dest.display());
+        }
     }
 
     Ok(())

@@ -17,3 +17,6 @@ tree-sitter-bash      = "0.23"
 tree-sitter-highlight = "0.24"
 tree-sitter-json      = "0.24"
 tree-sitter-rust      = "0.23"
+
+# CSS processing
+lightningcss = "1.0.0-alpha.70"
