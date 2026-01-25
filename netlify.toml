@@ -1,0 +1,13 @@
+# Netlify build configuration for nrd.sh
+
+[build]
+  command = "cargo build --release && ./target/release/nrd-sh"
+  publish = "public"
+
+[build.environment]
+  RUST_VERSION = "1.84"
+
+# Redirect clean URLs (optional, for server-side routing)
+# Not needed since we use .html extensions
+
+# Headers are configured in static/_headers
