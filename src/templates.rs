@@ -196,6 +196,7 @@ fn base_layout(title: &str, content: Markup, page_path: &str, config: &SiteConfi
                 meta name="viewport" content="width=device-width, initial-scale=1";
                 title { (title) " | " (config.title) }
                 link rel="canonical" href=(canonical_url);
+                link rel="alternate" type="application/atom+xml" title="Atom Feed" href=(format!("{}/feed.xml", config.base_url.trim_end_matches('/')));
                 link rel="stylesheet" href=(format!("{}/style.css", prefix));
             }
             body {

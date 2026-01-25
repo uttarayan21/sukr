@@ -1,0 +1,93 @@
+//! Atom feed generation.
+
+use crate::config::SiteConfig;
+use crate::content::Content;
+
+/// Generate an Atom 1.0 feed from blog posts.
+pub fn generate_atom_feed(posts: &[Content], config: &SiteConfig) -> String {
+    let base_url = config.base_url.trim_end_matches('/');
+
+    // Use the most recent post date as feed updated time, or fallback
+    let updated = posts
+        .first()
+        .and_then(|p| p.frontmatter.date.as_ref())
+        .map(|d| format!("{}T00:00:00Z", d))
+        .unwrap_or_else(|| "1970-01-01T00:00:00Z".to_string());
+
+    let mut entries = String::new();
+    for post in posts {
+        let post_url = format!("{}/blog/{}.html", base_url, post.slug);
+        let post_date = post
+            .frontmatter
+            .date
+            .as_ref()
+            .map(|d| format!("{}T00:00:00Z", d))
+            .unwrap_or_else(|| "1970-01-01T00:00:00Z".to_string());
+
+        let summary = post
+            .frontmatter
+            .description
+            .as_ref()
+            .map(|s| xml_escape(s))
+            .unwrap_or_default();
+
+        entries.push_str(&format!(
+            r#"  <entry>
+    <title>{}</title>
+    <link href="{}" rel="alternate"/>
+    <id>{}</id>
+    <updated>{}</updated>
+    <summary>{}</summary>
+  </entry>
+"#,
+            xml_escape(&post.frontmatter.title),
+            post_url,
+            post_url,
+            post_date,
+            summary,
+        ));
+    }
+
+    format!(
+        r#"<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{}</title>
+  <link href="{}" rel="alternate"/>
+  <link href="{}/feed.xml" rel="self"/>
+  <id>{}/</id>
+  <updated>{}</updated>
+  <author>
+    <name>{}</name>
+  </author>
+{}
+</feed>
+"#,
+        xml_escape(&config.title),
+        base_url,
+        base_url,
+        base_url,
+        updated,
+        xml_escape(&config.author),
+        entries,
+    )
+}
+
+/// Escape XML special characters.
+fn xml_escape(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        .replace('\'', "&apos;")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_xml_escape() {
+        assert_eq!(xml_escape("Hello & World"), "Hello &amp; World");
+        assert_eq!(xml_escape("<tag>"), "&lt;tag&gt;");
+    }
+}

@@ -6,6 +6,7 @@ mod config;
 mod content;
 mod css;
 mod error;
+mod feed;
 mod highlight;
 mod render;
 mod templates;
@@ -44,6 +45,9 @@ fn run() -> Result<()> {
     // 2. Generate blog index (sorted by date, newest first)
     posts.sort_by(|a, b| b.frontmatter.date.cmp(&a.frontmatter.date));
     generate_blog_index(output_dir, &posts, &config)?;
+
+    // 2b. Generate Atom feed
+    generate_feed(output_dir, &posts, &config)?;
 
     // 3. Process standalone pages (about, collab)
     process_pages(content_dir, output_dir, &config)?;
@@ -114,6 +118,22 @@ fn generate_blog_index(
     })?;
 
     fs::write(&out_path, page.into_string()).map_err(|e| Error::WriteFile {
+        path: out_path.clone(),
+        source: e,
+    })?;
+
+    eprintln!("  → {}", out_path.display());
+    Ok(())
+}
+
+/// Generate the Atom feed
+fn generate_feed(output_dir: &Path, posts: &[Content], config: &config::SiteConfig) -> Result<()> {
+    let out_path = output_dir.join("feed.xml");
+    eprintln!("generating: {}", out_path.display());
+
+    let feed_xml = feed::generate_atom_feed(posts, config);
+
+    fs::write(&out_path, feed_xml).map_err(|e| Error::WriteFile {
         path: out_path.clone(),
         source: e,
     })?;
