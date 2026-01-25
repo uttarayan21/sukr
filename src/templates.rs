@@ -3,8 +3,21 @@
 use crate::content::{Content, Frontmatter};
 use maud::{html, Markup, PreEscaped, DOCTYPE};
 
+/// Compute relative path prefix based on page depth.
+/// depth=0 (root) → "."
+/// depth=1 (one level deep) → ".."
+/// depth=2 → "../.."
+fn relative_prefix(depth: usize) -> String {
+    if depth == 0 {
+        ".".to_string()
+    } else {
+        (0..depth).map(|_| "..").collect::<Vec<_>>().join("/")
+    }
+}
+
 /// Render a blog post with the base layout.
-pub fn render_post(frontmatter: &Frontmatter, content_html: &str) -> Markup {
+pub fn render_post(frontmatter: &Frontmatter, content_html: &str, depth: usize) -> Markup {
+    let prefix = relative_prefix(depth);
     base_layout(
         &frontmatter.title,
         html! {
@@ -20,7 +33,7 @@ pub fn render_post(frontmatter: &Frontmatter, content_html: &str) -> Markup {
                     @if !frontmatter.tags.is_empty() {
                         ul.tags {
                             @for tag in &frontmatter.tags {
-                                li { a href=(format!("/tags/{}/", tag)) { (tag) } }
+                                li { a href=(format!("{}/tags/{}/", prefix, tag)) { (tag) } }
                             }
                         }
                     }
@@ -30,11 +43,12 @@ pub fn render_post(frontmatter: &Frontmatter, content_html: &str) -> Markup {
                 }
             }
         },
+        depth,
     )
 }
 
 /// Render a standalone page (about, collab, etc.)
-pub fn render_page(frontmatter: &Frontmatter, content_html: &str) -> Markup {
+pub fn render_page(frontmatter: &Frontmatter, content_html: &str, depth: usize) -> Markup {
     base_layout(
         &frontmatter.title,
         html! {
@@ -45,11 +59,12 @@ pub fn render_page(frontmatter: &Frontmatter, content_html: &str) -> Markup {
                 }
             }
         },
+        depth,
     )
 }
 
 /// Render the homepage.
-pub fn render_homepage(frontmatter: &Frontmatter, content_html: &str) -> Markup {
+pub fn render_homepage(frontmatter: &Frontmatter, content_html: &str, depth: usize) -> Markup {
     base_layout(
         &frontmatter.title,
         html! {
@@ -63,11 +78,12 @@ pub fn render_homepage(frontmatter: &Frontmatter, content_html: &str) -> Markup 
                 (PreEscaped(content_html))
             }
         },
+        depth,
     )
 }
 
 /// Render the blog listing page.
-pub fn render_blog_index(title: &str, posts: &[Content]) -> Markup {
+pub fn render_blog_index(title: &str, posts: &[Content], depth: usize) -> Markup {
     base_layout(
         title,
         html! {
@@ -75,7 +91,8 @@ pub fn render_blog_index(title: &str, posts: &[Content]) -> Markup {
             ul.post-list {
                 @for post in posts {
                     li {
-                        a href=(format!("/blog/{}/", post.slug)) {
+                        // Posts are siblings in the same directory
+                        a href=(format!("./{}/", post.slug)) {
                             span.title { (post.frontmatter.title) }
                             @if let Some(ref date) = post.frontmatter.date {
                                 time.date { (date) }
@@ -88,11 +105,12 @@ pub fn render_blog_index(title: &str, posts: &[Content]) -> Markup {
                 }
             }
         },
+        depth,
     )
 }
 
 /// Render the projects page with cards.
-pub fn render_projects_index(title: &str, projects: &[Content]) -> Markup {
+pub fn render_projects_index(title: &str, projects: &[Content], depth: usize) -> Markup {
     base_layout(
         title,
         html! {
@@ -117,11 +135,13 @@ pub fn render_projects_index(title: &str, projects: &[Content]) -> Markup {
                 }
             }
         },
+        depth,
     )
 }
 
 /// Base HTML layout wrapper.
-fn base_layout(title: &str, content: Markup) -> Markup {
+fn base_layout(title: &str, content: Markup, depth: usize) -> Markup {
+    let prefix = relative_prefix(depth);
     html! {
         (DOCTYPE)
         html lang="en" {
@@ -129,14 +149,14 @@ fn base_layout(title: &str, content: Markup) -> Markup {
                 meta charset="utf-8";
                 meta name="viewport" content="width=device-width, initial-scale=1";
                 title { (title) " | nrd.sh" }
-                link rel="stylesheet" href="/style.css";
+                link rel="stylesheet" href=(format!("{}/style.css", prefix));
             }
             body {
                 nav {
-                    a href="/" { "nrd.sh" }
-                    a href="/blog/" { "blog" }
-                    a href="/projects/" { "projects" }
-                    a href="/about/" { "about" }
+                    a href=(format!("{}/", prefix)) { "nrd.sh" }
+                    a href=(format!("{}/blog/", prefix)) { "blog" }
+                    a href=(format!("{}/projects/", prefix)) { "projects" }
+                    a href=(format!("{}/about/", prefix)) { "about" }
                 }
                 main {
                     (content)
@@ -146,5 +166,18 @@ fn base_layout(title: &str, content: Markup) -> Markup {
                 }
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_relative_prefix() {
+        assert_eq!(relative_prefix(0), ".");
+        assert_eq!(relative_prefix(1), "..");
+        assert_eq!(relative_prefix(2), "../..");
+        assert_eq!(relative_prefix(3), "../../..");
     }
 }

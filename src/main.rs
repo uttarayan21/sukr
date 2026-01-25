@@ -78,7 +78,7 @@ fn process_blog_posts(content_dir: &Path, output_dir: &Path) -> Result<Vec<Conte
 
         let content = Content::from_path(path, ContentKind::Post)?;
         let html_body = render::markdown_to_html(&content.body);
-        let page = templates::render_post(&content.frontmatter, &html_body);
+        let page = templates::render_post(&content.frontmatter, &html_body, 2);
 
         write_output(output_dir, content_dir, &content, page.into_string())?;
         posts.push(content);
@@ -92,7 +92,7 @@ fn generate_blog_index(output_dir: &Path, posts: &[Content]) -> Result<()> {
     let out_path = output_dir.join("blog/index.html");
     eprintln!("generating: {}", out_path.display());
 
-    let page = templates::render_blog_index("Blog", posts);
+    let page = templates::render_blog_index("Blog", posts, 1);
 
     fs::create_dir_all(out_path.parent().unwrap()).map_err(|e| Error::CreateDir {
         path: out_path.parent().unwrap().to_path_buf(),
@@ -117,7 +117,7 @@ fn process_pages(content_dir: &Path, output_dir: &Path) -> Result<()> {
 
             let content = Content::from_path(&path, ContentKind::Page)?;
             let html_body = render::markdown_to_html(&content.body);
-            let page = templates::render_page(&content.frontmatter, &html_body);
+            let page = templates::render_page(&content.frontmatter, &html_body, 1);
 
             write_output(output_dir, content_dir, &content, page.into_string())?;
         }
@@ -150,7 +150,7 @@ fn generate_projects_index(output_dir: &Path, projects: &[Content]) -> Result<()
     let out_path = output_dir.join("projects/index.html");
     eprintln!("generating: {}", out_path.display());
 
-    let page = templates::render_projects_index("Projects", projects);
+    let page = templates::render_projects_index("Projects", projects, 1);
 
     fs::create_dir_all(out_path.parent().unwrap()).map_err(|e| Error::CreateDir {
         path: out_path.parent().unwrap().to_path_buf(),
@@ -173,7 +173,7 @@ fn generate_homepage(content_dir: &Path, output_dir: &Path) -> Result<()> {
 
     let content = Content::from_path(&index_path, ContentKind::Section)?;
     let html_body = render::markdown_to_html(&content.body);
-    let page = templates::render_homepage(&content.frontmatter, &html_body);
+    let page = templates::render_homepage(&content.frontmatter, &html_body, 0);
 
     let out_path = output_dir.join("index.html");
 
