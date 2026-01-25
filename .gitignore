@@ -1,4 +1,6 @@
 public
+target
 
 # Local Netlify folder
 .netlify
+target/
