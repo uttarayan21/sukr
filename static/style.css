@@ -1,0 +1,251 @@
+/* nrd.sh - Minimal Base Styles */
+
+:root {
+  /* Typography */
+  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+  --font-size: 1rem;
+  --line-height: 1.6;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+
+  /* Layout */
+  --max-width: 48rem;
+
+  /* Colors - Light */
+  --bg: #fafafa;
+  --bg-alt: #f0f0f0;
+  --text: #1a1a1a;
+  --text-muted: #666;
+  --accent: #0066cc;
+  --accent-hover: #0052a3;
+  --border: #ddd;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a1a;
+    --bg-alt: #252525;
+    --text: #e0e0e0;
+    --text-muted: #999;
+    --accent: #6ab0f3;
+    --accent-hover: #8cc4f7;
+    --border: #333;
+  }
+}
+
+/* Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base */
+html {
+  font-family: var(--font-sans);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Layout */
+nav, main, footer {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-md);
+}
+
+nav {
+  display: flex;
+  gap: var(--space-lg);
+  border-bottom: 1px solid var(--border);
+  padding-block: var(--space-md);
+}
+
+main {
+  flex: 1;
+  padding-block: var(--space-lg);
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  padding-block: var(--space-md);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+/* Typography */
+h1, h2, h3 {
+  line-height: 1.3;
+  margin-block: var(--space-lg) var(--space-md);
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+h1:first-child, h2:first-child, h3:first-child {
+  margin-top: 0;
+}
+
+p {
+  margin-block: var(--space-md);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+/* Code */
+code, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+code {
+  background: var(--bg-alt);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 3px;
+}
+
+pre {
+  background: var(--bg-alt);
+  padding: var(--space-md);
+  overflow-x: auto;
+  border-radius: 4px;
+  margin-block: var(--space-md);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Lists */
+ul, ol {
+  margin-block: var(--space-md);
+  padding-left: var(--space-lg);
+}
+
+li {
+  margin-block: var(--space-xs);
+}
+
+/* Blockquote */
+blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: var(--space-md);
+  margin-block: var(--space-md);
+  color: var(--text-muted);
+}
+
+/* Post */
+article.post header {
+  margin-bottom: var(--space-lg);
+}
+
+.date {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.description {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.tags {
+  list-style: none;
+  display: flex;
+  gap: var(--space-sm);
+  padding: 0;
+  margin-top: var(--space-sm);
+}
+
+.tags li a {
+  background: var(--bg-alt);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 3px;
+  font-size: 0.85rem;
+}
+
+/* Post List */
+.post-list {
+  list-style: none;
+  padding: 0;
+}
+
+.post-list li {
+  margin-block: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border);
+}
+
+.post-list li:last-child {
+  border-bottom: none;
+}
+
+.post-list .title {
+  display: block;
+  font-weight: 600;
+}
+
+/* Project Cards */
+.project-cards {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--space-md);
+}
+
+.card {
+  background: var(--bg-alt);
+  padding: var(--space-md);
+  border-radius: 4px;
+}
+
+.card h2 {
+  font-size: 1.1rem;
+  margin: 0 0 var(--space-sm);
+}
+
+.card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding-block: var(--space-xl);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+}
+
+.tagline {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+}

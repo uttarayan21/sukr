@@ -1,7 +1,7 @@
 //! HTML templates using maud.
 
 use crate::content::{Content, Frontmatter};
-use maud::{DOCTYPE, Markup, PreEscaped, html};
+use maud::{html, Markup, PreEscaped, DOCTYPE};
 
 /// Render a blog post with the base layout.
 pub fn render_post(frontmatter: &Frontmatter, content_html: &str) -> Markup {

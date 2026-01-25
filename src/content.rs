@@ -1,7 +1,7 @@
 //! Content discovery and frontmatter parsing.
 
 use crate::error::{Error, Result};
-use gray_matter::{Matter, engine::YAML};
+use gray_matter::{engine::YAML, Matter};
 use std::fs;
 use std::path::{Path, PathBuf};
 

@@ -22,10 +22,14 @@ fn main() {
 fn run() -> Result<()> {
     let content_dir = Path::new("content");
     let output_dir = Path::new("public");
+    let static_dir = Path::new("static");
 
     if !content_dir.exists() {
         return Err(Error::ContentDirNotFound(content_dir.to_path_buf()));
     }
+
+    // 0. Copy static assets
+    copy_static_assets(static_dir, output_dir)?;
 
     // 1. Process blog posts
     let mut posts = process_blog_posts(content_dir, output_dir)?;
@@ -206,5 +210,43 @@ fn write_output(
     })?;
 
     eprintln!("  → {}", out_path.display());
+    Ok(())
+}
+
+/// Copy static assets (CSS, etc.) to output directory
+fn copy_static_assets(static_dir: &Path, output_dir: &Path) -> Result<()> {
+    if !static_dir.exists() {
+        return Ok(()); // No static dir is fine
+    }
+
+    fs::create_dir_all(output_dir).map_err(|e| Error::CreateDir {
+        path: output_dir.to_path_buf(),
+        source: e,
+    })?;
+
+    for entry in walkdir::WalkDir::new(static_dir)
+        .into_iter()
+        .filter_map(|e| e.ok())
+        .filter(|e| e.file_type().is_file())
+    {
+        let src = entry.path();
+        let relative = src.strip_prefix(static_dir).unwrap();
+        let dest = output_dir.join(relative);
+
+        if let Some(parent) = dest.parent() {
+            fs::create_dir_all(parent).map_err(|e| Error::CreateDir {
+                path: parent.to_path_buf(),
+                source: e,
+            })?;
+        }
+
+        fs::copy(src, &dest).map_err(|e| Error::WriteFile {
+            path: dest.clone(),
+            source: e,
+        })?;
+
+        eprintln!("copying: {} → {}", src.display(), dest.display());
+    }
+
     Ok(())
 }
