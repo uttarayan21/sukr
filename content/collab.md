@@ -1,9 +1,6 @@
-+++
-title = "Collaborate"
-path = "collab"
-[extra]
-repo_view = false
-+++
+---
+title: Collaborate
+---
 
 ## Support Open Source
 
