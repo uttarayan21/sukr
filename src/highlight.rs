@@ -29,27 +29,28 @@ const HIGHLIGHT_NAMES: &[&str] = &[
 
 /// Static HTML attributes for each highlight class.
 /// Pre-computed to avoid allocations in the render loop.
+/// HtmlRenderer wraps with <span ...>...</span>, callback returns just the attributes.
 const HTML_ATTRS: &[&[u8]] = &[
-    b"<span class=\"hl-attribute\">",
-    b"<span class=\"hl-comment\">",
-    b"<span class=\"hl-constant\">",
-    b"<span class=\"hl-constant-builtin\">",
-    b"<span class=\"hl-constructor\">",
-    b"<span class=\"hl-function\">",
-    b"<span class=\"hl-function-builtin\">",
-    b"<span class=\"hl-keyword\">",
-    b"<span class=\"hl-number\">",
-    b"<span class=\"hl-operator\">",
-    b"<span class=\"hl-property\">",
-    b"<span class=\"hl-punctuation\">",
-    b"<span class=\"hl-punctuation-bracket\">",
-    b"<span class=\"hl-punctuation-delimiter\">",
-    b"<span class=\"hl-string\">",
-    b"<span class=\"hl-type\">",
-    b"<span class=\"hl-type-builtin\">",
-    b"<span class=\"hl-variable\">",
-    b"<span class=\"hl-variable-builtin\">",
-    b"<span class=\"hl-variable-parameter\">",
+    b" class=\"hl-attribute\"",
+    b" class=\"hl-comment\"",
+    b" class=\"hl-constant\"",
+    b" class=\"hl-constant-builtin\"",
+    b" class=\"hl-constructor\"",
+    b" class=\"hl-function\"",
+    b" class=\"hl-function-builtin\"",
+    b" class=\"hl-keyword\"",
+    b" class=\"hl-number\"",
+    b" class=\"hl-operator\"",
+    b" class=\"hl-property\"",
+    b" class=\"hl-punctuation\"",
+    b" class=\"hl-punctuation-bracket\"",
+    b" class=\"hl-punctuation-delimiter\"",
+    b" class=\"hl-string\"",
+    b" class=\"hl-type\"",
+    b" class=\"hl-type-builtin\"",
+    b" class=\"hl-variable\"",
+    b" class=\"hl-variable-builtin\"",
+    b" class=\"hl-variable-parameter\"",
 ];
 
 /// Supported languages for syntax highlighting.
@@ -147,7 +148,7 @@ mod tests {
         let html = highlight_code(Language::Rust, code);
 
         // Should contain span elements with highlight classes
-        assert!(html.contains("<span class=\"hl-"));
+        assert!(html.contains("class=\"hl-"));
         // Should contain the keyword "fn"
         assert!(html.contains("fn"));
         // Should contain the string
@@ -159,7 +160,7 @@ mod tests {
         let code = "#!/bin/bash\necho \"hello world\"";
         let html = highlight_code(Language::Bash, code);
 
-        assert!(html.contains("<span class=\"hl-"));
+        assert!(html.contains("class=\"hl-"));
         assert!(html.contains("echo"));
     }
 

@@ -42,6 +42,7 @@
               toolchain
               pkgs.treefmt
               pkgs.shfmt
+              pkgs.rust-analyzer
               pkgs.taplo
               pkgs.pkg-config
               pkgs.nixfmt
