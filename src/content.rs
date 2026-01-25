@@ -1,9 +1,22 @@
 //! Content discovery and frontmatter parsing.
 
 use crate::error::{Error, Result};
-use gray_matter::{engine::YAML, Matter};
+use gray_matter::{Matter, engine::YAML};
 use std::fs;
 use std::path::{Path, PathBuf};
+
+/// The type of content being processed.
+#[derive(Debug, Clone, PartialEq)]
+pub enum ContentKind {
+    /// Blog post with full metadata (date, tags, etc.)
+    Post,
+    /// Standalone page (about, collab)
+    Page,
+    /// Section index (_index.md)
+    Section,
+    /// Project card with external link
+    Project,
+}
 
 /// Parsed frontmatter from a content file.
 #[derive(Debug)]
@@ -12,11 +25,16 @@ pub struct Frontmatter {
     pub description: Option<String>,
     pub date: Option<String>,
     pub tags: Vec<String>,
+    /// For project cards: sort order
+    pub weight: Option<i64>,
+    /// For project cards: external link
+    pub link_to: Option<String>,
 }
 
 /// A content item ready for rendering.
 #[derive(Debug)]
 pub struct Content {
+    pub kind: ContentKind,
     pub frontmatter: Frontmatter,
     pub body: String,
     pub source_path: PathBuf,
@@ -24,9 +42,12 @@ pub struct Content {
 }
 
 impl Content {
-    /// Load and parse a markdown file with TOML frontmatter.
-    pub fn from_path(path: impl AsRef<Path>) -> Result<Self> {
-        let path = path.as_ref();
+    /// Load and parse a markdown file with YAML frontmatter.
+    pub fn from_path(path: impl AsRef<Path>, kind: ContentKind) -> Result<Self> {
+        Self::from_path_inner(path.as_ref(), kind)
+    }
+
+    fn from_path_inner(path: &Path, kind: ContentKind) -> Result<Self> {
         let raw = fs::read_to_string(path).map_err(|e| Error::ReadFile {
             path: path.to_path_buf(),
             source: e,
@@ -45,6 +66,7 @@ impl Content {
             .to_string();
 
         Ok(Content {
+            kind,
             frontmatter,
             body: parsed.content,
             source_path: path.to_path_buf(),
@@ -60,8 +82,18 @@ impl Content {
             .strip_prefix(content_root)
             .unwrap_or(&self.source_path);
 
-        let parent = relative.parent().unwrap_or(Path::new(""));
-        parent.join(&self.slug).join("index.html")
+        match self.kind {
+            ContentKind::Section => {
+                // _index.md → parent/index.html
+                let parent = relative.parent().unwrap_or(Path::new(""));
+                parent.join("index.html")
+            }
+            _ => {
+                // Regular content → parent/slug/index.html
+                let parent = relative.parent().unwrap_or(Path::new(""));
+                parent.join(&self.slug).join("index.html")
+            }
+        }
     }
 }
 
@@ -86,6 +118,8 @@ fn parse_frontmatter(path: &Path, parsed: &gray_matter::ParsedEntity) -> Result<
 
     let description = pod.get("description").and_then(|v| v.as_string().ok());
     let date = pod.get("date").and_then(|v| v.as_string().ok());
+    let weight = pod.get("weight").and_then(|v| v.as_i64().ok());
+    let link_to = pod.get("link_to").and_then(|v| v.as_string().ok());
 
     // Handle nested taxonomies.tags structure
     let tags = if let Some(taxonomies) = pod.get("taxonomies") {
@@ -111,5 +145,7 @@ fn parse_frontmatter(path: &Path, parsed: &gray_matter::ParsedEntity) -> Result<
         description,
         date,
         tags,
+        weight,
+        link_to,
     })
 }
