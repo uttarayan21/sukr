@@ -3,5 +3,8 @@ target
 
 # Local Netlify folder
 .netlify
+
 .direnv
 target/
+.repomap*
+public/

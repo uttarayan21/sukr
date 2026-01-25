@@ -21,6 +21,7 @@ The agent MUST read and adhere to the global engineering ruleset and any active 
 **Active Fragments:**
 
 - Rust idioms (`.agent/predicates/fragments/rust.md`)
+- DepMap MCP tools (`.agent/predicates/fragments/depmap.md`)
 
 **Available Workflows:**
 
