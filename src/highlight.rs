@@ -4,12 +4,15 @@ use tree_sitter_highlight::{HighlightConfiguration, Highlighter as TSHighlighter
 
 /// Recognized highlight names mapped to CSS classes.
 /// Order matters: index becomes the class name suffix.
+/// Comprehensive list covering captures from all supported languages.
 const HIGHLIGHT_NAMES: &[&str] = &[
     "attribute",
     "comment",
     "constant",
     "constant.builtin",
     "constructor",
+    "embedded",
+    "escape",
     "function",
     "function.builtin",
     "keyword",
@@ -19,7 +22,11 @@ const HIGHLIGHT_NAMES: &[&str] = &[
     "punctuation",
     "punctuation.bracket",
     "punctuation.delimiter",
+    "punctuation.special",
     "string",
+    "string.special",
+    "string.special.path",
+    "string.special.uri",
     "type",
     "type.builtin",
     "variable",
@@ -29,13 +36,15 @@ const HIGHLIGHT_NAMES: &[&str] = &[
 
 /// Static HTML attributes for each highlight class.
 /// Pre-computed to avoid allocations in the render loop.
-/// HtmlRenderer wraps with <span ...>...</span>, callback returns just the attributes.
+/// Must be in same order as HIGHLIGHT_NAMES.
 const HTML_ATTRS: &[&[u8]] = &[
     b" class=\"hl-attribute\"",
     b" class=\"hl-comment\"",
     b" class=\"hl-constant\"",
     b" class=\"hl-constant-builtin\"",
     b" class=\"hl-constructor\"",
+    b" class=\"hl-embedded\"",
+    b" class=\"hl-escape\"",
     b" class=\"hl-function\"",
     b" class=\"hl-function-builtin\"",
     b" class=\"hl-keyword\"",
@@ -45,7 +54,11 @@ const HTML_ATTRS: &[&[u8]] = &[
     b" class=\"hl-punctuation\"",
     b" class=\"hl-punctuation-bracket\"",
     b" class=\"hl-punctuation-delimiter\"",
+    b" class=\"hl-punctuation-special\"",
     b" class=\"hl-string\"",
+    b" class=\"hl-string-special\"",
+    b" class=\"hl-string-special-path\"",
+    b" class=\"hl-string-special-uri\"",
     b" class=\"hl-type\"",
     b" class=\"hl-type-builtin\"",
     b" class=\"hl-variable\"",

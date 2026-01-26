@@ -272,6 +272,7 @@ article.post header {
 :root {
   --hl-keyword: #d73a49;
   --hl-string: #22863a;
+  --hl-string-special: #032f62;
   --hl-comment: #6a737d;
   --hl-function: #6f42c1;
   --hl-type: #005cc5;
@@ -281,13 +282,17 @@ article.post header {
   --hl-constant: #005cc5;
   --hl-property: #005cc5;
   --hl-punctuation: #24292e;
+  --hl-punctuation-special: #d73a49;
   --hl-attribute: #22863a;
+  --hl-escape: #005cc5;
+  --hl-embedded: #6f42c1;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --hl-keyword: #f97583;
     --hl-string: #9ecbff;
+    --hl-string-special: #b392f0;
     --hl-comment: #6a737d;
     --hl-function: #b392f0;
     --hl-type: #79b8ff;
@@ -297,7 +302,10 @@ article.post header {
     --hl-constant: #79b8ff;
     --hl-property: #79b8ff;
     --hl-punctuation: #e1e4e8;
+    --hl-punctuation-special: #f97583;
     --hl-attribute: #85e89d;
+    --hl-escape: #79b8ff;
+    --hl-embedded: #b392f0;
   }
 }
 
@@ -380,4 +388,23 @@ article.post header {
 
 .hl-constructor {
   color: var(--hl-type);
+}
+
+.hl-escape {
+  color: var(--hl-escape);
+  font-weight: 600;
+}
+
+.hl-embedded {
+  color: var(--hl-embedded);
+}
+
+.hl-string-special,
+.hl-string-special-path,
+.hl-string-special-uri {
+  color: var(--hl-string-special);
+}
+
+.hl-punctuation-special {
+  color: var(--hl-punctuation-special);
 }
