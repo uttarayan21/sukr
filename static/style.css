@@ -278,10 +278,10 @@ article.post header {
   --hl-type: #005cc5;
   --hl-number: #005cc5;
   --hl-operator: #d73a49;
-  --hl-variable: #24292e;
+  --hl-variable: #e36209;
   --hl-constant: #005cc5;
   --hl-property: #005cc5;
-  --hl-punctuation: #24292e;
+  --hl-punctuation: #586069;
   --hl-punctuation-special: #d73a49;
   --hl-attribute: #22863a;
   --hl-escape: #005cc5;
@@ -298,10 +298,10 @@ article.post header {
     --hl-type: #79b8ff;
     --hl-number: #79b8ff;
     --hl-operator: #f97583;
-    --hl-variable: #e1e4e8;
+    --hl-variable: #ffab70;
     --hl-constant: #79b8ff;
     --hl-property: #79b8ff;
-    --hl-punctuation: #e1e4e8;
+    --hl-punctuation: #a0a0a0;
     --hl-punctuation-special: #f97583;
     --hl-attribute: #85e89d;
     --hl-escape: #79b8ff;

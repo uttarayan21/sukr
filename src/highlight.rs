@@ -145,7 +145,7 @@ fn get_config(lang: Language) -> HighlightConfiguration {
         Language::Nix => (
             tree_sitter_nix::LANGUAGE.into(),
             "nix",
-            tree_sitter_nix::HIGHLIGHTS_QUERY,
+            include_str!("../queries/nix-highlights.scm"),
         ),
         Language::Python => (
             tree_sitter_python::LANGUAGE.into(),
