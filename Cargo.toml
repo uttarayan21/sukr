@@ -32,5 +32,6 @@ tree-sitter-yaml       = "0.7"
 lightningcss = "1.0.0-alpha.70"
 
 # Config parsing
-serde = { version = "1", features = ["derive"] }
-toml  = "0.8"
+katex-rs = "0.2.3"
+serde    = { version = "1", features = ["derive"] }
+toml     = "0.8"

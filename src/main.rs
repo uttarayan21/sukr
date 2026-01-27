@@ -8,6 +8,7 @@ mod css;
 mod error;
 mod feed;
 mod highlight;
+mod math;
 mod render;
 mod templates;
 
