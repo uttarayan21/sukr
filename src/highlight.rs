@@ -1,5 +1,6 @@
 //! Syntax highlighting via tree-sitter.
 
+use std::sync::LazyLock;
 use tree_sitter_highlight::{HighlightConfiguration, Highlighter as TSHighlighter, HtmlRenderer};
 
 /// Recognized highlight names mapped to CSS classes.
@@ -104,90 +105,172 @@ impl Language {
     }
 }
 
-/// Get highlight configuration for a language.
-fn get_config(lang: Language) -> HighlightConfiguration {
-    let (language, name, highlights) = match lang {
-        Language::Bash => (
-            tree_sitter_bash::LANGUAGE.into(),
-            "bash",
-            tree_sitter_bash::HIGHLIGHT_QUERY,
-        ),
-        Language::C => (
-            tree_sitter_c::LANGUAGE.into(),
-            "c",
-            tree_sitter_c::HIGHLIGHT_QUERY,
-        ),
-        Language::Css => (
-            tree_sitter_css::LANGUAGE.into(),
-            "css",
-            tree_sitter_css::HIGHLIGHTS_QUERY,
-        ),
-        Language::Go => (
-            tree_sitter_go::LANGUAGE.into(),
-            "go",
-            tree_sitter_go::HIGHLIGHTS_QUERY,
-        ),
-        Language::Html => (
-            tree_sitter_html::LANGUAGE.into(),
-            "html",
-            tree_sitter_html::HIGHLIGHTS_QUERY,
-        ),
-        Language::JavaScript => (
-            tree_sitter_javascript::LANGUAGE.into(),
-            "javascript",
-            tree_sitter_javascript::HIGHLIGHT_QUERY,
-        ),
-        Language::Json => (
-            tree_sitter_json::LANGUAGE.into(),
-            "json",
-            tree_sitter_json::HIGHLIGHTS_QUERY,
-        ),
-        Language::Nix => (
-            tree_sitter_nix::LANGUAGE.into(),
-            "nix",
-            include_str!("../queries/nix-highlights.scm"),
-        ),
-        Language::Python => (
-            tree_sitter_python::LANGUAGE.into(),
-            "python",
-            tree_sitter_python::HIGHLIGHTS_QUERY,
-        ),
-        Language::Rust => (
-            tree_sitter_rust::LANGUAGE.into(),
-            "rust",
-            tree_sitter_rust::HIGHLIGHTS_QUERY,
-        ),
-        Language::TypeScript => (
-            tree_sitter_typescript::LANGUAGE_TYPESCRIPT.into(),
-            "typescript",
-            tree_sitter_typescript::HIGHLIGHTS_QUERY,
-        ),
-        Language::Yaml => (
-            tree_sitter_yaml::LANGUAGE.into(),
-            "yaml",
-            tree_sitter_yaml::HIGHLIGHTS_QUERY,
-        ),
-    };
-
-    let mut config = HighlightConfiguration::new(language, name, highlights, "", "")
+/// Helper to create and configure a HighlightConfiguration.
+fn make_config(
+    language: tree_sitter::Language,
+    name: &str,
+    highlights: &str,
+    injections: &str,
+) -> HighlightConfiguration {
+    let mut config = HighlightConfiguration::new(language, name, highlights, injections, "")
         .expect("highlight query should be valid");
-
     config.configure(HIGHLIGHT_NAMES);
     config
 }
 
+// Static configurations for each language, lazily initialized.
+
+static BASH_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_bash::LANGUAGE.into(),
+        "bash",
+        tree_sitter_bash::HIGHLIGHT_QUERY,
+        "",
+    )
+});
+
+static C_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_c::LANGUAGE.into(),
+        "c",
+        tree_sitter_c::HIGHLIGHT_QUERY,
+        "",
+    )
+});
+
+static CSS_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_css::LANGUAGE.into(),
+        "css",
+        tree_sitter_css::HIGHLIGHTS_QUERY,
+        "",
+    )
+});
+
+static GO_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_go::LANGUAGE.into(),
+        "go",
+        tree_sitter_go::HIGHLIGHTS_QUERY,
+        "",
+    )
+});
+
+static HTML_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_html::LANGUAGE.into(),
+        "html",
+        tree_sitter_html::HIGHLIGHTS_QUERY,
+        tree_sitter_html::INJECTIONS_QUERY,
+    )
+});
+
+static JAVASCRIPT_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_javascript::LANGUAGE.into(),
+        "javascript",
+        tree_sitter_javascript::HIGHLIGHT_QUERY,
+        tree_sitter_javascript::INJECTIONS_QUERY,
+    )
+});
+
+static JSON_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_json::LANGUAGE.into(),
+        "json",
+        tree_sitter_json::HIGHLIGHTS_QUERY,
+        "",
+    )
+});
+
+static NIX_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_nix::LANGUAGE.into(),
+        "nix",
+        include_str!("../queries/nix-highlights.scm"),
+        include_str!("../queries/nix-injections.scm"),
+    )
+});
+
+static PYTHON_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_python::LANGUAGE.into(),
+        "python",
+        tree_sitter_python::HIGHLIGHTS_QUERY,
+        "",
+    )
+});
+
+static RUST_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_rust::LANGUAGE.into(),
+        "rust",
+        tree_sitter_rust::HIGHLIGHTS_QUERY,
+        "",
+    )
+});
+
+static TYPESCRIPT_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_typescript::LANGUAGE_TYPESCRIPT.into(),
+        "typescript",
+        tree_sitter_typescript::HIGHLIGHTS_QUERY,
+        "",
+    )
+});
+
+static YAML_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_yaml::LANGUAGE.into(),
+        "yaml",
+        tree_sitter_yaml::HIGHLIGHTS_QUERY,
+        "",
+    )
+});
+
+/// Get a static reference to the highlight configuration for a language.
+fn get_config(lang: Language) -> &'static HighlightConfiguration {
+    match lang {
+        Language::Bash => &BASH_CONFIG,
+        Language::C => &C_CONFIG,
+        Language::Css => &CSS_CONFIG,
+        Language::Go => &GO_CONFIG,
+        Language::Html => &HTML_CONFIG,
+        Language::JavaScript => &JAVASCRIPT_CONFIG,
+        Language::Json => &JSON_CONFIG,
+        Language::Nix => &NIX_CONFIG,
+        Language::Python => &PYTHON_CONFIG,
+        Language::Rust => &RUST_CONFIG,
+        Language::TypeScript => &TYPESCRIPT_CONFIG,
+        Language::Yaml => &YAML_CONFIG,
+    }
+}
+
+/// Get config by language name string (for injection callback).
+fn get_config_by_name(name: &str) -> Option<&'static HighlightConfiguration> {
+    Language::from_fence(name).map(get_config)
+}
+
 /// Highlight source code and return HTML with span elements.
+///
+/// Uses tree-sitter-highlight with injection support for embedded languages
+/// in Nix, HTML, and JavaScript code blocks.
 pub fn highlight_code(lang: Language, source: &str) -> String {
-    let mut highlighter = TSHighlighter::new();
     let config = get_config(lang);
 
-    let highlights = match highlighter.highlight(&config, source.as_bytes(), None, |_| None) {
+    // Leak both the highlighter and source to satisfy 'static lifetime.
+    // Acceptable for SSG where the process exits after building.
+    let highlighter: &'static mut TSHighlighter = Box::leak(Box::new(TSHighlighter::new()));
+    let static_source: &'static str = Box::leak(source.to_owned().into_boxed_str());
+    let source_bytes: &'static [u8] = static_source.as_bytes();
+
+    let highlights = match highlighter.highlight(config, source_bytes, None, get_config_by_name) {
         Ok(h) => h,
         Err(_) => return html_escape(source),
     };
 
     let mut renderer = HtmlRenderer::new();
-    let result = renderer.render(highlights, source.as_bytes(), &|highlight, buf| {
+    let result = renderer.render(highlights, source_bytes, &|highlight, buf| {
         let attrs = HTML_ATTRS.get(highlight.0).copied().unwrap_or(b"");
         buf.extend_from_slice(attrs);
     });
@@ -282,5 +365,26 @@ mod tests {
         let escaped = html_escape("<script>alert('xss')</script>");
         assert!(!escaped.contains('<'));
         assert!(escaped.contains("&lt;"));
+    }
+
+    #[test]
+    fn test_nix_injection_bash_buildphase() {
+        // Nix code with embedded bash in buildPhase
+        let code = r#"{ pkgs }:
+pkgs.stdenv.mkDerivation {
+  buildPhase = ''
+    echo "Hello from bash"
+    make build
+  '';
+}"#;
+        let html = highlight_code(Language::Nix, code);
+
+        // Should contain Nix highlighting
+        assert!(html.contains("class=\"hl-"));
+        // Should contain the bash content
+        assert!(html.contains("echo"));
+        assert!(html.contains("make"));
+        // String content should be present
+        assert!(html.contains("Hello from bash"));
     }
 }

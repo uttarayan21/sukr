@@ -13,6 +13,7 @@ thiserror      = "2"
 walkdir        = "2"
 
 # Syntax highlighting
+tree-sitter            = "0.26"
 tree-sitter-bash       = "0.23"
 tree-sitter-c          = "0.24"
 tree-sitter-css        = "0.25"
