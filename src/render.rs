@@ -1,6 +1,6 @@
 //! Markdown to HTML rendering via pulldown-cmark with syntax highlighting.
 
-use crate::highlight::{highlight_code, Language};
+use crate::highlight::{Language, highlight_code};
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 
 /// Render markdown content to HTML with syntax highlighting.
@@ -8,7 +8,8 @@ pub fn markdown_to_html(markdown: &str) -> String {
     let options = Options::ENABLE_TABLES
         | Options::ENABLE_FOOTNOTES
         | Options::ENABLE_STRIKETHROUGH
-        | Options::ENABLE_TASKLISTS;
+        | Options::ENABLE_TASKLISTS
+        | Options::ENABLE_MATH;
 
     let parser = Parser::new_ext(markdown, options);
     let mut html_output = String::new();
@@ -107,9 +108,28 @@ pub fn markdown_to_html(markdown: &str) -> String {
                 };
                 html_output.push_str(checkbox);
             }
-            Event::InlineMath(_) | Event::DisplayMath(_) => {
-                // Future: KaTeX integration
-            }
+            Event::InlineMath(latex) => match crate::math::render_math(&latex, false) {
+                Ok(rendered) => html_output.push_str(&rendered),
+                Err(e) => {
+                    eprintln!("math render error: {e}");
+                    html_output.push_str("<code class=\"math-error\">");
+                    html_output.push_str(&html_escape(&latex));
+                    html_output.push_str("</code>");
+                }
+            },
+            Event::DisplayMath(latex) => match crate::math::render_math(&latex, true) {
+                Ok(rendered) => {
+                    html_output.push_str("<div class=\"math-display\">\n");
+                    html_output.push_str(&rendered);
+                    html_output.push_str("\n</div>\n");
+                }
+                Err(e) => {
+                    eprintln!("math render error: {e}");
+                    html_output.push_str("<pre class=\"math-error\">");
+                    html_output.push_str(&html_escape(&latex));
+                    html_output.push_str("</pre>\n");
+                }
+            },
         }
     }
 
