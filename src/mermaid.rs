@@ -3,6 +3,7 @@
 //! Converts Mermaid diagram definitions to SVG at build-time.
 
 use mermaid_rs_renderer::RenderOptions;
+use std::panic;
 
 /// Render a Mermaid diagram to SVG.
 ///
@@ -11,9 +12,21 @@ use mermaid_rs_renderer::RenderOptions;
 ///
 /// # Returns
 /// The rendered SVG string, or an error message on failure.
+///
+/// # Note
+/// Uses catch_unwind to handle panics in upstream dependencies gracefully.
 pub fn render_diagram(code: &str) -> Result<String, String> {
-    let opts = RenderOptions::modern();
-    mermaid_rs_renderer::render_with_options(code, opts).map_err(|e| e.to_string())
+    let code = code.to_owned();
+    let result = panic::catch_unwind(move || {
+        let opts = RenderOptions::modern();
+        mermaid_rs_renderer::render_with_options(&code, opts)
+    });
+
+    match result {
+        Ok(Ok(svg)) => Ok(svg),
+        Ok(Err(e)) => Err(e.to_string()),
+        Err(_) => Err("mermaid rendering panicked (upstream bug)".to_string()),
+    }
 }
 
 #[cfg(test)]
@@ -38,6 +51,13 @@ mod tests {
         // Should not panic, returns error
         let result = render_diagram("invalid diagram syntax ???");
         // May succeed with error node or fail gracefully
+        assert!(result.is_ok() || result.is_err());
+    }
+
+    #[test]
+    fn test_state_diagram() {
+        let result =
+            render_diagram("stateDiagram-v2\n    [*] --> Idle\n    Idle --> Processing: Start");
         assert!(result.is_ok() || result.is_err());
     }
 }

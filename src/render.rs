@@ -46,23 +46,43 @@ pub fn markdown_to_html(markdown: &str) -> String {
             Event::End(TagEnd::CodeBlock) => {
                 // Render the code block with highlighting
                 let lang_str = code_block_lang.as_deref().unwrap_or("");
-                html_output.push_str("<pre><code");
 
-                if let Some(lang) = Language::from_fence(lang_str) {
-                    // Supported language: apply tree-sitter highlighting
-                    html_output.push_str(&format!(" class=\"language-{}\">", lang_str));
-                    html_output.push_str(&highlight_code(lang, &code_block_content));
-                } else {
-                    // Unsupported language: render as plain escaped text
-                    if !lang_str.is_empty() {
-                        html_output.push_str(&format!(" class=\"language-{}\">", lang_str));
-                    } else {
-                        html_output.push('>');
+                // Mermaid diagrams: render to SVG
+                if lang_str == "mermaid" {
+                    match crate::mermaid::render_diagram(&code_block_content) {
+                        Ok(svg) => {
+                            html_output.push_str("<div class=\"mermaid-diagram\">\n");
+                            html_output.push_str(&svg);
+                            html_output.push_str("\n</div>\n");
+                        }
+                        Err(e) => {
+                            eprintln!("mermaid render error: {e}");
+                            html_output.push_str("<pre class=\"mermaid-error\"><code>");
+                            html_output.push_str(&html_escape(&code_block_content));
+                            html_output.push_str("</code></pre>\n");
+                        }
                     }
-                    html_output.push_str(&html_escape(&code_block_content));
+                } else {
+                    // Code blocks: syntax highlighting
+                    html_output.push_str("<pre><code");
+
+                    if let Some(lang) = Language::from_fence(lang_str) {
+                        // Supported language: apply tree-sitter highlighting
+                        html_output.push_str(&format!(" class=\"language-{}\">", lang_str));
+                        html_output.push_str(&highlight_code(lang, &code_block_content));
+                    } else {
+                        // Unsupported language: render as plain escaped text
+                        if !lang_str.is_empty() {
+                            html_output.push_str(&format!(" class=\"language-{}\">", lang_str));
+                        } else {
+                            html_output.push('>');
+                        }
+                        html_output.push_str(&html_escape(&code_block_content));
+                    }
+
+                    html_output.push_str("</code></pre>\n");
                 }
 
-                html_output.push_str("</code></pre>\n");
                 code_block_lang = None;
                 code_block_content.clear();
             }
