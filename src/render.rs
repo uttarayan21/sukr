@@ -1,6 +1,6 @@
 //! Markdown to HTML rendering via pulldown-cmark with syntax highlighting.
 
-use crate::highlight::{Language, highlight_code};
+use crate::highlight::{highlight_code, Language};
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 
 /// Render markdown content to HTML with syntax highlighting.

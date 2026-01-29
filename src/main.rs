@@ -9,6 +9,7 @@ mod error;
 mod feed;
 mod highlight;
 mod math;
+mod mermaid;
 mod render;
 mod templates;
 
