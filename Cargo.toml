@@ -37,4 +37,8 @@ serde    = { version = "1", features = ["derive"] }
 toml     = "0.8"
 
 # Diagram rendering
-mermaid-rs-renderer = { git = "https://github.com/1jehuang/mermaid-rs-renderer", default-features = false }
+mermaid-rs-renderer = { version = "0.1", default-features = false }
+
+# Patch dagre_rust to fix unwrap on None bug
+[patch.crates-io]
+dagre_rust = { path = "patches/dagre_rust" }
