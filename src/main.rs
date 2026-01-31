@@ -13,7 +13,7 @@ mod mermaid;
 mod render;
 mod templates;
 
-use crate::content::{Content, ContentKind};
+use crate::content::{discover_nav, Content, ContentKind, NavItem};
 use crate::error::{Error, Result};
 use std::fs;
 use std::path::Path;
@@ -38,21 +38,24 @@ fn run() -> Result<()> {
     // Load site configuration
     let config = config::SiteConfig::load(config_path)?;
 
+    // Discover navigation from filesystem
+    let nav = discover_nav(content_dir)?;
+
     // 0. Copy static assets
     copy_static_assets(static_dir, output_dir)?;
 
     // 1. Process blog posts
-    let mut posts = process_blog_posts(content_dir, output_dir, &config)?;
+    let mut posts = process_blog_posts(content_dir, output_dir, &config, &nav)?;
 
     // 2. Generate blog index (sorted by date, newest first)
     posts.sort_by(|a, b| b.frontmatter.date.cmp(&a.frontmatter.date));
-    generate_blog_index(output_dir, &posts, &config)?;
+    generate_blog_index(output_dir, &posts, &config, &nav)?;
 
     // 2b. Generate Atom feed
     generate_feed(output_dir, &posts, &config)?;
 
-    // 3. Process standalone pages (about, collab)
-    process_pages(content_dir, output_dir, &config)?;
+    // 3. Process standalone pages (discovered dynamically)
+    process_pages(content_dir, output_dir, &config, &nav)?;
 
     // 4. Process projects and generate project index
     let mut projects = process_projects(content_dir)?;
@@ -62,10 +65,10 @@ fn run() -> Result<()> {
             .unwrap_or(99)
             .cmp(&b.frontmatter.weight.unwrap_or(99))
     });
-    generate_projects_index(output_dir, &projects, &config)?;
+    generate_projects_index(output_dir, &projects, &config, &nav)?;
 
     // 5. Generate homepage
-    generate_homepage(content_dir, output_dir, &config)?;
+    generate_homepage(content_dir, output_dir, &config, &nav)?;
 
     eprintln!("done!");
     Ok(())
@@ -76,6 +79,7 @@ fn process_blog_posts(
     content_dir: &Path,
     output_dir: &Path,
     config: &config::SiteConfig,
+    nav: &[NavItem],
 ) -> Result<Vec<Content>> {
     let blog_dir = content_dir.join("blog");
     let mut posts = Vec::new();
@@ -94,7 +98,8 @@ fn process_blog_posts(
         let content = Content::from_path(path, ContentKind::Post)?;
         let html_body = render::markdown_to_html(&content.body);
         let page_path = format!("/{}", content.output_path(content_dir).display());
-        let page = templates::render_post(&content.frontmatter, &html_body, &page_path, config);
+        let page =
+            templates::render_post(&content.frontmatter, &html_body, &page_path, config, nav);
 
         write_output(output_dir, content_dir, &content, page.into_string())?;
         posts.push(content);
@@ -108,11 +113,12 @@ fn generate_blog_index(
     output_dir: &Path,
     posts: &[Content],
     config: &config::SiteConfig,
+    nav: &[NavItem],
 ) -> Result<()> {
     let out_path = output_dir.join("blog/index.html");
     eprintln!("generating: {}", out_path.display());
 
-    let page = templates::render_blog_index("Blog", posts, "/blog/index.html", config);
+    let page = templates::render_blog_index("Blog", posts, "/blog/index.html", config, nav);
 
     fs::create_dir_all(out_path.parent().unwrap()).map_err(|e| Error::CreateDir {
         path: out_path.parent().unwrap().to_path_buf(),
@@ -144,17 +150,32 @@ fn generate_feed(output_dir: &Path, posts: &[Content], config: &config::SiteConf
     Ok(())
 }
 
-/// Process standalone pages in content/ (about.md, collab.md)
-fn process_pages(content_dir: &Path, output_dir: &Path, config: &config::SiteConfig) -> Result<()> {
-    for name in ["about.md", "collab.md"] {
-        let path = content_dir.join(name);
-        if path.exists() {
+/// Process standalone pages in content/ (top-level .md files excluding _index.md)
+fn process_pages(
+    content_dir: &Path,
+    output_dir: &Path,
+    config: &config::SiteConfig,
+    nav: &[NavItem],
+) -> Result<()> {
+    // Dynamically discover top-level .md files (except _index.md)
+    let entries = fs::read_dir(content_dir).map_err(|e| Error::ReadFile {
+        path: content_dir.to_path_buf(),
+        source: e,
+    })?;
+
+    for entry in entries.filter_map(|e| e.ok()) {
+        let path = entry.path();
+        if path.is_file()
+            && path.extension().is_some_and(|ext| ext == "md")
+            && path.file_name().is_some_and(|n| n != "_index.md")
+        {
             eprintln!("processing: {}", path.display());
 
             let content = Content::from_path(&path, ContentKind::Page)?;
             let html_body = render::markdown_to_html(&content.body);
             let page_path = format!("/{}", content.output_path(content_dir).display());
-            let page = templates::render_page(&content.frontmatter, &html_body, &page_path, config);
+            let page =
+                templates::render_page(&content.frontmatter, &html_body, &page_path, config, nav);
 
             write_output(output_dir, content_dir, &content, page.into_string())?;
         }
@@ -187,12 +208,13 @@ fn generate_projects_index(
     output_dir: &Path,
     projects: &[Content],
     config: &config::SiteConfig,
+    nav: &[NavItem],
 ) -> Result<()> {
     let out_path = output_dir.join("projects/index.html");
     eprintln!("generating: {}", out_path.display());
 
     let page =
-        templates::render_projects_index("Projects", projects, "/projects/index.html", config);
+        templates::render_projects_index("Projects", projects, "/projects/index.html", config, nav);
 
     fs::create_dir_all(out_path.parent().unwrap()).map_err(|e| Error::CreateDir {
         path: out_path.parent().unwrap().to_path_buf(),
@@ -213,13 +235,15 @@ fn generate_homepage(
     content_dir: &Path,
     output_dir: &Path,
     config: &config::SiteConfig,
+    nav: &[NavItem],
 ) -> Result<()> {
     let index_path = content_dir.join("_index.md");
     eprintln!("generating: homepage");
 
     let content = Content::from_path(&index_path, ContentKind::Section)?;
     let html_body = render::markdown_to_html(&content.body);
-    let page = templates::render_homepage(&content.frontmatter, &html_body, "/index.html", config);
+    let page =
+        templates::render_homepage(&content.frontmatter, &html_body, "/index.html", config, nav);
 
     let out_path = output_dir.join("index.html");
 

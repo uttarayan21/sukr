@@ -1,7 +1,7 @@
 //! HTML templates using maud.
 
 use crate::config::SiteConfig;
-use crate::content::{Content, Frontmatter};
+use crate::content::{Content, Frontmatter, NavItem};
 use maud::{html, Markup, PreEscaped, DOCTYPE};
 
 /// Compute relative path prefix based on page depth.
@@ -33,6 +33,7 @@ pub fn render_post(
     content_html: &str,
     page_path: &str,
     config: &SiteConfig,
+    nav: &[NavItem],
 ) -> Markup {
     let depth = path_depth(page_path);
     let prefix = relative_prefix(depth);
@@ -63,6 +64,7 @@ pub fn render_post(
         },
         page_path,
         config,
+        nav,
     )
 }
 
@@ -72,6 +74,7 @@ pub fn render_page(
     content_html: &str,
     page_path: &str,
     config: &SiteConfig,
+    nav: &[NavItem],
 ) -> Markup {
     base_layout(
         &frontmatter.title,
@@ -85,6 +88,7 @@ pub fn render_page(
         },
         page_path,
         config,
+        nav,
     )
 }
 
@@ -94,6 +98,7 @@ pub fn render_homepage(
     content_html: &str,
     page_path: &str,
     config: &SiteConfig,
+    nav: &[NavItem],
 ) -> Markup {
     base_layout(
         &frontmatter.title,
@@ -110,6 +115,7 @@ pub fn render_homepage(
         },
         page_path,
         config,
+        nav,
     )
 }
 
@@ -119,6 +125,7 @@ pub fn render_blog_index(
     posts: &[Content],
     page_path: &str,
     config: &SiteConfig,
+    nav: &[NavItem],
 ) -> Markup {
     base_layout(
         title,
@@ -143,6 +150,7 @@ pub fn render_blog_index(
         },
         page_path,
         config,
+        nav,
     )
 }
 
@@ -152,6 +160,7 @@ pub fn render_projects_index(
     projects: &[Content],
     page_path: &str,
     config: &SiteConfig,
+    nav: &[NavItem],
 ) -> Markup {
     base_layout(
         title,
@@ -179,11 +188,18 @@ pub fn render_projects_index(
         },
         page_path,
         config,
+        nav,
     )
 }
 
 /// Base HTML layout wrapper.
-fn base_layout(title: &str, content: Markup, page_path: &str, config: &SiteConfig) -> Markup {
+fn base_layout(
+    title: &str,
+    content: Markup,
+    page_path: &str,
+    config: &SiteConfig,
+    nav: &[NavItem],
+) -> Markup {
     let depth = path_depth(page_path);
     let prefix = relative_prefix(depth);
     let canonical_url = format!("{}{}", config.base_url.trim_end_matches('/'), page_path);
@@ -202,9 +218,9 @@ fn base_layout(title: &str, content: Markup, page_path: &str, config: &SiteConfi
             body {
                 nav {
                     a href=(format!("{}/index.html", prefix)) { (config.title) }
-                    a href=(format!("{}/blog/index.html", prefix)) { "blog" }
-                    a href=(format!("{}/projects/index.html", prefix)) { "projects" }
-                    a href=(format!("{}/about.html", prefix)) { "about" }
+                    @for item in nav {
+                        a href=(format!("{}{}", prefix, item.path)) { (item.label) }
+                    }
                 }
                 main {
                     (content)
