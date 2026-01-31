@@ -34,6 +34,7 @@ lightningcss = "1.0.0-alpha.70"
 # Config parsing
 katex-rs = "0.2.3"
 serde    = { version = "1", features = ["derive"] }
+tera     = "1"
 toml     = "0.8"
 
 # Diagram rendering

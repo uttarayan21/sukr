@@ -2,6 +2,7 @@
 
 use crate::error::{Error, Result};
 use gray_matter::{engine::YAML, Matter};
+use serde::Serialize;
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -19,7 +20,7 @@ pub enum ContentKind {
 }
 
 /// A navigation menu item discovered from the filesystem.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct NavItem {
     /// Display label (from nav_label or title)
     pub label: String,
@@ -42,6 +43,10 @@ pub struct Frontmatter {
     pub link_to: Option<String>,
     /// Custom navigation label (defaults to title)
     pub nav_label: Option<String>,
+    /// Section type for template dispatch (e.g., "blog", "projects")
+    pub section_type: Option<String>,
+    /// Override template for this content item
+    pub template: Option<String>,
 }
 
 /// A content item ready for rendering.
@@ -134,6 +139,8 @@ fn parse_frontmatter(path: &Path, parsed: &gray_matter::ParsedEntity) -> Result<
     let weight = pod.get("weight").and_then(|v| v.as_i64().ok());
     let link_to = pod.get("link_to").and_then(|v| v.as_string().ok());
     let nav_label = pod.get("nav_label").and_then(|v| v.as_string().ok());
+    let section_type = pod.get("section_type").and_then(|v| v.as_string().ok());
+    let template = pod.get("template").and_then(|v| v.as_string().ok());
 
     // Handle nested taxonomies.tags structure
     let tags = if let Some(taxonomies) = pod.get("taxonomies") {
@@ -162,6 +169,8 @@ fn parse_frontmatter(path: &Path, parsed: &gray_matter::ParsedEntity) -> Result<
         weight,
         link_to,
         nav_label,
+        section_type,
+        template,
     })
 }
 

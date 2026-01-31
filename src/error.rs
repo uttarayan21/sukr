@@ -40,6 +40,14 @@ pub enum Error {
     /// Failed to parse configuration file.
     #[error("invalid config in {path}: {message}")]
     Config { path: PathBuf, message: String },
+
+    /// Failed to load templates.
+    #[error("failed to load templates: {message}")]
+    TemplateLoad { message: String },
+
+    /// Failed to render template.
+    #[error("failed to render template '{template}': {message}")]
+    TemplateRender { template: String, message: String },
 }
 
 /// Result type alias for compiler operations.
