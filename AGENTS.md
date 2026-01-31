@@ -11,9 +11,12 @@ The agent MUST read and adhere to the global engineering ruleset and any active 
 ```
 .agent/
 ├── predicates/
-│   ├── global.md              # Base engineering ruleset (required)
-│   └── fragments/             # Active extensions
-│       └── rust.md            # Rust conventions
+│   ├── engineering.md         # Base engineering ruleset (always active)
+│   └── fragments/             # Context-specific extensions (opt-in)
+│       ├── rust.md            # Rust idioms
+│       ├── depmap.md          # DepMap MCP tools
+│       ├── integral.md        # Holistic problem-solving
+│       └── personalization.md # User preferences
 └── workflows/
     └── ...                    # Task-specific workflows
 ```
@@ -22,6 +25,8 @@ The agent MUST read and adhere to the global engineering ruleset and any active 
 
 - Rust idioms (`.agent/predicates/fragments/rust.md`)
 - DepMap MCP tools (`.agent/predicates/fragments/depmap.md`)
+- Integral problem-solving (`.agent/predicates/fragments/integral.md`)
+- Personalization (`.agent/predicates/fragments/personalization.md`)
 
 **Available Workflows:**
 
