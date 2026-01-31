@@ -840,37 +840,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "nrd-sh"
-version = "0.1.0"
-dependencies = [
- "gray_matter",
- "katex-rs",
- "lightningcss",
- "mermaid-rs-renderer",
- "pulldown-cmark",
- "serde",
- "tempfile",
- "tera",
- "thiserror 2.0.18",
- "toml 0.8.23",
- "tree-sitter",
- "tree-sitter-bash",
- "tree-sitter-c",
- "tree-sitter-css",
- "tree-sitter-go",
- "tree-sitter-highlight",
- "tree-sitter-html",
- "tree-sitter-javascript",
- "tree-sitter-json",
- "tree-sitter-nix",
- "tree-sitter-python",
- "tree-sitter-rust",
- "tree-sitter-typescript",
- "tree-sitter-yaml",
- "walkdir",
-]
-
-[[package]]
 name = "num-traits"
 version = "0.2.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1537,6 +1506,37 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.114",
+]
+
+[[package]]
+name = "sukr"
+version = "0.1.0"
+dependencies = [
+ "gray_matter",
+ "katex-rs",
+ "lightningcss",
+ "mermaid-rs-renderer",
+ "pulldown-cmark",
+ "serde",
+ "tempfile",
+ "tera",
+ "thiserror 2.0.18",
+ "toml 0.8.23",
+ "tree-sitter",
+ "tree-sitter-bash",
+ "tree-sitter-c",
+ "tree-sitter-css",
+ "tree-sitter-go",
+ "tree-sitter-highlight",
+ "tree-sitter-html",
+ "tree-sitter-javascript",
+ "tree-sitter-json",
+ "tree-sitter-nix",
+ "tree-sitter-python",
+ "tree-sitter-rust",
+ "tree-sitter-typescript",
+ "tree-sitter-yaml",
+ "walkdir",
 ]
 
 [[package]]

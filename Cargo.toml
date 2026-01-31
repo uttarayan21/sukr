@@ -1,8 +1,8 @@
 [package]
-description = "Bespoke static site compiler for nrd.sh"
+description = "Minimal static site compiler — suckless, Rust, zero JS"
 edition     = "2024"
 license     = "MIT"
-name        = "nrd-sh"
+name        = "sukr"
 version     = "0.1.0"
 
 [dependencies]

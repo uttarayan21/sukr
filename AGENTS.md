@@ -34,13 +34,13 @@ The agent MUST read and adhere to the global engineering ruleset and any active 
 
 ## Project Overview
 
-**nrd.sh** is a bespoke static site compiler written in Rust. It transforms Markdown content into a minimal, high-performance static site with zero client-side dependencies.
+**sukr** is a minimal static site compiler written in Rust. Suckless, zero JS, transforms Markdown into high-performance static HTML.
 
 ### Philosophy
 
 - **Suckless:** No bloated runtimes, no unnecessary JavaScript
 - **Hermetic:** Single binary with all dependencies compiled in
-- **Elegant:** Syntax highlighting via Tree-sitter
+- **Elegant:** Syntax highlighting via Tree-sitter, templates via Tera
 
 ### Architecture
 
@@ -50,7 +50,7 @@ The compiler implements an **Interceptor Pipeline**:
 2. **Stream:** Feed Markdown to `pulldown-cmark` event parser
 3. **Intercept:** Route code blocks to Tree-sitter, Mermaid, KaTeX
 4. **Render:** Push modified events to HTML writer
-5. **Layout:** Wrap in `maud` templates
+5. **Layout:** Wrap in Tera templates (runtime, user-customizable)
 6. **Write:** Output to `public/`
 
 ---
@@ -65,7 +65,12 @@ cargo run            # Run compiler (builds site to public/)
 
 # Production
 nix build            # Build hermetic release binary
-./result/bin/nrd-sh  # Run release compiler
+./result/bin/sukr    # Run release compiler
+
+# CLI Usage
+sukr                           # Build with ./site.toml
+sukr -c sites/blog/site.toml   # Build with custom config
+sukr --help                    # Show usage
 ```
 
 ---
@@ -85,15 +90,17 @@ nix build            # Build hermetic release binary
 .
 ├── Cargo.toml           # Rust manifest
 ├── flake.nix            # Nix build environment
-├── site.toml            # Site configuration
+├── site.toml            # Site configuration (or in sites/*)
 ├── src/
 │   ├── main.rs          # Pipeline orchestrator
 │   ├── config.rs        # TOML config loader
+│   ├── content.rs       # Content discovery, sections
+│   ├── template_engine.rs # Tera template engine
 │   ├── feed.rs          # Atom feed generation
 │   ├── highlight.rs     # Tree-sitter highlighting
-│   ├── render.rs        # Pulldown-cmark interception
-│   └── templates.rs     # Maud HTML templates
-├── content/             # Blog content (Markdown + YAML frontmatter)
+│   └── render.rs        # Pulldown-cmark interception
+├── templates/           # Tera templates (base, page, section/*)
+├── content/             # Markdown + YAML frontmatter
 ├── static/              # CSS, images, _headers
 └── public/              # Generated output
 ```
@@ -121,7 +128,13 @@ nix build            # Build hermetic release binary
 Site configuration lives in `site.toml`:
 
 ```toml
-title    = "nrd.sh"
-author   = "nrdxp"
-base_url = "https://nrd.sh/"
+title    = "My Site"
+author   = "Author Name"
+base_url = "https://example.com"
+
+[paths]  # All optional, defaults shown
+content   = "content"
+output    = "public"
+static    = "static"
+templates = "templates"
 ```

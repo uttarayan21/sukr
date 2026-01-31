@@ -1,6 +1,6 @@
-//! nrd.sh - Bespoke static site compiler.
+//! sukr - Minimal static site compiler.
 //!
-//! Transforms markdown content into a minimal static site.
+//! Suckless, Rust, zero JS. Transforms markdown into static HTML.
 
 mod config;
 mod content;
@@ -20,10 +20,10 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 const USAGE: &str = "\
-nrd-sh - Bespoke static site compiler
+sukr - Minimal static site compiler
 
 USAGE:
-    nrd-sh [OPTIONS]
+    sukr [OPTIONS]
 
 OPTIONS:
     -c, --config <FILE>  Path to site.toml config file (default: ./site.toml)
