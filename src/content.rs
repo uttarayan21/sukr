@@ -236,6 +236,99 @@ pub fn discover_nav(content_dir: &Path) -> Result<Vec<NavItem>> {
     Ok(nav_items)
 }
 
+/// A discovered section from the content directory.
+#[derive(Debug)]
+pub struct Section {
+    /// The section's index content (_index.md)
+    pub index: Content,
+    /// Directory name (e.g., "blog", "projects")
+    pub name: String,
+    /// Section type for template dispatch (from frontmatter or directory name)
+    pub section_type: String,
+    /// Path to section directory
+    pub path: PathBuf,
+}
+
+impl Section {
+    /// Collect all content items in this section (excluding _index.md).
+    pub fn collect_items(&self) -> Result<Vec<Content>> {
+        let mut items = Vec::new();
+
+        for entry in fs::read_dir(&self.path)
+            .map_err(|e| Error::ReadFile {
+                path: self.path.clone(),
+                source: e,
+            })?
+            .filter_map(|e| e.ok())
+        {
+            let path = entry.path();
+            if path.is_file()
+                && path.extension().is_some_and(|ext| ext == "md")
+                && path.file_name().is_some_and(|n| n != "_index.md")
+            {
+                // Determine content kind based on section type
+                let kind = match self.section_type.as_str() {
+                    "blog" => ContentKind::Post,
+                    "projects" => ContentKind::Project,
+                    _ => ContentKind::Page,
+                };
+                items.push(Content::from_path(&path, kind)?);
+            }
+        }
+
+        Ok(items)
+    }
+}
+
+/// Discover all sections (directories with _index.md) in the content directory.
+pub fn discover_sections(content_dir: &Path) -> Result<Vec<Section>> {
+    let mut sections = Vec::new();
+
+    let entries = fs::read_dir(content_dir).map_err(|e| Error::ReadFile {
+        path: content_dir.to_path_buf(),
+        source: e,
+    })?;
+
+    for entry in entries.filter_map(|e| e.ok()) {
+        let path = entry.path();
+
+        if path.is_dir() {
+            let index_path = path.join("_index.md");
+            if index_path.exists() {
+                let index = Content::from_path(&index_path, ContentKind::Section)?;
+                let name = path
+                    .file_name()
+                    .and_then(|n| n.to_str())
+                    .unwrap_or("section")
+                    .to_string();
+
+                // Section type from frontmatter, or fall back to directory name
+                let section_type = index
+                    .frontmatter
+                    .section_type
+                    .clone()
+                    .unwrap_or_else(|| name.clone());
+
+                sections.push(Section {
+                    index,
+                    name,
+                    section_type,
+                    path,
+                });
+            }
+        }
+    }
+
+    // Sort by weight
+    sections.sort_by(|a, b| {
+        let wa = a.index.frontmatter.weight.unwrap_or(50);
+        let wb = b.index.frontmatter.weight.unwrap_or(50);
+        wa.cmp(&wb)
+    });
+
+    Ok(sections)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -332,5 +425,136 @@ mod tests {
         let nav = discover_nav(content_dir).expect("discover_nav failed");
         assert_eq!(nav.len(), 1);
         assert_eq!(nav[0].label, "About"); // Uses nav_label, not title
+    }
+
+    // =========================================================================
+    // discover_sections tests
+    // =========================================================================
+
+    fn write_section_index(
+        path: &Path,
+        title: &str,
+        section_type: Option<&str>,
+        weight: Option<i64>,
+    ) {
+        let mut content = format!("---\ntitle: \"{}\"\n", title);
+        if let Some(st) = section_type {
+            content.push_str(&format!("section_type: \"{}\"\n", st));
+        }
+        if let Some(w) = weight {
+            content.push_str(&format!("weight: {}\n", w));
+        }
+        content.push_str("---\nSection content.\n");
+        fs::write(path, content).expect("failed to write section index");
+    }
+
+    #[test]
+    fn test_discover_sections_finds_directories() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        // Create two sections
+        fs::create_dir(content_dir.join("blog")).unwrap();
+        write_section_index(&content_dir.join("blog/_index.md"), "Blog", None, None);
+
+        fs::create_dir(content_dir.join("projects")).unwrap();
+        write_section_index(
+            &content_dir.join("projects/_index.md"),
+            "Projects",
+            None,
+            None,
+        );
+
+        let sections = discover_sections(content_dir).expect("discover_sections failed");
+        assert_eq!(sections.len(), 2);
+
+        let names: Vec<_> = sections.iter().map(|s| s.name.as_str()).collect();
+        assert!(names.contains(&"blog"));
+        assert!(names.contains(&"projects"));
+    }
+
+    #[test]
+    fn test_discover_sections_uses_section_type_from_frontmatter() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        fs::create_dir(content_dir.join("writings")).unwrap();
+        write_section_index(
+            &content_dir.join("writings/_index.md"),
+            "My Writings",
+            Some("blog"),
+            None,
+        );
+
+        let sections = discover_sections(content_dir).expect("discover_sections failed");
+        assert_eq!(sections.len(), 1);
+        assert_eq!(sections[0].name, "writings");
+        assert_eq!(sections[0].section_type, "blog"); // From frontmatter, not dir name
+    }
+
+    #[test]
+    fn test_discover_sections_falls_back_to_dir_name() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        fs::create_dir(content_dir.join("gallery")).unwrap();
+        write_section_index(
+            &content_dir.join("gallery/_index.md"),
+            "Gallery",
+            None,
+            None,
+        );
+
+        let sections = discover_sections(content_dir).expect("discover_sections failed");
+        assert_eq!(sections.len(), 1);
+        assert_eq!(sections[0].section_type, "gallery"); // Falls back to dir name
+    }
+
+    #[test]
+    fn test_discover_sections_sorts_by_weight() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        fs::create_dir(content_dir.join("blog")).unwrap();
+        write_section_index(&content_dir.join("blog/_index.md"), "Blog", None, Some(20));
+
+        fs::create_dir(content_dir.join("projects")).unwrap();
+        write_section_index(
+            &content_dir.join("projects/_index.md"),
+            "Projects",
+            None,
+            Some(10),
+        );
+
+        let sections = discover_sections(content_dir).expect("discover_sections failed");
+        assert_eq!(sections.len(), 2);
+        assert_eq!(sections[0].name, "projects"); // weight 10
+        assert_eq!(sections[1].name, "blog"); // weight 20
+    }
+
+    #[test]
+    fn test_section_collect_items() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        fs::create_dir(content_dir.join("blog")).unwrap();
+        write_section_index(
+            &content_dir.join("blog/_index.md"),
+            "Blog",
+            Some("blog"),
+            None,
+        );
+        write_frontmatter(&content_dir.join("blog/post1.md"), "Post 1", None, None);
+        write_frontmatter(&content_dir.join("blog/post2.md"), "Post 2", None, None);
+
+        let sections = discover_sections(content_dir).expect("discover_sections failed");
+        assert_eq!(sections.len(), 1);
+
+        let items = sections[0].collect_items().expect("collect_items failed");
+        assert_eq!(items.len(), 2);
+
+        let titles: Vec<_> = items.iter().map(|c| c.frontmatter.title.as_str()).collect();
+        assert!(titles.contains(&"Post 1"));
+        assert!(titles.contains(&"Post 2"));
     }
 }
