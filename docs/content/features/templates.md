@@ -10,7 +10,7 @@ sukr uses [Tera](https://tera.netlify.app/), a Jinja2-like templating engine. Te
 
 ## Template Directory Structure
 
-```
+```text
 templates/
 ├── base.html               # Shared layout (required)
 ├── page.html               # Standalone pages

@@ -12,7 +12,7 @@ sukr automatically discovers sections from your content directory structure.
 
 A section is any directory under `content/` that contains an `_index.md` file:
 
-```
+```text
 content/
 ├── _index.md           # Homepage (not a section)
 ├── about.md            # Standalone page

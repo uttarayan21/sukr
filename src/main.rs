@@ -142,15 +142,13 @@ fn run(config_path: &Path) -> Result<()> {
             }
         }
 
-        // Render individual content pages (for blog posts)
-        if section.section_type == "blog" {
-            for item in &items {
-                eprintln!("  processing: {}", item.slug);
-                let html_body = render::markdown_to_html(&item.body);
-                let page_path = format!("/{}", item.output_path(&content_dir).display());
-                let html = engine.render_content(item, &html_body, &page_path, &config, &nav)?;
-                write_output(&output_dir, &content_dir, item, html)?;
-            }
+        // Render individual content pages for all sections
+        for item in &items {
+            eprintln!("  processing: {}", item.slug);
+            let html_body = render::markdown_to_html(&item.body);
+            let page_path = format!("/{}", item.output_path(&content_dir).display());
+            let html = engine.render_content(item, &html_body, &page_path, &config, &nav)?;
+            write_output(&output_dir, &content_dir, item, html)?;
         }
 
         // Render section index
