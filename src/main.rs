@@ -17,40 +17,89 @@ use crate::content::{discover_nav, discover_sections, Content, ContentKind, NavI
 use crate::error::{Error, Result};
 use crate::template_engine::{ContentContext, TemplateEngine};
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
+
+const USAGE: &str = "\
+nrd-sh - Bespoke static site compiler
+
+USAGE:
+    nrd-sh [OPTIONS]
+
+OPTIONS:
+    -c, --config <FILE>  Path to site.toml config file (default: ./site.toml)
+    -h, --help           Print this help message
+";
 
 fn main() {
-    if let Err(e) = run() {
-        eprintln!("error: {e}");
-        std::process::exit(1);
+    match parse_args() {
+        Ok(Some(config_path)) => {
+            if let Err(e) = run(&config_path) {
+                eprintln!("error: {e}");
+                std::process::exit(1);
+            }
+        }
+        Ok(None) => {} // --help was printed
+        Err(e) => {
+            eprintln!("error: {e}");
+            std::process::exit(1);
+        }
     }
 }
 
-fn run() -> Result<()> {
-    let content_dir = Path::new("content");
-    let output_dir = Path::new("public");
-    let static_dir = Path::new("static");
-    let config_path = Path::new("site.toml");
-    let template_dir = Path::new("templates");
+/// Parse command-line arguments. Returns None if --help was requested.
+fn parse_args() -> std::result::Result<Option<PathBuf>, String> {
+    let args: Vec<_> = std::env::args().collect();
+    let mut config_path = PathBuf::from("site.toml");
+    let mut i = 1;
+
+    while i < args.len() {
+        match args[i].as_str() {
+            "-h" | "--help" => {
+                print!("{USAGE}");
+                return Ok(None);
+            }
+            "-c" | "--config" => {
+                if i + 1 >= args.len() {
+                    return Err("--config requires an argument".to_string());
+                }
+                config_path = PathBuf::from(&args[i + 1]);
+                i += 2;
+            }
+            arg => {
+                return Err(format!("unknown argument: {arg}"));
+            }
+        }
+    }
+
+    Ok(Some(config_path))
+}
+
+fn run(config_path: &Path) -> Result<()> {
+    // Load site configuration
+    let config = config::SiteConfig::load(config_path)?;
+
+    // Resolve paths relative to config file location
+    let base_dir = config_path.parent().unwrap_or(Path::new("."));
+    let content_dir = base_dir.join(&config.paths.content);
+    let output_dir = base_dir.join(&config.paths.output);
+    let static_dir = base_dir.join(&config.paths.static_dir);
+    let template_dir = base_dir.join(&config.paths.templates);
 
     if !content_dir.exists() {
         return Err(Error::ContentDirNotFound(content_dir.to_path_buf()));
     }
 
-    // Load site configuration
-    let config = config::SiteConfig::load(config_path)?;
-
     // Load Tera templates
-    let engine = TemplateEngine::new(template_dir)?;
+    let engine = TemplateEngine::new(&template_dir)?;
 
     // Discover navigation from filesystem
-    let nav = discover_nav(content_dir)?;
+    let nav = discover_nav(&content_dir)?;
 
     // 0. Copy static assets
-    copy_static_assets(static_dir, output_dir)?;
+    copy_static_assets(&static_dir, &output_dir)?;
 
     // 1. Discover and process all sections
-    let sections = discover_sections(content_dir)?;
+    let sections = discover_sections(&content_dir)?;
     let mut all_posts = Vec::new(); // For feed generation
 
     for section in &sections {
@@ -92,9 +141,9 @@ fn run() -> Result<()> {
             for item in &items {
                 eprintln!("  processing: {}", item.slug);
                 let html_body = render::markdown_to_html(&item.body);
-                let page_path = format!("/{}", item.output_path(content_dir).display());
+                let page_path = format!("/{}", item.output_path(&content_dir).display());
                 let html = engine.render_content(item, &html_body, &page_path, &config, &nav)?;
-                write_output(output_dir, content_dir, item, html)?;
+                write_output(&output_dir, &content_dir, item, html)?;
             }
         }
 
@@ -102,7 +151,7 @@ fn run() -> Result<()> {
         let page_path = format!("/{}/index.html", section.name);
         let item_contexts: Vec<_> = items
             .iter()
-            .map(|c| ContentContext::from_content(c, content_dir))
+            .map(|c| ContentContext::from_content(c, &content_dir))
             .collect();
         let html = engine.render_section(
             &section.index,
@@ -127,14 +176,14 @@ fn run() -> Result<()> {
 
     // 2. Generate Atom feed (blog posts only)
     if !all_posts.is_empty() {
-        generate_feed(output_dir, &all_posts, &config, content_dir)?;
+        generate_feed(&output_dir, &all_posts, &config, &content_dir)?;
     }
 
     // 3. Process standalone pages (discovered dynamically)
-    process_pages(content_dir, output_dir, &config, &nav, &engine)?;
+    process_pages(&content_dir, &output_dir, &config, &nav, &engine)?;
 
     // 4. Generate homepage
-    generate_homepage(content_dir, output_dir, &config, &nav, &engine)?;
+    generate_homepage(&content_dir, &output_dir, &config, &nav, &engine)?;
 
     eprintln!("done!");
     Ok(())

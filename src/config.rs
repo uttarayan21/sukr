@@ -3,7 +3,7 @@
 use crate::error::{Error, Result};
 use serde::Deserialize;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 /// Site-wide configuration loaded from site.toml.
 #[derive(Debug, Deserialize)]
@@ -14,6 +14,35 @@ pub struct SiteConfig {
     pub author: String,
     /// Base URL for the site (used for feeds, canonical links).
     pub base_url: String,
+    /// Path configuration (all optional with defaults).
+    #[serde(default)]
+    pub paths: PathsConfig,
+}
+
+/// Path configuration with sensible defaults.
+#[derive(Debug, Deserialize)]
+#[serde(default)]
+pub struct PathsConfig {
+    /// Content directory (default: "content")
+    pub content: PathBuf,
+    /// Output directory (default: "public")
+    pub output: PathBuf,
+    /// Static assets directory (default: "static")
+    #[serde(rename = "static")]
+    pub static_dir: PathBuf,
+    /// Templates directory (default: "templates")
+    pub templates: PathBuf,
+}
+
+impl Default for PathsConfig {
+    fn default() -> Self {
+        Self {
+            content: PathBuf::from("content"),
+            output: PathBuf::from("public"),
+            static_dir: PathBuf::from("static"),
+            templates: PathBuf::from("templates"),
+        }
+    }
 }
 
 impl SiteConfig {
@@ -47,5 +76,41 @@ mod tests {
         assert_eq!(config.title, "Test Site");
         assert_eq!(config.author, "Test Author");
         assert_eq!(config.base_url, "https://example.com/");
+    }
+
+    #[test]
+    fn test_paths_config_defaults() {
+        let toml = r#"
+            title = "Test"
+            author = "Author"
+            base_url = "https://example.com"
+        "#;
+
+        let config: SiteConfig = toml::from_str(toml).unwrap();
+        assert_eq!(config.paths.content, PathBuf::from("content"));
+        assert_eq!(config.paths.output, PathBuf::from("public"));
+        assert_eq!(config.paths.static_dir, PathBuf::from("static"));
+        assert_eq!(config.paths.templates, PathBuf::from("templates"));
+    }
+
+    #[test]
+    fn test_paths_config_custom() {
+        let toml = r#"
+            title = "Test"
+            author = "Author"
+            base_url = "https://example.com"
+
+            [paths]
+            content = "src/content"
+            output = "dist"
+            static = "assets"
+            templates = "theme"
+        "#;
+
+        let config: SiteConfig = toml::from_str(toml).unwrap();
+        assert_eq!(config.paths.content, PathBuf::from("src/content"));
+        assert_eq!(config.paths.output, PathBuf::from("dist"));
+        assert_eq!(config.paths.static_dir, PathBuf::from("assets"));
+        assert_eq!(config.paths.templates, PathBuf::from("theme"));
     }
 }
