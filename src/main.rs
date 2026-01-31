@@ -12,10 +12,10 @@ mod math;
 mod mermaid;
 mod render;
 mod template_engine;
-mod templates;
 
-use crate::content::{discover_nav, Content, ContentKind, NavItem};
+use crate::content::{discover_nav, discover_sections, Content, ContentKind, NavItem};
 use crate::error::{Error, Result};
+use crate::template_engine::{ContentContext, TemplateEngine};
 use std::fs;
 use std::path::Path;
 
@@ -31,6 +31,7 @@ fn run() -> Result<()> {
     let output_dir = Path::new("public");
     let static_dir = Path::new("static");
     let config_path = Path::new("site.toml");
+    let template_dir = Path::new("templates");
 
     if !content_dir.exists() {
         return Err(Error::ContentDirNotFound(content_dir.to_path_buf()));
@@ -39,99 +40,103 @@ fn run() -> Result<()> {
     // Load site configuration
     let config = config::SiteConfig::load(config_path)?;
 
+    // Load Tera templates
+    let engine = TemplateEngine::new(template_dir)?;
+
     // Discover navigation from filesystem
     let nav = discover_nav(content_dir)?;
 
     // 0. Copy static assets
     copy_static_assets(static_dir, output_dir)?;
 
-    // 1. Process blog posts
-    let mut posts = process_blog_posts(content_dir, output_dir, &config, &nav)?;
+    // 1. Discover and process all sections
+    let sections = discover_sections(content_dir)?;
+    let mut all_posts = Vec::new(); // For feed generation
 
-    // 2. Generate blog index (sorted by date, newest first)
-    posts.sort_by(|a, b| b.frontmatter.date.cmp(&a.frontmatter.date));
-    generate_blog_index(output_dir, &posts, &config, &nav)?;
+    for section in &sections {
+        eprintln!("processing section: {}", section.name);
 
-    // 2b. Generate Atom feed
-    generate_feed(output_dir, &posts, &config, content_dir)?;
+        // Collect and sort items in this section
+        let mut items = section.collect_items()?;
 
-    // 3. Process standalone pages (discovered dynamically)
-    process_pages(content_dir, output_dir, &config, &nav)?;
+        // Sort based on section type
+        match section.section_type.as_str() {
+            "blog" => {
+                // Blog: sort by date, newest first
+                items.sort_by(|a, b| b.frontmatter.date.cmp(&a.frontmatter.date));
+                all_posts.extend(items.iter().cloned());
+            }
+            "projects" => {
+                // Projects: sort by weight
+                items.sort_by(|a, b| {
+                    a.frontmatter
+                        .weight
+                        .unwrap_or(99)
+                        .cmp(&b.frontmatter.weight.unwrap_or(99))
+                });
+            }
+            _ => {
+                // Default: sort by weight then title
+                items.sort_by(|a, b| {
+                    a.frontmatter
+                        .weight
+                        .unwrap_or(50)
+                        .cmp(&b.frontmatter.weight.unwrap_or(50))
+                        .then_with(|| a.frontmatter.title.cmp(&b.frontmatter.title))
+                });
+            }
+        }
 
-    // 4. Process projects and generate project index
-    let mut projects = process_projects(content_dir)?;
-    projects.sort_by(|a, b| {
-        a.frontmatter
-            .weight
-            .unwrap_or(99)
-            .cmp(&b.frontmatter.weight.unwrap_or(99))
-    });
-    generate_projects_index(output_dir, &projects, &config, &nav)?;
+        // Render individual content pages (for blog posts)
+        if section.section_type == "blog" {
+            for item in &items {
+                eprintln!("  processing: {}", item.slug);
+                let html_body = render::markdown_to_html(&item.body);
+                let page_path = format!("/{}", item.output_path(content_dir).display());
+                let html = engine.render_content(item, &html_body, &page_path, &config, &nav)?;
+                write_output(output_dir, content_dir, item, html)?;
+            }
+        }
 
-    // 5. Generate homepage
-    generate_homepage(content_dir, output_dir, &config, &nav)?;
+        // Render section index
+        let page_path = format!("/{}/index.html", section.name);
+        let item_contexts: Vec<_> = items
+            .iter()
+            .map(|c| ContentContext::from_content(c, content_dir))
+            .collect();
+        let html = engine.render_section(
+            &section.index,
+            &section.section_type,
+            &item_contexts,
+            &page_path,
+            &config,
+            &nav,
+        )?;
 
-    eprintln!("done!");
-    Ok(())
-}
-
-/// Process all blog posts in content/blog/
-fn process_blog_posts(
-    content_dir: &Path,
-    output_dir: &Path,
-    config: &config::SiteConfig,
-    nav: &[NavItem],
-) -> Result<Vec<Content>> {
-    let blog_dir = content_dir.join("blog");
-    let mut posts = Vec::new();
-
-    for entry in walkdir::WalkDir::new(&blog_dir)
-        .into_iter()
-        .filter_map(|e| e.ok())
-        .filter(|e| {
-            e.path().extension().is_some_and(|ext| ext == "md")
-                && e.path().file_name().is_some_and(|n| n != "_index.md")
-        })
-    {
-        let path = entry.path();
-        eprintln!("processing: {}", path.display());
-
-        let content = Content::from_path(path, ContentKind::Post)?;
-        let html_body = render::markdown_to_html(&content.body);
-        let page_path = format!("/{}", content.output_path(content_dir).display());
-        let page =
-            templates::render_post(&content.frontmatter, &html_body, &page_path, config, nav);
-
-        write_output(output_dir, content_dir, &content, page.into_string())?;
-        posts.push(content);
+        let out_path = output_dir.join(&section.name).join("index.html");
+        fs::create_dir_all(out_path.parent().unwrap()).map_err(|e| Error::CreateDir {
+            path: out_path.parent().unwrap().to_path_buf(),
+            source: e,
+        })?;
+        fs::write(&out_path, html).map_err(|e| Error::WriteFile {
+            path: out_path.clone(),
+            source: e,
+        })?;
+        eprintln!("  → {}", out_path.display());
     }
 
-    Ok(posts)
-}
+    // 2. Generate Atom feed (blog posts only)
+    if !all_posts.is_empty() {
+        generate_feed(output_dir, &all_posts, &config, content_dir)?;
+    }
 
-/// Generate the blog listing page
-fn generate_blog_index(
-    output_dir: &Path,
-    posts: &[Content],
-    config: &config::SiteConfig,
-    nav: &[NavItem],
-) -> Result<()> {
-    let out_path = output_dir.join("blog/index.html");
-    eprintln!("generating: {}", out_path.display());
+    // 3. Process standalone pages (discovered dynamically)
+    process_pages(content_dir, output_dir, &config, &nav, &engine)?;
 
-    let page = templates::render_blog_index("Blog", posts, "/blog/index.html", config, nav);
+    // 4. Generate homepage
+    generate_homepage(content_dir, output_dir, &config, &nav, &engine)?;
 
-    fs::create_dir_all(out_path.parent().unwrap()).map_err(|e| Error::CreateDir {
-        path: out_path.parent().unwrap().to_path_buf(),
-        source: e,
-    })?;
-
-    fs::write(&out_path, page.into_string()).map_err(|e| Error::WriteFile {
-        path: out_path.clone(),
-        source: e,
-    })?;
-
-    eprintln!("  → {}", out_path.display());
+    eprintln!("done!");
     Ok(())
 }
 
@@ -162,6 +167,7 @@ fn process_pages(
     output_dir: &Path,
     config: &config::SiteConfig,
     nav: &[NavItem],
+    engine: &TemplateEngine,
 ) -> Result<()> {
     // Dynamically discover top-level .md files (except _index.md)
     let entries = fs::read_dir(content_dir).map_err(|e| Error::ReadFile {
@@ -180,59 +186,11 @@ fn process_pages(
             let content = Content::from_path(&path, ContentKind::Page)?;
             let html_body = render::markdown_to_html(&content.body);
             let page_path = format!("/{}", content.output_path(content_dir).display());
-            let page =
-                templates::render_page(&content.frontmatter, &html_body, &page_path, config, nav);
+            let html = engine.render_page(&content, &html_body, &page_path, config, nav)?;
 
-            write_output(output_dir, content_dir, &content, page.into_string())?;
+            write_output(output_dir, content_dir, &content, html)?;
         }
     }
-    Ok(())
-}
-
-/// Load all project cards (without writing individual pages)
-fn process_projects(content_dir: &Path) -> Result<Vec<Content>> {
-    let projects_dir = content_dir.join("projects");
-    let mut projects = Vec::new();
-
-    for entry in walkdir::WalkDir::new(&projects_dir)
-        .into_iter()
-        .filter_map(|e| e.ok())
-        .filter(|e| {
-            e.path().extension().is_some_and(|ext| ext == "md")
-                && e.path().file_name().is_some_and(|n| n != "_index.md")
-        })
-    {
-        let content = Content::from_path(entry.path(), ContentKind::Project)?;
-        projects.push(content);
-    }
-
-    Ok(projects)
-}
-
-/// Generate the projects listing page
-fn generate_projects_index(
-    output_dir: &Path,
-    projects: &[Content],
-    config: &config::SiteConfig,
-    nav: &[NavItem],
-) -> Result<()> {
-    let out_path = output_dir.join("projects/index.html");
-    eprintln!("generating: {}", out_path.display());
-
-    let page =
-        templates::render_projects_index("Projects", projects, "/projects/index.html", config, nav);
-
-    fs::create_dir_all(out_path.parent().unwrap()).map_err(|e| Error::CreateDir {
-        path: out_path.parent().unwrap().to_path_buf(),
-        source: e,
-    })?;
-
-    fs::write(&out_path, page.into_string()).map_err(|e| Error::WriteFile {
-        path: out_path.clone(),
-        source: e,
-    })?;
-
-    eprintln!("  → {}", out_path.display());
     Ok(())
 }
 
@@ -242,14 +200,14 @@ fn generate_homepage(
     output_dir: &Path,
     config: &config::SiteConfig,
     nav: &[NavItem],
+    engine: &TemplateEngine,
 ) -> Result<()> {
     let index_path = content_dir.join("_index.md");
     eprintln!("generating: homepage");
 
     let content = Content::from_path(&index_path, ContentKind::Section)?;
     let html_body = render::markdown_to_html(&content.body);
-    let page =
-        templates::render_homepage(&content.frontmatter, &html_body, "/index.html", config, nav);
+    let html = engine.render_page(&content, &html_body, "/index.html", config, nav)?;
 
     let out_path = output_dir.join("index.html");
 
@@ -258,7 +216,7 @@ fn generate_homepage(
         source: e,
     })?;
 
-    fs::write(&out_path, page.into_string()).map_err(|e| Error::WriteFile {
+    fs::write(&out_path, html).map_err(|e| Error::WriteFile {
         path: out_path.clone(),
         source: e,
     })?;

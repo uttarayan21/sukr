@@ -44,6 +44,7 @@ impl TemplateEngine {
         nav: &[NavItem],
     ) -> Result<String> {
         let mut ctx = self.base_context(page_path, config, nav);
+        ctx.insert("title", &content.frontmatter.title);
         ctx.insert("page", &FrontmatterContext::from(&content.frontmatter));
         ctx.insert("content", html_body);
         self.render("page.html", &ctx)
@@ -64,6 +65,7 @@ impl TemplateEngine {
             .as_deref()
             .unwrap_or("content/default.html");
         let mut ctx = self.base_context(page_path, config, nav);
+        ctx.insert("title", &content.frontmatter.title);
         ctx.insert("page", &FrontmatterContext::from(&content.frontmatter));
         ctx.insert("content", html_body);
         self.render(template, &ctx)
@@ -73,19 +75,16 @@ impl TemplateEngine {
     pub fn render_section(
         &self,
         section: &Content,
+        section_type: &str,
         items: &[ContentContext],
         page_path: &str,
         config: &SiteConfig,
         nav: &[NavItem],
     ) -> Result<String> {
-        let section_type = section
-            .frontmatter
-            .section_type
-            .as_deref()
-            .unwrap_or("default");
         let template = format!("section/{}.html", section_type);
 
         let mut ctx = self.base_context(page_path, config, nav);
+        ctx.insert("title", &section.frontmatter.title);
         ctx.insert("section", &FrontmatterContext::from(&section.frontmatter));
         ctx.insert("items", items);
         self.render(&template, &ctx)
@@ -98,6 +97,8 @@ impl TemplateEngine {
         ctx.insert("nav", nav);
         ctx.insert("page_path", page_path);
         ctx.insert("prefix", &relative_prefix(page_path));
+        // Trimmed base_url for canonical links
+        ctx.insert("base_url", config.base_url.trim_end_matches('/'));
         ctx
     }
 }

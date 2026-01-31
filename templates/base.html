@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ title }} | {{ config.title }}</title>
-    <link rel="canonical" href="{{ config.base_url | trim_end_matches(pat='/') }}{{ page_path }}">
-    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="{{ config.base_url | trim_end_matches(pat='/') }}/feed.xml">
+    <link rel="canonical" href="{{ base_url }}{{ page_path }}">
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="{{ base_url }}/feed.xml">
     <link rel="stylesheet" href="{{ prefix }}/style.css">
 </head>
+
 <body>
     <nav>
         <a href="{{ prefix }}/index.html">{{ config.title }}</a>
@@ -22,4 +24,5 @@
         <p>© {{ config.author }}</p>
     </footer>
 </body>
+
 </html>

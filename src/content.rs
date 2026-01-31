@@ -31,7 +31,7 @@ pub struct NavItem {
 }
 
 /// Parsed frontmatter from a content file.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Frontmatter {
     pub title: String,
     pub description: Option<String>,
@@ -50,7 +50,7 @@ pub struct Frontmatter {
 }
 
 /// A content item ready for rendering.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Content {
     pub kind: ContentKind,
     pub frontmatter: Frontmatter,
