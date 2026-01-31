@@ -2,9 +2,10 @@
 
 use crate::config::SiteConfig;
 use crate::content::Content;
+use std::path::Path;
 
 /// Generate an Atom 1.0 feed from blog posts.
-pub fn generate_atom_feed(posts: &[Content], config: &SiteConfig) -> String {
+pub fn generate_atom_feed(posts: &[Content], config: &SiteConfig, content_root: &Path) -> String {
     let base_url = config.base_url.trim_end_matches('/');
 
     // Use the most recent post date as feed updated time, or fallback
@@ -16,7 +17,9 @@ pub fn generate_atom_feed(posts: &[Content], config: &SiteConfig) -> String {
 
     let mut entries = String::new();
     for post in posts {
-        let post_url = format!("{}/blog/{}.html", base_url, post.slug);
+        // Derive URL from output path (e.g., blog/foo.html → /blog/foo.html)
+        let relative_path = post.output_path(content_root);
+        let post_url = format!("{}/{}", base_url, relative_path.display());
         let post_date = post
             .frontmatter
             .date

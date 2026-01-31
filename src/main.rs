@@ -52,7 +52,7 @@ fn run() -> Result<()> {
     generate_blog_index(output_dir, &posts, &config, &nav)?;
 
     // 2b. Generate Atom feed
-    generate_feed(output_dir, &posts, &config)?;
+    generate_feed(output_dir, &posts, &config, content_dir)?;
 
     // 3. Process standalone pages (discovered dynamically)
     process_pages(content_dir, output_dir, &config, &nav)?;
@@ -135,11 +135,16 @@ fn generate_blog_index(
 }
 
 /// Generate the Atom feed
-fn generate_feed(output_dir: &Path, posts: &[Content], config: &config::SiteConfig) -> Result<()> {
+fn generate_feed(
+    output_dir: &Path,
+    posts: &[Content],
+    config: &config::SiteConfig,
+    content_dir: &Path,
+) -> Result<()> {
     let out_path = output_dir.join("feed.xml");
     eprintln!("generating: {}", out_path.display());
 
-    let feed_xml = feed::generate_atom_feed(posts, config);
+    let feed_xml = feed::generate_atom_feed(posts, config, content_dir);
 
     fs::write(&out_path, feed_xml).map_err(|e| Error::WriteFile {
         path: out_path.clone(),
