@@ -12,7 +12,7 @@ sukr highlights code blocks at build time using Tree-sitter. No client-side Java
 
 Use fenced code blocks with a language identifier:
 
-````markdown
+````md
 ```rust
 fn main() {
     println!("Hello, world!");

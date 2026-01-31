@@ -77,6 +77,7 @@ pub enum Language {
     Html,
     JavaScript,
     Json,
+    Markdown,
     Nix,
     Python,
     Rust,
@@ -95,6 +96,7 @@ impl Language {
             "html" => Some(Language::Html),
             "javascript" | "js" => Some(Language::JavaScript),
             "json" => Some(Language::Json),
+            "markdown" | "md" => Some(Language::Markdown),
             "nix" => Some(Language::Nix),
             "python" | "py" => Some(Language::Python),
             "rust" | "rs" => Some(Language::Rust),
@@ -183,6 +185,15 @@ static JSON_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
     )
 });
 
+static MARKDOWN_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_md::LANGUAGE.into(),
+        "markdown",
+        include_str!("../queries/md-highlights.scm"),
+        include_str!("../queries/md-injections.scm"),
+    )
+});
+
 static NIX_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
     make_config(
         tree_sitter_nix::LANGUAGE.into(),
@@ -238,6 +249,7 @@ fn get_config(lang: Language) -> &'static HighlightConfiguration {
         Language::Html => &HTML_CONFIG,
         Language::JavaScript => &JAVASCRIPT_CONFIG,
         Language::Json => &JSON_CONFIG,
+        Language::Markdown => &MARKDOWN_CONFIG,
         Language::Nix => &NIX_CONFIG,
         Language::Python => &PYTHON_CONFIG,
         Language::Rust => &RUST_CONFIG,
@@ -386,5 +398,30 @@ pkgs.stdenv.mkDerivation {
         assert!(html.contains("make"));
         // String content should be present
         assert!(html.contains("Hello from bash"));
+    }
+
+    #[test]
+    fn test_markdown_injection_rust() {
+        // Markdown code block with embedded Rust should have full Rust highlighting
+        let md = "```rust\nfn main() {\n    println!(\"Hello\");\n}\n```";
+        let html = highlight_code(Language::Markdown, md);
+
+        // All Rust tokens should be highlighted
+        assert!(
+            html.contains("hl-keyword"),
+            "fn should be highlighted as keyword"
+        );
+        assert!(
+            html.contains("hl-function"),
+            "main/println should be highlighted as function"
+        );
+        assert!(
+            html.contains("hl-string"),
+            "string literal should be highlighted"
+        );
+        assert!(
+            html.contains("hl-punctuation-bracket"),
+            "brackets should be highlighted"
+        );
     }
 }
