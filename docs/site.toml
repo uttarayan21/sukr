@@ -1,0 +1,9 @@
+author   = "Sukr Contributors"
+base_url = "https://sukr.io"
+title    = "Sukr Documentation"
+
+[paths]
+content   = "content"
+output    = "public"
+static    = "static"
+templates = "templates"

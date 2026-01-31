@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title }} | {{ config.title }}</title>
+    <link rel="canonical" href="{{ base_url }}{{ page_path }}" />
+    <link rel="stylesheet" href="{{ prefix }}/style.css" />
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <header>
+        <a href="{{ prefix }}/index.html" class="logo">sukr</a>
+        <span class="tagline">suckless static sites</span>
+      </header>
+      <nav>
+        {% for item in nav %}
+        <a
+          href="{{ prefix }}{{ item.path }}"
+          {%
+          if
+          page_path=""
+          ="item.path"
+          %}
+          class="active"
+          {%
+          endif
+          %}
+          >{{ item.label }}</a
+        >
+        {% endfor %}
+      </nav>
+    </aside>
+    <main>{% block content %}{% endblock content %}</main>
+  </body>
+</html>

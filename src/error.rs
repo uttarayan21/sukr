@@ -42,12 +42,16 @@ pub enum Error {
     Config { path: PathBuf, message: String },
 
     /// Failed to load templates.
-    #[error("failed to load templates: {message}")]
-    TemplateLoad { message: String },
+    #[error("failed to load templates: {0}")]
+    TemplateLoad(#[source] tera::Error),
 
     /// Failed to render template.
-    #[error("failed to render template '{template}': {message}")]
-    TemplateRender { template: String, message: String },
+    #[error("failed to render template '{template}'")]
+    TemplateRender {
+        template: String,
+        #[source]
+        source: tera::Error,
+    },
 }
 
 /// Result type alias for compiler operations.

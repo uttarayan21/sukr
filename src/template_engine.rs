@@ -18,9 +18,7 @@ impl TemplateEngine {
     /// Load templates from a directory (glob pattern: `templates/**/*`).
     pub fn new(template_dir: &Path) -> Result<Self> {
         let pattern = template_dir.join("**/*").display().to_string();
-        let tera = Tera::new(&pattern).map_err(|e| Error::TemplateLoad {
-            message: e.to_string(),
-        })?;
+        let tera = Tera::new(&pattern).map_err(Error::TemplateLoad)?;
         Ok(Self { tera })
     }
 
@@ -30,7 +28,7 @@ impl TemplateEngine {
             .render(template_name, context)
             .map_err(|e| Error::TemplateRender {
                 template: template_name.to_string(),
-                message: e.to_string(),
+                source: e,
             })
     }
 

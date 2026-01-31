@@ -35,6 +35,12 @@ fn main() {
         Ok(Some(config_path)) => {
             if let Err(e) = run(&config_path) {
                 eprintln!("error: {e}");
+                // Print full error chain
+                let mut source = std::error::Error::source(&e);
+                while let Some(cause) = source {
+                    eprintln!("  caused by: {cause}");
+                    source = std::error::Error::source(cause);
+                }
                 std::process::exit(1);
             }
         }
