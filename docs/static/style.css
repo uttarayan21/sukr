@@ -208,6 +208,29 @@ pre code {
   color: #ff79c6;
 }
 
+/* Markdown-specific text highlighting */
+.hl-text-title {
+  color: #ff79c6;
+  font-weight: bold;
+}
+
+.hl-text-literal {
+  color: #8be9fd;
+}
+
+.hl-text-uri {
+  color: #8be9fd;
+  text-decoration: underline;
+}
+
+.hl-text-reference {
+  color: #bd93f9;
+}
+
+.hl-string-escape {
+  color: #ffb86c;
+}
+
 /* Section navigation */
 .section-nav {
   display: flex;
