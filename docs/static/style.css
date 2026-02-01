@@ -218,6 +218,29 @@ h6:hover .heading-anchor {
   visibility: visible;
 }
 
+/* Highlight heading when :target (clicked anchor) */
+h1:target,
+h2:target,
+h3:target,
+h4:target,
+h5:target,
+h6:target {
+  scroll-margin-top: 1rem;
+  padding-left: 0.5rem;
+  border-left: 3px solid var(--accent);
+}
+
+/* Always show pilcrow on targeted heading */
+h1:target .heading-anchor,
+h2:target .heading-anchor,
+h3:target .heading-anchor,
+h4:target .heading-anchor,
+h5:target .heading-anchor,
+h6:target .heading-anchor {
+  visibility: visible;
+  color: var(--accent);
+}
+
 p {
   margin-bottom: 1rem;
 }
