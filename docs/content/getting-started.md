@@ -1,7 +1,7 @@
 ---
 title: Getting Started
 description: Install sukr and build your first site
-weight: 1
+weight: 0
 ---
 
 # Getting Started
