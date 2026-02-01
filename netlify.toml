@@ -1,7 +1,7 @@
 # Netlify build configuration for nrd.sh
 
 [build]
-command = "cargo build --release && ./target/release/nrd-sh"
+command = "cargo run -- -c docs/site.toml"
 publish = "public"
 
 [build.environment]
