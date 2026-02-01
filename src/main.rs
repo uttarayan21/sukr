@@ -11,6 +11,7 @@ mod highlight;
 mod math;
 mod mermaid;
 mod render;
+mod sitemap;
 mod template_engine;
 
 use crate::content::{discover_nav, discover_sections, Content, ContentKind, NavItem};

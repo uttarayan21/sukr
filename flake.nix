@@ -46,6 +46,7 @@
               pkgs.taplo
               pkgs.pkg-config
               pkgs.nixfmt
+              pkgs.nodePackages.prettier
               pkgs.miniserve # Dev server for testing
             ]
             ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
