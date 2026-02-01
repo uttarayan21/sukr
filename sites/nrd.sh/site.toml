@@ -1,5 +1,0 @@
-# Site configuration for nrd.sh static site compiler
-
-author   = "nrdxp"
-base_url = "https://nrd.sh/"
-title    = "nrd.sh"
