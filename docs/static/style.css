@@ -537,7 +537,10 @@ th {
 
   /* Show nav when checkbox is checked - checkbox is inside header now */
   .sidebar:has(.nav-toggle:checked) nav {
-    max-height: 500px;
+    max-height: calc(100vh - 161px);
+    /* Viewport-relative, account for header */
+    overflow-y: auto;
+    /* Enable internal scrolling when content exceeds height */
     opacity: 1;
     margin-top: 1rem;
     padding-top: 1rem;
