@@ -621,4 +621,16 @@ th {
   td code {
     white-space: normal;
   }
+
+  /* Make mermaid diagrams scrollable on mobile */
+  .mermaid-diagram {
+    overflow-x: auto;
+    max-width: calc(100vw - 2rem);
+  }
+
+  .mermaid-diagram svg {
+    display: block;
+    max-width: none;
+    /* Allow SVG to be wider than container */
+  }
 }
