@@ -1,10 +1,23 @@
 //! Markdown to HTML rendering via pulldown-cmark with syntax highlighting.
 
 use crate::highlight::{highlight_code, Language};
-use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
+use pulldown_cmark::{CodeBlockKind, Event, HeadingLevel, Options, Parser, Tag, TagEnd};
+use serde::Serialize;
+
+/// A heading anchor extracted from markdown content.
+#[derive(Debug, Clone, Serialize)]
+pub struct Anchor {
+    /// Heading ID attribute (slug)
+    pub id: String,
+    /// Heading text content
+    pub label: String,
+    /// Heading level (2-6, h1 excluded)
+    pub level: u8,
+}
 
 /// Render markdown content to HTML with syntax highlighting.
-pub fn markdown_to_html(markdown: &str) -> String {
+/// Returns the HTML output and a list of extracted heading anchors.
+pub fn markdown_to_html(markdown: &str) -> (String, Vec<Anchor>) {
     let options = Options::ENABLE_TABLES
         | Options::ENABLE_FOOTNOTES
         | Options::ENABLE_STRIKETHROUGH
@@ -13,12 +26,17 @@ pub fn markdown_to_html(markdown: &str) -> String {
 
     let parser = Parser::new_ext(markdown, options);
     let mut html_output = String::new();
+    let mut anchors = Vec::new();
     let mut code_block_lang: Option<String> = None;
     let mut code_block_content = String::new();
 
     // Image alt text accumulation state
     let mut image_alt_content: Option<String> = None;
     let mut image_attrs: Option<(String, String)> = None; // (src, title)
+
+    // Heading accumulation state
+    let mut heading_level: Option<HeadingLevel> = None;
+    let mut heading_text = String::new();
 
     for event in parser {
         match event {
@@ -90,6 +108,11 @@ pub fn markdown_to_html(markdown: &str) -> String {
                 code_block_lang = None;
                 code_block_content.clear();
             }
+            Event::Text(text) if heading_level.is_some() => {
+                // Accumulate heading text
+                heading_text.push_str(&text);
+                html_output.push_str(&html_escape(&text));
+            }
             Event::Text(text) => {
                 // Regular text outside code blocks
                 html_output.push_str(&html_escape(&text));
@@ -106,6 +129,14 @@ pub fn markdown_to_html(markdown: &str) -> String {
                 // Begin accumulating alt text; defer rendering to End event
                 image_alt_content = Some(String::new());
                 image_attrs = Some((dest_url.to_string(), title.to_string()));
+            }
+            Event::Start(Tag::Heading { level, .. }) => {
+                // Begin accumulating heading text
+                heading_level = Some(level);
+                heading_text.clear();
+                let level_num = level as u8;
+                html_output.push_str(&format!("<h{}", level_num));
+                // ID will be added at End event after we have the text
             }
             Event::Start(tag) => {
                 html_output.push_str(&start_tag_to_html(&tag));
@@ -129,6 +160,31 @@ pub fn markdown_to_html(markdown: &str) -> String {
                         ));
                     }
                 }
+            }
+            Event::End(TagEnd::Heading(level)) => {
+                // Generate slug ID from heading text
+                let id = slugify(&heading_text);
+                let level_num = level as u8;
+
+                // We need to go back and insert the id attribute and close the tag
+                // The heading was opened as "<hN" - find it and complete with id and >
+                if let Some(pos) = html_output.rfind(&format!("<h{}", level_num)) {
+                    let insert_pos = pos + format!("<h{}", level_num).len();
+                    html_output.insert_str(insert_pos, &format!(" id=\"{}\">", id));
+                }
+                html_output.push_str(&format!("</h{}>\n", level_num));
+
+                // Extract anchor for h2-h6 (skip h1)
+                if level_num >= 2 {
+                    anchors.push(Anchor {
+                        id,
+                        label: heading_text.clone(),
+                        level: level_num,
+                    });
+                }
+
+                heading_level = None;
+                heading_text.clear();
             }
             Event::End(tag) => {
                 html_output.push_str(&end_tag_to_html(&tag));
@@ -184,7 +240,7 @@ pub fn markdown_to_html(markdown: &str) -> String {
         }
     }
 
-    html_output
+    (html_output, anchors)
 }
 
 fn html_escape(s: &str) -> String {
@@ -192,6 +248,18 @@ fn html_escape(s: &str) -> String {
         .replace('<', "&lt;")
         .replace('>', "&gt;")
         .replace('"', "&quot;")
+}
+
+/// Convert heading text to a URL-friendly slug ID.
+fn slugify(text: &str) -> String {
+    text.to_lowercase()
+        .chars()
+        .map(|c| if c.is_alphanumeric() { c } else { '-' })
+        .collect::<String>()
+        .split('-')
+        .filter(|s| !s.is_empty())
+        .collect::<Vec<_>>()
+        .join("-")
 }
 
 fn start_tag_to_html(tag: &Tag) -> String {
@@ -270,15 +338,15 @@ mod tests {
     #[test]
     fn test_basic_markdown() {
         let md = "# Hello\n\nThis is a *test*.";
-        let html = markdown_to_html(md);
-        assert!(html.contains("<h1>Hello</h1>"));
+        let (html, _) = markdown_to_html(md);
+        assert!(html.contains("<h1 id=\"hello\">Hello</h1>"));
         assert!(html.contains("<em>test</em>"));
     }
 
     #[test]
     fn test_code_block_highlighting() {
         let md = "```rust\nfn main() {}\n```";
-        let html = markdown_to_html(md);
+        let (html, _) = markdown_to_html(md);
 
         // Should contain highlighted code
         assert!(html.contains("<pre><code"));
@@ -289,7 +357,7 @@ mod tests {
     #[test]
     fn test_code_block_unknown_language() {
         let md = "```unknown\nsome code\n```";
-        let html = markdown_to_html(md);
+        let (html, _) = markdown_to_html(md);
 
         // Should contain escaped code without highlighting spans
         assert!(html.contains("<pre><code"));
@@ -301,7 +369,7 @@ mod tests {
     #[test]
     fn test_inline_code() {
         let md = "Use `cargo run` to start.";
-        let html = markdown_to_html(md);
+        let (html, _) = markdown_to_html(md);
 
         assert!(html.contains("<code>cargo run</code>"));
     }
@@ -309,7 +377,7 @@ mod tests {
     #[test]
     fn test_image_alt_text() {
         let md = "![Beautiful sunset](sunset.jpg \"Evening sky\")";
-        let html = markdown_to_html(md);
+        let (html, _) = markdown_to_html(md);
 
         assert!(html.contains("alt=\"Beautiful sunset\""));
         assert!(html.contains("title=\"Evening sky\""));
@@ -319,7 +387,7 @@ mod tests {
     #[test]
     fn test_image_alt_text_no_title() {
         let md = "![Logo image](logo.png)";
-        let html = markdown_to_html(md);
+        let (html, _) = markdown_to_html(md);
 
         assert!(html.contains("alt=\"Logo image\""));
         assert!(html.contains("src=\"logo.png\""));

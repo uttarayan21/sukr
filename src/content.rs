@@ -50,6 +50,8 @@ pub struct Frontmatter {
     pub section_type: Option<String>,
     /// Override template for this content item
     pub template: Option<String>,
+    /// Enable table of contents (anchor nav in sidebar)
+    pub toc: Option<bool>,
 }
 
 /// A content item ready for rendering.
@@ -144,6 +146,7 @@ fn parse_frontmatter(path: &Path, parsed: &gray_matter::ParsedEntity) -> Result<
     let nav_label = pod.get("nav_label").and_then(|v| v.as_string().ok());
     let section_type = pod.get("section_type").and_then(|v| v.as_string().ok());
     let template = pod.get("template").and_then(|v| v.as_string().ok());
+    let toc = pod.get("toc").and_then(|v| v.as_bool().ok());
 
     // Handle nested taxonomies.tags structure
     let tags = if let Some(taxonomies) = pod.get("taxonomies") {
@@ -174,6 +177,7 @@ fn parse_frontmatter(path: &Path, parsed: &gray_matter::ParsedEntity) -> Result<
         nav_label,
         section_type,
         template,
+        toc,
     })
 }
 
