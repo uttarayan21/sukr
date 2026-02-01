@@ -28,6 +28,9 @@ pub struct SiteConfig {
 pub struct NavConfig {
     /// Whether to display nested navigation (default: false).
     pub nested: bool,
+    /// Enable table of contents (anchor nav) globally (default: false).
+    /// Can be overridden per-page via frontmatter toc field.
+    pub toc: bool,
 }
 
 /// Path configuration with sensible defaults.

@@ -45,7 +45,10 @@ impl TemplateEngine {
     ) -> Result<String> {
         let mut ctx = self.base_context(page_path, config, nav);
         ctx.insert("title", &content.frontmatter.title);
-        ctx.insert("page", &FrontmatterContext::from(&content.frontmatter));
+        ctx.insert(
+            "page",
+            &FrontmatterContext::new(&content.frontmatter, config),
+        );
         ctx.insert("content", html_body);
         ctx.insert("anchors", anchors);
         self.render("page.html", &ctx)
@@ -68,7 +71,10 @@ impl TemplateEngine {
             .unwrap_or("content/default.html");
         let mut ctx = self.base_context(page_path, config, nav);
         ctx.insert("title", &content.frontmatter.title);
-        ctx.insert("page", &FrontmatterContext::from(&content.frontmatter));
+        ctx.insert(
+            "page",
+            &FrontmatterContext::new(&content.frontmatter, config),
+        );
         ctx.insert("content", html_body);
         ctx.insert("anchors", anchors);
         self.render(template, &ctx)
@@ -88,7 +94,10 @@ impl TemplateEngine {
 
         let mut ctx = self.base_context(page_path, config, nav);
         ctx.insert("title", &section.frontmatter.title);
-        ctx.insert("section", &FrontmatterContext::from(&section.frontmatter));
+        ctx.insert(
+            "section",
+            &FrontmatterContext::new(&section.frontmatter, config),
+        );
         ctx.insert("items", items);
         self.render(&template, &ctx)
     }
@@ -154,8 +163,9 @@ pub struct FrontmatterContext {
     pub toc: bool,
 }
 
-impl From<&crate::content::Frontmatter> for FrontmatterContext {
-    fn from(fm: &crate::content::Frontmatter) -> Self {
+impl FrontmatterContext {
+    /// Create context from frontmatter with config fallback for toc.
+    pub fn new(fm: &crate::content::Frontmatter, config: &SiteConfig) -> Self {
         Self {
             title: fm.title.clone(),
             description: fm.description.clone(),
@@ -163,7 +173,7 @@ impl From<&crate::content::Frontmatter> for FrontmatterContext {
             tags: fm.tags.clone(),
             weight: fm.weight,
             link_to: fm.link_to.clone(),
-            toc: fm.toc.unwrap_or(false),
+            toc: fm.toc.unwrap_or(config.nav.toc),
         }
     }
 }
@@ -178,9 +188,9 @@ pub struct ContentContext {
 }
 
 impl ContentContext {
-    pub fn from_content(content: &Content, content_dir: &Path) -> Self {
+    pub fn from_content(content: &Content, content_dir: &Path, config: &SiteConfig) -> Self {
         Self {
-            frontmatter: FrontmatterContext::from(&content.frontmatter),
+            frontmatter: FrontmatterContext::new(&content.frontmatter, config),
             body: content.body.clone(),
             slug: content.slug.clone(),
             path: format!("/{}", content.output_path(content_dir).display()),

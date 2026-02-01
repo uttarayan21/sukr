@@ -10,3 +10,4 @@ templates = "templates"
 
 [nav]
 nested = true
+toc    = true

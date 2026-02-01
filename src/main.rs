@@ -159,7 +159,7 @@ fn run(config_path: &Path) -> Result<()> {
         let page_path = format!("/{}/index.html", section.name);
         let item_contexts: Vec<_> = items
             .iter()
-            .map(|c| ContentContext::from_content(c, &content_dir))
+            .map(|c| ContentContext::from_content(c, &content_dir, &config))
             .collect();
         let html = engine.render_section(
             &section.index,
