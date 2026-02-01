@@ -1,7 +1,7 @@
 //! XML sitemap generation for SEO.
 
 use crate::config::SiteConfig;
-use crate::content::{Content, Section};
+use crate::content::SiteManifest;
 use std::path::Path;
 
 /// A URL entry for the sitemap.
@@ -12,7 +12,7 @@ pub struct SitemapEntry {
     pub lastmod: Option<String>,
 }
 
-/// Generate an XML sitemap from discovered content.
+/// Generate an XML sitemap from the site manifest.
 ///
 /// Includes:
 /// - Homepage
@@ -20,8 +20,7 @@ pub struct SitemapEntry {
 /// - Section items (posts, projects, etc.)
 /// - Standalone pages
 pub fn generate_sitemap(
-    sections: &[Section],
-    pages: &[Content],
+    manifest: &SiteManifest,
     config: &SiteConfig,
     content_root: &Path,
 ) -> String {
@@ -35,7 +34,7 @@ pub fn generate_sitemap(
     });
 
     // Sections and their items
-    for section in sections {
+    for section in &manifest.sections {
         // Section index
         entries.push(SitemapEntry {
             loc: format!("{}/{}/index.html", base_url, section.name),
@@ -55,7 +54,7 @@ pub fn generate_sitemap(
     }
 
     // Standalone pages
-    for page in pages {
+    for page in &manifest.pages {
         let relative_path = page.output_path(content_root);
         entries.push(SitemapEntry {
             loc: format!("{}/{}", base_url, relative_path.display()),

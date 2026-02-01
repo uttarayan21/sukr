@@ -1,11 +1,16 @@
 //! Atom feed generation.
 
 use crate::config::SiteConfig;
-use crate::content::Content;
+use crate::content::SiteManifest;
 use std::path::Path;
 
-/// Generate an Atom 1.0 feed from blog posts.
-pub fn generate_atom_feed(posts: &[Content], config: &SiteConfig, content_root: &Path) -> String {
+/// Generate an Atom 1.0 feed from blog posts in the manifest.
+pub fn generate_atom_feed(
+    manifest: &SiteManifest,
+    config: &SiteConfig,
+    content_root: &Path,
+) -> String {
+    let posts = &manifest.posts;
     let base_url = config.base_url.trim_end_matches('/');
 
     // Use the most recent post date as feed updated time, or fallback

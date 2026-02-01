@@ -14,7 +14,7 @@ mod render;
 mod sitemap;
 mod template_engine;
 
-use crate::content::{discover_nav, discover_sections, Content, ContentKind, NavItem};
+use crate::content::{Content, ContentKind, NavItem};
 use crate::error::{Error, Result};
 use crate::template_engine::{ContentContext, TemplateEngine};
 use std::fs;
@@ -99,17 +99,14 @@ fn run(config_path: &Path) -> Result<()> {
     // Load Tera templates
     let engine = TemplateEngine::new(&template_dir)?;
 
-    // Discover navigation from filesystem
-    let nav = discover_nav(&content_dir)?;
+    // Discover all site content in a single pass
+    let manifest = content::SiteManifest::discover(&content_dir)?;
 
     // 0. Copy static assets
     copy_static_assets(&static_dir, &output_dir)?;
 
-    // 1. Discover and process all sections
-    let sections = discover_sections(&content_dir)?;
-    let mut all_posts = Vec::new(); // For feed generation
-
-    for section in &sections {
+    // 1. Process all sections
+    for section in &manifest.sections {
         eprintln!("processing section: {}", section.name);
 
         // Collect and sort items in this section
@@ -120,7 +117,6 @@ fn run(config_path: &Path) -> Result<()> {
             "blog" => {
                 // Blog: sort by date, newest first
                 items.sort_by(|a, b| b.frontmatter.date.cmp(&a.frontmatter.date));
-                all_posts.extend(items.iter().cloned());
             }
             "projects" => {
                 // Projects: sort by weight
@@ -148,7 +144,8 @@ fn run(config_path: &Path) -> Result<()> {
             eprintln!("  processing: {}", item.slug);
             let html_body = render::markdown_to_html(&item.body);
             let page_path = format!("/{}", item.output_path(&content_dir).display());
-            let html = engine.render_content(item, &html_body, &page_path, &config, &nav)?;
+            let html =
+                engine.render_content(item, &html_body, &page_path, &config, &manifest.nav)?;
             write_output(&output_dir, &content_dir, item, html)?;
         }
 
@@ -164,15 +161,15 @@ fn run(config_path: &Path) -> Result<()> {
             &item_contexts,
             &page_path,
             &config,
-            &nav,
-        )?;
+            &manifest.nav,
+        );
 
         let out_path = output_dir.join(&section.name).join("index.html");
         fs::create_dir_all(out_path.parent().unwrap()).map_err(|e| Error::CreateDir {
             path: out_path.parent().unwrap().to_path_buf(),
             source: e,
         })?;
-        fs::write(&out_path, html).map_err(|e| Error::WriteFile {
+        fs::write(&out_path, html?).map_err(|e| Error::WriteFile {
             path: out_path.clone(),
             source: e,
         })?;
@@ -180,24 +177,18 @@ fn run(config_path: &Path) -> Result<()> {
     }
 
     // 2. Generate Atom feed (blog posts only)
-    if !all_posts.is_empty() {
-        generate_feed(&output_dir, &all_posts, &config, &content_dir)?;
+    if !manifest.posts.is_empty() {
+        generate_feed(&output_dir, &manifest, &config, &content_dir)?;
     }
 
-    // 3. Process standalone pages (discovered dynamically)
-    let standalone_pages = process_pages(&content_dir, &output_dir, &config, &nav, &engine)?;
+    // 3. Process standalone pages
+    process_pages(&content_dir, &output_dir, &config, &manifest.nav, &engine)?;
 
     // 4. Generate homepage
-    generate_homepage(&content_dir, &output_dir, &config, &nav, &engine)?;
+    generate_homepage(&content_dir, &output_dir, &config, &manifest.nav, &engine)?;
 
     // 5. Generate sitemap
-    generate_sitemap_file(
-        &output_dir,
-        &sections,
-        &standalone_pages,
-        &config,
-        &content_dir,
-    )?;
+    generate_sitemap_file(&output_dir, &manifest, &config, &content_dir)?;
 
     eprintln!("done!");
     Ok(())
@@ -206,14 +197,14 @@ fn run(config_path: &Path) -> Result<()> {
 /// Generate the Atom feed
 fn generate_feed(
     output_dir: &Path,
-    posts: &[Content],
+    manifest: &content::SiteManifest,
     config: &config::SiteConfig,
     content_dir: &Path,
 ) -> Result<()> {
     let out_path = output_dir.join("feed.xml");
     eprintln!("generating: {}", out_path.display());
 
-    let feed_xml = feed::generate_atom_feed(posts, config, content_dir);
+    let feed_xml = feed::generate_atom_feed(manifest, config, content_dir);
 
     fs::write(&out_path, feed_xml).map_err(|e| Error::WriteFile {
         path: out_path.clone(),
@@ -227,15 +218,14 @@ fn generate_feed(
 /// Generate the XML sitemap
 fn generate_sitemap_file(
     output_dir: &Path,
-    sections: &[content::Section],
-    pages: &[Content],
+    manifest: &content::SiteManifest,
     config: &config::SiteConfig,
     content_dir: &Path,
 ) -> Result<()> {
     let out_path = output_dir.join("sitemap.xml");
     eprintln!("generating: {}", out_path.display());
 
-    let sitemap_xml = sitemap::generate_sitemap(sections, pages, config, content_dir);
+    let sitemap_xml = sitemap::generate_sitemap(manifest, config, content_dir);
 
     fs::write(&out_path, sitemap_xml).map_err(|e| Error::WriteFile {
         path: out_path.clone(),
@@ -247,16 +237,13 @@ fn generate_sitemap_file(
 }
 
 /// Process standalone pages in content/ (top-level .md files excluding _index.md)
-/// Returns the discovered pages for use by sitemap generation.
 fn process_pages(
     content_dir: &Path,
     output_dir: &Path,
     config: &config::SiteConfig,
     nav: &[NavItem],
     engine: &TemplateEngine,
-) -> Result<Vec<Content>> {
-    let mut pages = Vec::new();
-
+) -> Result<()> {
     // Dynamically discover top-level .md files (except _index.md)
     let entries = fs::read_dir(content_dir).map_err(|e| Error::ReadFile {
         path: content_dir.to_path_buf(),
@@ -277,10 +264,9 @@ fn process_pages(
             let html = engine.render_page(&content, &html_body, &page_path, config, nav)?;
 
             write_output(output_dir, content_dir, &content, html)?;
-            pages.push(content);
         }
     }
-    Ok(pages)
+    Ok(())
 }
 
 /// Generate the homepage from content/_index.md
