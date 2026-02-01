@@ -1,4 +1,4 @@
-//! Custom error types for the nrd.sh compiler.
+//! Custom error types for the sukr compiler.
 
 use std::path::PathBuf;
 

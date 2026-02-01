@@ -1,5 +1,5 @@
 {
-  description = "nrd.sh - bespoke static site compiler";
+  description = "sukr - bespoke static site compiler";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
