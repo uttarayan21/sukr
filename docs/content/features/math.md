@@ -38,13 +38,29 @@ Or fence with `math` language:
 
 KaTeX supports a large subset of LaTeX math:
 
-- Greek letters: `$\alpha, \beta, \gamma$`
-- Fractions: `$\frac{a}{b}$`
-- Subscripts/superscripts: `$x_i^2$`
-- Summations: `$\sum_{i=1}^{n} i$`
-- Integrals: `$\int_a^b f(x)\,dx$`
-- Matrices: `$\begin{pmatrix} a & b \\ c & d \end{pmatrix}$`
-- And much more...
+| Feature                 | Syntax                                         | Rendered                                       |
+| ----------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| Greek letters           | `\alpha, \beta, \gamma`                        | $\alpha, \beta, \gamma$                        |
+| Fractions               | `\frac{a}{b}`                                  | $\frac{a}{b}$                                  |
+| Subscripts/superscripts | `x_i^2`                                        | $x_i^2$                                        |
+| Summations              | `\sum_{i=1}^{n} i`                             | $\sum_{i=1}^{n} i$                             |
+| Integrals               | `\int_a^b f(x)\,dx`                            | $\int_a^b f(x)\,dx$                            |
+| Square roots            | `\sqrt{x^2 + y^2}`                             | $\sqrt{x^2 + y^2}$                             |
+| Matrices                | `\begin{pmatrix} a & b \\ c & d \end{pmatrix}` | $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$ |
+
+### Display Math Examples
+
+The Gaussian integral:
+
+$$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
+
+Euler's identity:
+
+$$e^{i\pi} + 1 = 0$$
+
+The Schrödinger equation:
+
+$$i\hbar\frac{\partial}{\partial t}\Psi = \hat{H}\Psi$$
 
 ## How It Works
 
