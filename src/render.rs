@@ -393,4 +393,69 @@ mod tests {
         assert!(html.contains("src=\"logo.png\""));
         assert!(!html.contains("title="));
     }
+
+    #[test]
+    fn test_anchor_extraction() {
+        let md = r#"# Page Title
+## Getting Started
+Some intro text.
+### Installation
+Install steps.
+## Configuration
+Config details.
+#### Deep Heading
+"#;
+        let (html, anchors) = markdown_to_html(md);
+
+        // h1 should NOT be extracted (page title, not TOC)
+        assert!(anchors.iter().all(|a| a.level >= 2));
+
+        // Should have 4 anchors: h2, h3, h2, h4
+        assert_eq!(anchors.len(), 4);
+
+        // Check first anchor
+        assert_eq!(anchors[0].id, "getting-started");
+        assert_eq!(anchors[0].label, "Getting Started");
+        assert_eq!(anchors[0].level, 2);
+
+        // Check h3
+        assert_eq!(anchors[1].id, "installation");
+        assert_eq!(anchors[1].level, 3);
+
+        // Check second h2
+        assert_eq!(anchors[2].id, "configuration");
+        assert_eq!(anchors[2].level, 2);
+
+        // Check h4
+        assert_eq!(anchors[3].id, "deep-heading");
+        assert_eq!(anchors[3].level, 4);
+
+        // Verify IDs are in HTML
+        assert!(html.contains("id=\"getting-started\""));
+        assert!(html.contains("id=\"installation\""));
+    }
+
+    #[test]
+    fn test_slugify_edge_cases() {
+        // Basic case
+        assert_eq!(slugify("Hello World"), "hello-world");
+
+        // Multiple spaces → single hyphen
+        assert_eq!(slugify("Hello   World"), "hello-world");
+
+        // Special characters → hyphen (apostrophe becomes hyphen)
+        assert_eq!(slugify("What's New?"), "what-s-new");
+
+        // Numbers preserved, dot becomes hyphen
+        assert_eq!(slugify("Version 2.0"), "version-2-0");
+
+        // Leading/trailing spaces trimmed
+        assert_eq!(slugify("  Padded  "), "padded");
+
+        // Mixed case → lowercase
+        assert_eq!(slugify("CamelCase"), "camelcase");
+
+        // Consecutive special chars → single hyphen
+        assert_eq!(slugify("A -- B"), "a-b");
+    }
 }

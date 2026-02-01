@@ -216,4 +216,96 @@ mod tests {
     fn test_relative_prefix_depth_2() {
         assert_eq!(relative_prefix("/blog/posts/foo.html"), "../..");
     }
+
+    #[test]
+    fn test_toc_config_fallback() {
+        use crate::content::Frontmatter;
+
+        // Create configs with different toc defaults
+        let config_toc_true = SiteConfig {
+            title: "Test".to_string(),
+            author: "Test".to_string(),
+            base_url: "https://test.com".to_string(),
+            paths: crate::config::PathsConfig::default(),
+            nav: crate::config::NavConfig {
+                nested: false,
+                toc: true,
+            },
+        };
+
+        let config_toc_false = SiteConfig {
+            title: "Test".to_string(),
+            author: "Test".to_string(),
+            base_url: "https://test.com".to_string(),
+            paths: crate::config::PathsConfig::default(),
+            nav: crate::config::NavConfig {
+                nested: false,
+                toc: false,
+            },
+        };
+
+        // Frontmatter with explicit toc: true
+        let fm_explicit_true = Frontmatter {
+            title: "Test".to_string(),
+            description: None,
+            date: None,
+            tags: vec![],
+            weight: None,
+            link_to: None,
+            nav_label: None,
+            section_type: None,
+            template: None,
+            toc: Some(true),
+        };
+
+        // Frontmatter with explicit toc: false
+        let fm_explicit_false = Frontmatter {
+            title: "Test".to_string(),
+            description: None,
+            date: None,
+            tags: vec![],
+            weight: None,
+            link_to: None,
+            nav_label: None,
+            section_type: None,
+            template: None,
+            toc: Some(false),
+        };
+
+        // Frontmatter with no toc specified (None)
+        let fm_none = Frontmatter {
+            title: "Test".to_string(),
+            description: None,
+            date: None,
+            tags: vec![],
+            weight: None,
+            link_to: None,
+            nav_label: None,
+            section_type: None,
+            template: None,
+            toc: None,
+        };
+
+        // Explicit true overrides config false
+        let ctx = FrontmatterContext::new(&fm_explicit_true, &config_toc_false);
+        assert!(
+            ctx.toc,
+            "explicit toc: true should override config toc: false"
+        );
+
+        // Explicit false overrides config true
+        let ctx = FrontmatterContext::new(&fm_explicit_false, &config_toc_true);
+        assert!(
+            !ctx.toc,
+            "explicit toc: false should override config toc: true"
+        );
+
+        // None falls back to config true
+        let ctx = FrontmatterContext::new(&fm_none, &config_toc_true);
+        assert!(ctx.toc, "toc: None should fall back to config toc: true");
+
+        // None falls back to config false
+        let ctx = FrontmatterContext::new(&fm_none, &config_toc_false);
+        assert!(!ctx.toc, "toc: None should fall back to config toc: false");
+    }
 }
