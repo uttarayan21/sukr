@@ -41,7 +41,7 @@
       {% if page_path == item.path and page.toc and anchors %}
       <div class="nav-anchors">
         {% for anchor in anchors %}
-        <a href="#{{ anchor.id }}" class="anchor-link level-{{ anchor.level }}">{{ anchor.label }}</a>
+        <a href="#{{ anchor.id }}" class="anchor-link level-{{ anchor.level }}">{{ anchor.label | strip_parens }}</a>
         {% endfor %}
       </div>
       {% endif %}
@@ -53,7 +53,7 @@
         {% if page_path == child.path and page.toc and anchors %}
         <div class="nav-anchors">
           {% for anchor in anchors %}
-          <a href="#{{ anchor.id }}" class="anchor-link level-{{ anchor.level }}">{{ anchor.label }}</a>
+          <a href="#{{ anchor.id }}" class="anchor-link level-{{ anchor.level }}">{{ anchor.label | strip_parens }}</a>
           {% endfor %}
         </div>
         {% endif %}

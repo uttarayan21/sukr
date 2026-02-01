@@ -172,7 +172,11 @@ pub fn markdown_to_html(markdown: &str) -> (String, Vec<Anchor>) {
                     let insert_pos = pos + format!("<h{}", level_num).len();
                     html_output.insert_str(insert_pos, &format!(" id=\"{}\">", id));
                 }
-                html_output.push_str(&format!("</h{}>\n", level_num));
+                // Add pilcrow anchor link for deep-linking (hover-reveal via CSS)
+                html_output.push_str(&format!(
+                    "<a class=\"heading-anchor\" href=\"#{}\">¶</a></h{}>\n",
+                    id, level_num
+                ));
 
                 // Extract anchor for h2-h6 (skip h1)
                 if level_num >= 2 {
@@ -339,7 +343,10 @@ mod tests {
     fn test_basic_markdown() {
         let md = "# Hello\n\nThis is a *test*.";
         let (html, _) = markdown_to_html(md);
-        assert!(html.contains("<h1 id=\"hello\">Hello</h1>"));
+        // Heading includes pilcrow anchor for deep-linking
+        assert!(html.contains(
+            "<h1 id=\"hello\">Hello<a class=\"heading-anchor\" href=\"#hello\">¶</a></h1>"
+        ));
         assert!(html.contains("<em>test</em>"));
     }
 

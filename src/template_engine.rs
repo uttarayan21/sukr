@@ -1,9 +1,10 @@
 //! Tera-based template engine for runtime HTML generation.
 
+use std::collections::HashMap;
 use std::path::Path;
 
 use serde::Serialize;
-use tera::{Context, Tera};
+use tera::{Context, Tera, Value};
 
 use crate::config::SiteConfig;
 use crate::content::{Content, NavItem};
@@ -19,7 +20,11 @@ impl TemplateEngine {
     /// Load templates from a directory (glob pattern: `templates/**/*`).
     pub fn new(template_dir: &Path) -> Result<Self> {
         let pattern = template_dir.join("**/*").display().to_string();
-        let tera = Tera::new(&pattern).map_err(Error::TemplateLoad)?;
+        let mut tera = Tera::new(&pattern).map_err(Error::TemplateLoad)?;
+
+        // Register custom filters
+        tera.register_filter("strip_parens", strip_parens_filter);
+
         Ok(Self { tera })
     }
 
@@ -195,6 +200,23 @@ impl ContentContext {
             slug: content.slug.clone(),
             path: format!("/{}", content.output_path(content_dir).display()),
         }
+    }
+}
+
+/// Tera filter to strip parenthetical text from strings.
+/// E.g., "Content (in Section)" → "Content"
+fn strip_parens_filter(value: &Value, _args: &HashMap<String, Value>) -> tera::Result<Value> {
+    match value {
+        Value::String(s) => {
+            // Find opening paren and trim everything from there
+            let result = if let Some(pos) = s.find('(') {
+                s[..pos].trim().to_string()
+            } else {
+                s.clone()
+            };
+            Ok(Value::String(result))
+        }
+        _ => Ok(value.clone()),
     }
 }
 
