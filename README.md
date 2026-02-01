@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/static/logo.png" alt="sukr logo" width="128" />
+</p>
+
 # sukr
 
 **Minimal static site compiler — suckless, Rust, zero JS.**
