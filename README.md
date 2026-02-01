@@ -6,13 +6,18 @@
 
 **Minimal static site compiler — suckless, Rust, zero JS.**
 
-sukr transforms Markdown content into high-performance static HTML. No bloated runtimes, no unnecessary JavaScript, just clean output.
+sukr transforms Markdown content into high-performance static HTML. No bloated runtimes, no client-side JavaScript, just clean output.
 
 ## Features
 
-- **Build-time rendering** — Syntax highlighting via Tree-sitter, no client JS
-- **Tera templates** — Runtime customizable, no recompilation needed
-- **Convention over configuration** — Add sections by creating directories
+- **Syntax highlighting** — Tree-sitter with language injection (Nix→Bash, HTML→JS/CSS)
+- **Math rendering** — LaTeX to HTML via KaTeX at build time
+- **Mermaid diagrams** — Rendered to inline SVG, no client JS
+- **Tera templates** — Customize without recompiling
+- **Hierarchical navigation** — Nested sections with table of contents
+- **Atom feeds** — Auto-generated for blog sections
+- **Sitemap** — SEO-ready XML sitemap
+- **CSS minification** — LightningCSS optimization
 - **Monorepo support** — Multiple sites via `-c` flag
 
 ## Quick Start
@@ -25,10 +30,7 @@ cargo build --release
 sukr
 
 # Custom config (monorepo)
-sukr -c sites/blog/site.toml
-
-# Help
-sukr --help
+sukr -c docs/site.toml
 ```
 
 ## Configuration
@@ -40,11 +42,15 @@ title    = "My Site"
 author   = "Your Name"
 base_url = "https://example.com"
 
-[paths]  # All optional
-content   = "content"    # default
-output    = "public"     # default
-static    = "static"     # default
-templates = "templates"  # default
+[paths]  # All optional, defaults shown
+content   = "content"
+output    = "public"
+static    = "static"
+templates = "templates"
+
+[nav]  # Optional
+nested = false  # Show section children in nav
+toc    = false  # Enable table of contents
 ```
 
 ## Content Structure
@@ -57,6 +63,10 @@ content/
     ├── _index.md      # Section index → /blog/index.html
     └── my-post.md     # Post → /blog/my-post.html
 ```
+
+## Documentation
+
+Full documentation at [sukr.io](https://sukr.io) (built with sukr).
 
 ## License
 
