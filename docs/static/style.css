@@ -150,62 +150,107 @@ pre code {
   padding: 0;
 }
 
-/* Syntax highlighting (tree-sitter classes) */
+/* Syntax highlighting (tree-sitter classes)
+ * Dracula-inspired color scheme with full coverage
+ * All colors chosen to work well on dark backgrounds
+ */
+
+/* Keywords: control flow, declarations - Pink */
 .hl-keyword {
   color: #ff79c6;
 }
 
-.hl-string {
+/* Strings and literals - Yellow */
+.hl-string,
+.hl-string-special {
   color: #f1fa8c;
 }
 
-.hl-function {
+.hl-string-escape {
+  color: #ffb86c;
+}
+
+.hl-string-special-path,
+.hl-string-special-uri {
+  color: #8be9fd;
+  text-decoration: underline;
+}
+
+/* Functions and methods - Green */
+.hl-function,
+.hl-function-builtin {
   color: #50fa7b;
 }
 
+/* Comments - Muted blue-gray */
 .hl-comment {
   color: #6272a4;
   font-style: italic;
 }
 
-.hl-number {
+/* Numbers and constants - Purple */
+.hl-number,
+.hl-constant,
+.hl-constant-builtin {
   color: #bd93f9;
 }
 
+/* Operators - Pink (same as keywords for visual consistency) */
 .hl-operator {
   color: #ff79c6;
 }
 
-.hl-punctuation {
+/* Punctuation - Subtle muted */
+.hl-punctuation,
+.hl-punctuation-bracket,
+.hl-punctuation-delimiter {
   color: var(--fg-muted);
 }
 
-.hl-punctuation-bracket {
-  color: var(--fg-muted);
+.hl-punctuation-special {
+  color: #ff79c6;
 }
 
+/* Types - Cyan */
+.hl-type,
+.hl-type-builtin {
+  color: #8be9fd;
+}
+
+/* Variables - Light foreground */
 .hl-variable {
   color: var(--fg);
 }
 
-.hl-type {
+.hl-variable-builtin {
+  color: #ffb86c;
+}
+
+.hl-variable-parameter {
+  color: #ffb86c;
+  font-style: italic;
+}
+
+/* Properties and attributes - Cyan */
+.hl-property,
+.hl-attribute {
   color: #8be9fd;
 }
 
-.hl-constant {
-  color: #bd93f9;
-}
-
-.hl-attribute {
+/* Constructors - Green */
+.hl-constructor {
   color: #50fa7b;
 }
 
-.hl-property {
-  color: #66d9ef;
-}
-
+/* HTML/XML tags - Pink */
 .hl-tag {
   color: #ff79c6;
+}
+
+/* Embedded/escape content - Orange */
+.hl-embedded,
+.hl-escape {
+  color: #ffb86c;
 }
 
 /* Markdown-specific text highlighting */
@@ -225,10 +270,6 @@ pre code {
 
 .hl-text-reference {
   color: #bd93f9;
-}
-
-.hl-string-escape {
-  color: #ffb86c;
 }
 
 /* Section navigation */
