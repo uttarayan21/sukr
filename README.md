@@ -56,12 +56,14 @@ toc    = false  # Enable table of contents
 ## Content Structure
 
 ```
-content/
-├── _index.md          # Homepage
-├── about.md           # Standalone page → /about.html
-└── blog/
-    ├── _index.md      # Section index → /blog/index.html
-    └── my-post.md     # Post → /blog/my-post.html
+docs/
+├── _index.md              # Homepage
+├── getting-started.md     # Page → /getting-started.html
+├── configuration.md       # Page → /configuration.html
+└── features/
+    ├── _index.md          # Section index → /features/index.html
+    └── templates.md       # Page → /features/templates.html
+...
 ```
 
 ## Documentation
