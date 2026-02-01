@@ -121,6 +121,8 @@ pub struct ConfigContext {
     pub title: String,
     pub author: String,
     pub base_url: String,
+    /// Whether to display nested navigation
+    pub nested_nav: bool,
 }
 
 impl From<&SiteConfig> for ConfigContext {
@@ -129,6 +131,7 @@ impl From<&SiteConfig> for ConfigContext {
             title: config.title.clone(),
             author: config.author.clone(),
             base_url: config.base_url.clone(),
+            nested_nav: config.nav.nested,
         }
     }
 }

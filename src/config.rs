@@ -17,6 +17,17 @@ pub struct SiteConfig {
     /// Path configuration (all optional with defaults).
     #[serde(default)]
     pub paths: PathsConfig,
+    /// Navigation configuration.
+    #[serde(default)]
+    pub nav: NavConfig,
+}
+
+/// Navigation configuration.
+#[derive(Debug, Deserialize, Default)]
+#[serde(default)]
+pub struct NavConfig {
+    /// Whether to display nested navigation (default: false).
+    pub nested: bool,
 }
 
 /// Path configuration with sensible defaults.

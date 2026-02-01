@@ -94,6 +94,19 @@ body {
   color: var(--bg);
 }
 
+.sidebar .nav-children {
+  margin-left: 1rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar .nav-children a {
+  font-size: 0.9rem;
+}
+
 .sidebar-footer {
   margin-top: auto;
   padding-top: 1rem;
