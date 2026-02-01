@@ -28,6 +28,18 @@ Most static site generators punt rich content to the browser. sukr doesn't.
 - **CSS minification** — LightningCSS optimization
 - **Monorepo support** — Multiple sites via `-c` flag
 
+## Comparison
+
+| Feature             |    sukr     |  Zola   |  Hugo  | Eleventy |
+| :------------------ | :---------: | :-----: | :----: | :------: |
+| Syntax Highlighting | Tree-sitter | syntect | Chroma | Plugins  |
+| Build-time Math     |     ✅      |   ❌    |   ❌   |  Plugin  |
+| Build-time Diagrams |     ✅      |   ❌    |   ❌   |  Plugin  |
+| Zero JS Output      |     ✅      |   ❌    |   ❌   | Optional |
+| Single Binary       |     ✅      |   ✅    |   ✅   |    ❌    |
+
+See the [full comparison](https://sukr.io/comparison.html) for details.
+
 ## Quick Start
 
 ```bash
