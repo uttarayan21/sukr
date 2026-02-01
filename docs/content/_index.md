@@ -9,10 +9,13 @@ description: Minimal static site compiler — suckless, Rust, zero JS
 
 ## Why sukr?
 
-- **Fast builds** — Single Rust binary, parallel processing
-- **Zero JS** — Syntax highlighting at build time via Tree-sitter
-- **Flexible templates** — Runtime Tera templates, no recompilation
-- **Monorepo-ready** — Multiple sites via `-c` config flag
+Most static site generators punt rich content to the browser. sukr doesn't.
+
+- **Tree-sitter highlighting** — Proper parsing, not regex. Supports language injection (Nix→Bash, HTML→JS/CSS).
+- **Build-time math** — KaTeX renders LaTeX to static HTML. No 300KB JavaScript bundle.
+- **Build-time diagrams** — Mermaid compiles to inline SVG. Diagrams load instantly.
+- **Flexible templates** — Runtime Tera templates, no recompilation needed.
+- **Monorepo-ready** — Multiple sites via `-c` config flag.
 
 ## Quick Start
 
