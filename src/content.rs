@@ -329,6 +329,86 @@ pub fn discover_sections(content_dir: &Path) -> Result<Vec<Section>> {
     Ok(sections)
 }
 
+/// Discover standalone pages (top-level .md files except _index.md).
+pub fn discover_pages(content_dir: &Path) -> Result<Vec<Content>> {
+    let mut pages = Vec::new();
+
+    let entries = fs::read_dir(content_dir).map_err(|e| Error::ReadFile {
+        path: content_dir.to_path_buf(),
+        source: e,
+    })?;
+
+    for entry in entries.filter_map(|e| e.ok()) {
+        let path = entry.path();
+        if path.is_file()
+            && path.extension().is_some_and(|ext| ext == "md")
+            && path.file_name().is_some_and(|n| n != "_index.md")
+        {
+            pages.push(Content::from_path(&path, ContentKind::Page)?);
+        }
+    }
+
+    Ok(pages)
+}
+
+/// Complete site content manifest from a single discovery pass.
+///
+/// Aggregates all content types for use by rendering, feed, and sitemap generation.
+#[derive(Debug)]
+pub struct SiteManifest {
+    /// Homepage content (content/_index.md)
+    pub homepage: Content,
+    /// All sections (directories with _index.md)
+    pub sections: Vec<Section>,
+    /// Standalone pages (top-level .md files)
+    pub pages: Vec<Content>,
+    /// Blog posts for feed generation (items from "blog" sections)
+    pub posts: Vec<Content>,
+    /// Navigation menu items
+    pub nav: Vec<NavItem>,
+}
+
+impl SiteManifest {
+    /// Discover all site content in a single pass.
+    pub fn discover(content_dir: impl AsRef<Path>) -> Result<Self> {
+        Self::discover_inner(content_dir.as_ref())
+    }
+
+    fn discover_inner(content_dir: &Path) -> Result<Self> {
+        // Load homepage
+        let homepage_path = content_dir.join("_index.md");
+        let homepage = Content::from_path(&homepage_path, ContentKind::Section)?;
+
+        // Discover navigation
+        let nav = discover_nav(content_dir)?;
+
+        // Discover sections
+        let sections = discover_sections(content_dir)?;
+
+        // Collect section items and identify blog posts
+        let mut posts = Vec::new();
+        for section in &sections {
+            if section.section_type == "blog" {
+                let mut items = section.collect_items()?;
+                // Sort blog posts by date, newest first
+                items.sort_by(|a, b| b.frontmatter.date.cmp(&a.frontmatter.date));
+                posts.extend(items);
+            }
+        }
+
+        // Discover standalone pages
+        let pages = discover_pages(content_dir)?;
+
+        Ok(SiteManifest {
+            homepage,
+            sections,
+            pages,
+            posts,
+            nav,
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -556,5 +636,106 @@ mod tests {
         let titles: Vec<_> = items.iter().map(|c| c.frontmatter.title.as_str()).collect();
         assert!(titles.contains(&"Post 1"));
         assert!(titles.contains(&"Post 2"));
+    }
+
+    // =========================================================================
+    // SiteManifest tests
+    // =========================================================================
+
+    #[test]
+    fn test_manifest_discovers_homepage() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        write_frontmatter(&content_dir.join("_index.md"), "Home", None, None);
+
+        let manifest = SiteManifest::discover(content_dir).expect("discover failed");
+        assert_eq!(manifest.homepage.frontmatter.title, "Home");
+    }
+
+    #[test]
+    fn test_manifest_discovers_sections() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        write_frontmatter(&content_dir.join("_index.md"), "Home", None, None);
+        fs::create_dir(content_dir.join("blog")).unwrap();
+        write_section_index(
+            &content_dir.join("blog/_index.md"),
+            "Blog",
+            Some("blog"),
+            None,
+        );
+
+        let manifest = SiteManifest::discover(content_dir).expect("discover failed");
+        assert_eq!(manifest.sections.len(), 1);
+        assert_eq!(manifest.sections[0].name, "blog");
+    }
+
+    #[test]
+    fn test_manifest_discovers_pages() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        write_frontmatter(&content_dir.join("_index.md"), "Home", None, None);
+        write_frontmatter(&content_dir.join("about.md"), "About", None, None);
+        write_frontmatter(&content_dir.join("contact.md"), "Contact", None, None);
+
+        let manifest = SiteManifest::discover(content_dir).expect("discover failed");
+        assert_eq!(manifest.pages.len(), 2);
+
+        let titles: Vec<_> = manifest
+            .pages
+            .iter()
+            .map(|c| c.frontmatter.title.as_str())
+            .collect();
+        assert!(titles.contains(&"About"));
+        assert!(titles.contains(&"Contact"));
+    }
+
+    #[test]
+    fn test_manifest_collects_blog_posts() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        write_frontmatter(&content_dir.join("_index.md"), "Home", None, None);
+        fs::create_dir(content_dir.join("blog")).unwrap();
+        write_section_index(
+            &content_dir.join("blog/_index.md"),
+            "Blog",
+            Some("blog"),
+            None,
+        );
+
+        // Create blog posts with dates
+        let post1 = format!("---\ntitle: \"Post 1\"\ndate: \"2026-01-15\"\n---\nContent.");
+        let post2 = format!("---\ntitle: \"Post 2\"\ndate: \"2026-01-20\"\n---\nContent.");
+        fs::write(content_dir.join("blog/post1.md"), &post1).unwrap();
+        fs::write(content_dir.join("blog/post2.md"), &post2).unwrap();
+
+        let manifest = SiteManifest::discover(content_dir).expect("discover failed");
+        assert_eq!(manifest.posts.len(), 2);
+
+        // Should be sorted by date, newest first
+        assert_eq!(manifest.posts[0].frontmatter.title, "Post 2"); // 2026-01-20
+        assert_eq!(manifest.posts[1].frontmatter.title, "Post 1"); // 2026-01-15
+    }
+
+    #[test]
+    fn test_manifest_discovers_nav() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        write_frontmatter(&content_dir.join("_index.md"), "Home", None, None);
+        write_frontmatter(&content_dir.join("about.md"), "About", Some(10), None);
+        fs::create_dir(content_dir.join("blog")).unwrap();
+        write_section_index(&content_dir.join("blog/_index.md"), "Blog", None, Some(20));
+
+        let manifest = SiteManifest::discover(content_dir).expect("discover failed");
+        assert_eq!(manifest.nav.len(), 2);
+
+        // Nav should be sorted by weight
+        assert_eq!(manifest.nav[0].label, "About"); // weight 10
+        assert_eq!(manifest.nav[1].label, "Blog"); // weight 20
     }
 }
