@@ -8,6 +8,7 @@
   <link rel="canonical" href="{{ base_url }}{{ page_path }}" />
   <link rel="stylesheet" href="{{ prefix }}/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" crossorigin="anonymous" />
+  <link rel="icon" type="image/png" href="{{ prefix }}/logo.png" />
 </head>
 
 <body>
@@ -20,6 +21,10 @@
       {% for item in nav %}<a href="{{ prefix }}{{ item.path }}" {% if page_path==item.path %} class="active" {% endif
         %}>{{ item.label }}</a>{% endfor %}
     </nav>
+    <footer class="sidebar-footer">
+      <a href="https://github.com/nrdxp/sukr">GitHub</a>
+      <span>© 2024 nrdxp — MIT</span>
+    </footer>
   </aside>
   <main>{% block content %}{% endblock content %}</main>
 </body>

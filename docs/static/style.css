@@ -41,6 +41,8 @@ body {
   top: 0;
   height: 100vh;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar header {
@@ -83,6 +85,25 @@ body {
 .sidebar nav a.active {
   background: var(--accent);
   color: var(--bg);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-footer a {
+  color: var(--fg-muted);
+}
+
+.sidebar-footer a:hover {
+  color: var(--accent);
 }
 
 /* Main content */
