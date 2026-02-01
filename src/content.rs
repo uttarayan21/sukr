@@ -28,6 +28,9 @@ pub struct NavItem {
     pub path: String,
     /// Sort order (lower = first, default 50)
     pub weight: i64,
+    /// Child navigation items (section pages)
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub children: Vec<NavItem>,
 }
 
 /// Parsed frontmatter from a content file.
@@ -206,6 +209,7 @@ pub fn discover_nav(content_dir: &Path) -> Result<Vec<NavItem>> {
                             .unwrap_or(content.frontmatter.title),
                         path: format!("/{}.html", slug),
                         weight: content.frontmatter.weight.unwrap_or(50),
+                        children: Vec::new(),
                     });
                 }
             }
@@ -218,6 +222,34 @@ pub fn discover_nav(content_dir: &Path) -> Result<Vec<NavItem>> {
                     .file_name()
                     .and_then(|n| n.to_str())
                     .unwrap_or("section");
+
+                // Collect section items as child nav items
+                let section = Section {
+                    index: content.clone(),
+                    name: dir_name.to_string(),
+                    section_type: content
+                        .frontmatter
+                        .section_type
+                        .clone()
+                        .unwrap_or_else(|| dir_name.to_string()),
+                    path: path.clone(),
+                };
+
+                let mut children: Vec<NavItem> = section
+                    .collect_items()?
+                    .into_iter()
+                    .map(|item| NavItem {
+                        label: item.frontmatter.nav_label.unwrap_or(item.frontmatter.title),
+                        path: format!("/{}/{}.html", dir_name, item.slug),
+                        weight: item.frontmatter.weight.unwrap_or(50),
+                        children: Vec::new(),
+                    })
+                    .collect();
+
+                // Sort children by weight, then alphabetically
+                children
+                    .sort_by(|a, b| a.weight.cmp(&b.weight).then_with(|| a.label.cmp(&b.label)));
+
                 nav_items.push(NavItem {
                     label: content
                         .frontmatter
@@ -225,6 +257,7 @@ pub fn discover_nav(content_dir: &Path) -> Result<Vec<NavItem>> {
                         .unwrap_or(content.frontmatter.title),
                     path: format!("/{}/index.html", dir_name),
                     weight: content.frontmatter.weight.unwrap_or(50),
+                    children,
                 });
             }
         }
@@ -507,6 +540,39 @@ mod tests {
         assert_eq!(nav[0].label, "About"); // Uses nav_label, not title
     }
 
+    #[test]
+    fn test_discover_nav_populates_section_children() {
+        let dir = create_test_dir();
+        let content_dir = dir.path();
+
+        // Create section directory with _index.md and child pages
+        let features_dir = content_dir.join("features");
+        fs::create_dir(&features_dir).expect("failed to create features dir");
+        write_frontmatter(&features_dir.join("_index.md"), "Features", Some(10), None);
+        write_frontmatter(
+            &features_dir.join("templates.md"),
+            "Templates",
+            Some(20),
+            None,
+        );
+        write_frontmatter(
+            &features_dir.join("highlights.md"),
+            "Syntax Highlighting",
+            Some(10),
+            None,
+        );
+
+        let nav = discover_nav(content_dir).expect("discover_nav failed");
+        assert_eq!(nav.len(), 1);
+        assert_eq!(nav[0].label, "Features");
+        assert_eq!(nav[0].children.len(), 2);
+
+        // Children should be sorted by weight
+        assert_eq!(nav[0].children[0].label, "Syntax Highlighting"); // weight 10
+        assert_eq!(nav[0].children[0].path, "/features/highlights.html");
+        assert_eq!(nav[0].children[1].label, "Templates"); // weight 20
+        assert_eq!(nav[0].children[1].path, "/features/templates.html");
+    }
     // =========================================================================
     // discover_sections tests
     // =========================================================================
