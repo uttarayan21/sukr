@@ -185,7 +185,7 @@ fn run(config_path: &Path) -> Result<()> {
     process_pages(&content_dir, &output_dir, &config, &manifest.nav, &engine)?;
 
     // 4. Generate homepage
-    generate_homepage(&content_dir, &output_dir, &config, &manifest.nav, &engine)?;
+    generate_homepage(&manifest, &output_dir, &config, &engine)?;
 
     // 5. Generate sitemap
     generate_sitemap_file(&output_dir, &manifest, &config, &content_dir)?;
@@ -269,20 +269,23 @@ fn process_pages(
     Ok(())
 }
 
-/// Generate the homepage from content/_index.md
+/// Generate the homepage from manifest.homepage
 fn generate_homepage(
-    content_dir: &Path,
+    manifest: &content::SiteManifest,
     output_dir: &Path,
     config: &config::SiteConfig,
-    nav: &[NavItem],
     engine: &TemplateEngine,
 ) -> Result<()> {
-    let index_path = content_dir.join("_index.md");
     eprintln!("generating: homepage");
 
-    let content = Content::from_path(&index_path, ContentKind::Section)?;
-    let html_body = render::markdown_to_html(&content.body);
-    let html = engine.render_page(&content, &html_body, "/index.html", config, nav)?;
+    let html_body = render::markdown_to_html(&manifest.homepage.body);
+    let html = engine.render_page(
+        &manifest.homepage,
+        &html_body,
+        "/index.html",
+        config,
+        &manifest.nav,
+    )?;
 
     let out_path = output_dir.join("index.html");
 
