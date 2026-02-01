@@ -2,7 +2,7 @@
 
 [build]
 command = "cargo run -- -c docs/site.toml"
-publish = "public"
+publish = "docs/public"
 
 [build.environment]
 RUST_VERSION = "1.84"
