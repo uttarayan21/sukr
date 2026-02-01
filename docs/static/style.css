@@ -487,4 +487,21 @@ th {
   pre {
     max-width: calc(100vw - 2rem);
   }
+
+  /* Make tables scrollable on mobile */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    max-width: calc(100vw - 2rem);
+  }
+
+  /* Allow inline code to wrap */
+  code {
+    word-break: break-all;
+  }
+
+  td code {
+    white-space: normal;
+  }
 }
