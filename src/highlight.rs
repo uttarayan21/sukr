@@ -91,6 +91,7 @@ pub enum Language {
     Nix,
     Python,
     Rust,
+    Toml,
     TypeScript,
     Yaml,
 }
@@ -110,6 +111,7 @@ impl Language {
             "nix" => Some(Language::Nix),
             "python" | "py" => Some(Language::Python),
             "rust" | "rs" => Some(Language::Rust),
+            "toml" => Some(Language::Toml),
             "typescript" | "ts" | "tsx" => Some(Language::TypeScript),
             "yaml" | "yml" => Some(Language::Yaml),
             _ => None,
@@ -231,6 +233,15 @@ static RUST_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
     )
 });
 
+static TOML_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
+    make_config(
+        tree_sitter_toml_ng::LANGUAGE.into(),
+        "toml",
+        tree_sitter_toml_ng::HIGHLIGHTS_QUERY,
+        "",
+    )
+});
+
 static TYPESCRIPT_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
     make_config(
         tree_sitter_typescript::LANGUAGE_TYPESCRIPT.into(),
@@ -263,6 +274,7 @@ fn get_config(lang: Language) -> &'static HighlightConfiguration {
         Language::Nix => &NIX_CONFIG,
         Language::Python => &PYTHON_CONFIG,
         Language::Rust => &RUST_CONFIG,
+        Language::Toml => &TOML_CONFIG,
         Language::TypeScript => &TYPESCRIPT_CONFIG,
         Language::Yaml => &YAML_CONFIG,
     }

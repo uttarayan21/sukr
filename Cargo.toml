@@ -39,6 +39,7 @@ toml     = "0.8"
 # Diagram rendering
 mermaid-rs-renderer = { version = "0.1", default-features = false }
 tree-sitter-md      = "0.5.2"
+tree-sitter-toml-ng = "0.7.0"
 
 # Patch dagre_rust to fix unwrap on None bug
 [patch.crates-io]
