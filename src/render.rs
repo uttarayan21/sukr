@@ -16,6 +16,10 @@ pub fn markdown_to_html(markdown: &str) -> String {
     let mut code_block_lang: Option<String> = None;
     let mut code_block_content = String::new();
 
+    // Image alt text accumulation state
+    let mut image_alt_content: Option<String> = None;
+    let mut image_attrs: Option<(String, String)> = None; // (src, title)
+
     for event in parser {
         match event {
             Event::Start(Tag::CodeBlock(kind)) => {
@@ -33,14 +37,14 @@ pub fn markdown_to_html(markdown: &str) -> String {
                 };
                 code_block_content.clear();
             }
-            Event::Text(text) if code_block_lang.is_some() || !code_block_content.is_empty() => {
+            Event::Text(text) if code_block_lang.is_some() => {
                 // Accumulate code block content
-                // Note: we're in a code block if we have a lang OR we've started accumulating
-                if code_block_lang.is_some() {
-                    code_block_content.push_str(&text);
-                } else {
-                    // Regular text, render normally
-                    html_output.push_str(&html_escape(&text));
+                code_block_content.push_str(&text);
+            }
+            Event::Text(text) if image_alt_content.is_some() => {
+                // Accumulate image alt text
+                if let Some(ref mut alt) = image_alt_content {
+                    alt.push_str(&text);
                 }
             }
             Event::End(TagEnd::CodeBlock) => {
@@ -96,8 +100,35 @@ pub fn markdown_to_html(markdown: &str) -> String {
                 html_output.push_str(&html_escape(&text));
                 html_output.push_str("</code>");
             }
+            Event::Start(Tag::Image {
+                dest_url, title, ..
+            }) => {
+                // Begin accumulating alt text; defer rendering to End event
+                image_alt_content = Some(String::new());
+                image_attrs = Some((dest_url.to_string(), title.to_string()));
+            }
             Event::Start(tag) => {
                 html_output.push_str(&start_tag_to_html(&tag));
+            }
+            Event::End(TagEnd::Image) => {
+                // Render image with accumulated alt text
+                let alt = image_alt_content.take().unwrap_or_default();
+                if let Some((src, title)) = image_attrs.take() {
+                    if title.is_empty() {
+                        html_output.push_str(&format!(
+                            "<img src=\"{}\" alt=\"{}\" />",
+                            src,
+                            html_escape(&alt)
+                        ));
+                    } else {
+                        html_output.push_str(&format!(
+                            "<img src=\"{}\" alt=\"{}\" title=\"{}\" />",
+                            src,
+                            html_escape(&alt),
+                            html_escape(&title)
+                        ));
+                    }
+                }
             }
             Event::End(tag) => {
                 html_output.push_str(&end_tag_to_html(&tag));
@@ -191,11 +222,7 @@ fn start_tag_to_html(tag: &Tag) -> String {
                 format!("<a href=\"{}\" title=\"{}\">", dest_url, title)
             }
         }
-        Tag::Image {
-            dest_url, title, ..
-        } => {
-            format!("<img src=\"{}\" alt=\"\" title=\"{}\" />", dest_url, title)
-        }
+        Tag::Image { .. } => String::new(), // Handled separately in main loop
         Tag::HtmlBlock => String::new(),
         Tag::MetadataBlock(_) => String::new(),
         Tag::DefinitionListTitle => "<dt>".to_string(),
@@ -227,7 +254,7 @@ fn end_tag_to_html(tag: &TagEnd) -> String {
         TagEnd::Strong => "</strong>".to_string(),
         TagEnd::Strikethrough => "</del>".to_string(),
         TagEnd::Link => "</a>".to_string(),
-        TagEnd::Image => String::new(),
+        TagEnd::Image => String::new(), // Handled separately in main loop
         TagEnd::HtmlBlock => String::new(),
         TagEnd::MetadataBlock(_) => String::new(),
         TagEnd::DefinitionListTitle => "</dt>\n".to_string(),
@@ -277,5 +304,25 @@ mod tests {
         let html = markdown_to_html(md);
 
         assert!(html.contains("<code>cargo run</code>"));
+    }
+
+    #[test]
+    fn test_image_alt_text() {
+        let md = "![Beautiful sunset](sunset.jpg \"Evening sky\")";
+        let html = markdown_to_html(md);
+
+        assert!(html.contains("alt=\"Beautiful sunset\""));
+        assert!(html.contains("title=\"Evening sky\""));
+        assert!(html.contains("src=\"sunset.jpg\""));
+    }
+
+    #[test]
+    fn test_image_alt_text_no_title() {
+        let md = "![Logo image](logo.png)";
+        let html = markdown_to_html(md);
+
+        assert!(html.contains("alt=\"Logo image\""));
+        assert!(html.contains("src=\"logo.png\""));
+        assert!(!html.contains("title="));
     }
 }
