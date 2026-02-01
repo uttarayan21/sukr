@@ -39,23 +39,39 @@ All templates extend `base.html`:
 
 ### All Templates
 
-| Variable        | Description                     |
-| --------------- | ------------------------------- |
-| `config.title`  | Site title                      |
-| `config.author` | Site author                     |
-| `nav`           | Navigation items                |
-| `page_path`     | Current page path               |
-| `prefix`        | Relative path prefix for assets |
-| `base_url`      | Canonical base URL              |
-| `title`         | Current page title              |
+| Variable            | Description                         |
+| ------------------- | ----------------------------------- |
+| `config.title`      | Site title                          |
+| `config.author`     | Site author                         |
+| `config.nested_nav` | Whether hierarchical nav is enabled |
+| `nav`               | Array of navigation items           |
+| `page_path`         | Current page path                   |
+| `prefix`            | Relative path prefix for assets     |
+| `base_url`          | Canonical base URL                  |
+| `title`             | Current page title                  |
+
+Each nav item has:
+
+- `label` — Display text
+- `path` — URL path
+- `weight` — Sort order
+- `children` — Child nav items (when `nested_nav` is true)
 
 ### Page Templates
 
-| Variable           | Description           |
-| ------------------ | --------------------- |
-| `page.title`       | Page title            |
-| `page.description` | Page description      |
-| `content`          | Rendered HTML content |
+| Variable           | Description                          |
+| ------------------ | ------------------------------------ |
+| `page.title`       | Page title                           |
+| `page.description` | Page description                     |
+| `page.toc`         | Whether TOC is enabled for this page |
+| `content`          | Rendered HTML content                |
+| `anchors`          | Array of heading anchors for TOC     |
+
+Each anchor in `anchors` has:
+
+- `id` — Heading slug (for `href="#id"`)
+- `label` — Heading text
+- `level` — Heading level (2-6, h1 excluded)
 
 ### Section Templates
 

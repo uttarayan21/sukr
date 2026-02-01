@@ -58,6 +58,22 @@ weight: 10 # Appears before items with weight > 10
 ---
 ```
 
+### Hierarchical Navigation
+
+When `nav.nested = true` in your config, section children appear as nested sub-items:
+
+```text
+Features           ← Section link
+  ├─ Templates     ← Child page
+  ├─ Sections      ← Child page
+  └─ Highlighting  ← Child page
+Getting Started    ← Top-level page
+```
+
+Child pages inherit their parent section's position in the nav tree. Within a section, children sort by weight then alphabetically.
+
+Without nested navigation (the default), only top-level items appear in the nav.
+
 ## URL Examples
 
 | Source Path              | Output Path              | URL                |
