@@ -38,11 +38,25 @@
       {% set section_prefix = item.path | replace(from="index.html", to="") %}
       {% set is_current_section = page_path is starting_with(section_prefix) %}
       <a href="{{ prefix }}{{ item.path }}" {% if page_path==item.path %}class="active" {% endif %}>{{ item.label }}</a>
+      {% if page_path == item.path and page.toc and anchors %}
+      <div class="nav-anchors">
+        {% for anchor in anchors %}
+        <a href="#{{ anchor.id }}" class="anchor-link level-{{ anchor.level }}">{{ anchor.label }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
       {% if config.nested_nav and item.children %}
       <div class="nav-children{% if is_current_section %} expanded{% endif %}">
         {% for child in item.children %}
         <a href="{{ prefix }}{{ child.path }}" {% if page_path==child.path %}class="active" {% endif %}>{{ child.label
           }}</a>
+        {% if page_path == child.path and page.toc and anchors %}
+        <div class="nav-anchors">
+          {% for anchor in anchors %}
+          <a href="#{{ anchor.id }}" class="anchor-link level-{{ anchor.level }}">{{ anchor.label }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
         {% endfor %}
       </div>
       {% endif %}

@@ -111,6 +111,45 @@ body {
   font-size: 0.9rem;
 }
 
+/* Anchor navigation (TOC in sidebar) */
+.sidebar .nav-anchors {
+  margin-left: 1rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.sidebar .nav-anchors .anchor-link {
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  padding: 0.125rem 0;
+}
+
+.sidebar .nav-anchors .anchor-link:hover {
+  color: var(--accent);
+}
+
+/* Indent anchors by heading level */
+.sidebar .nav-anchors .level-3 {
+  margin-left: 0.5rem;
+}
+
+.sidebar .nav-anchors .level-4 {
+  margin-left: 1rem;
+}
+
+.sidebar .nav-anchors .level-5 {
+  margin-left: 1.5rem;
+}
+
+.sidebar .nav-anchors .level-6 {
+  margin-left: 2rem;
+}
+
 .sidebar-footer {
   margin-top: auto;
   padding-top: 1rem;

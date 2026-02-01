@@ -8,6 +8,7 @@ use tera::{Context, Tera};
 use crate::config::SiteConfig;
 use crate::content::{Content, NavItem};
 use crate::error::{Error, Result};
+use crate::render::Anchor;
 
 /// Runtime template engine wrapping Tera.
 pub struct TemplateEngine {
@@ -40,11 +41,13 @@ impl TemplateEngine {
         page_path: &str,
         config: &SiteConfig,
         nav: &[NavItem],
+        anchors: &[Anchor],
     ) -> Result<String> {
         let mut ctx = self.base_context(page_path, config, nav);
         ctx.insert("title", &content.frontmatter.title);
         ctx.insert("page", &FrontmatterContext::from(&content.frontmatter));
         ctx.insert("content", html_body);
+        ctx.insert("anchors", anchors);
         self.render("page.html", &ctx)
     }
 
@@ -56,6 +59,7 @@ impl TemplateEngine {
         page_path: &str,
         config: &SiteConfig,
         nav: &[NavItem],
+        anchors: &[Anchor],
     ) -> Result<String> {
         let template = content
             .frontmatter
@@ -66,6 +70,7 @@ impl TemplateEngine {
         ctx.insert("title", &content.frontmatter.title);
         ctx.insert("page", &FrontmatterContext::from(&content.frontmatter));
         ctx.insert("content", html_body);
+        ctx.insert("anchors", anchors);
         self.render(template, &ctx)
     }
 
@@ -145,6 +150,8 @@ pub struct FrontmatterContext {
     pub tags: Vec<String>,
     pub weight: Option<i64>,
     pub link_to: Option<String>,
+    /// Enable table of contents (anchor nav in sidebar)
+    pub toc: bool,
 }
 
 impl From<&crate::content::Frontmatter> for FrontmatterContext {
@@ -156,6 +163,7 @@ impl From<&crate::content::Frontmatter> for FrontmatterContext {
             tags: fm.tags.clone(),
             weight: fm.weight,
             link_to: fm.link_to.clone(),
+            toc: fm.toc.unwrap_or(false),
         }
     }
 }

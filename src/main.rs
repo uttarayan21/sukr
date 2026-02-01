@@ -142,10 +142,16 @@ fn run(config_path: &Path) -> Result<()> {
         // Render individual content pages for all sections
         for item in &items {
             eprintln!("  processing: {}", item.slug);
-            let (html_body, _anchors) = render::markdown_to_html(&item.body);
+            let (html_body, anchors) = render::markdown_to_html(&item.body);
             let page_path = format!("/{}", item.output_path(&content_dir).display());
-            let html =
-                engine.render_content(item, &html_body, &page_path, &config, &manifest.nav)?;
+            let html = engine.render_content(
+                item,
+                &html_body,
+                &page_path,
+                &config,
+                &manifest.nav,
+                &anchors,
+            )?;
             write_output(&output_dir, &content_dir, item, html)?;
         }
 
@@ -259,9 +265,10 @@ fn process_pages(
             eprintln!("processing: {}", path.display());
 
             let content = Content::from_path(&path, ContentKind::Page)?;
-            let (html_body, _anchors) = render::markdown_to_html(&content.body);
+            let (html_body, anchors) = render::markdown_to_html(&content.body);
             let page_path = format!("/{}", content.output_path(content_dir).display());
-            let html = engine.render_page(&content, &html_body, &page_path, config, nav)?;
+            let html =
+                engine.render_page(&content, &html_body, &page_path, config, nav, &anchors)?;
 
             write_output(output_dir, content_dir, &content, html)?;
         }
@@ -278,13 +285,14 @@ fn generate_homepage(
 ) -> Result<()> {
     eprintln!("generating: homepage");
 
-    let (html_body, _anchors) = render::markdown_to_html(&manifest.homepage.body);
+    let (html_body, anchors) = render::markdown_to_html(&manifest.homepage.body);
     let html = engine.render_page(
         &manifest.homepage,
         &html_body,
         "/index.html",
         config,
         &manifest.nav,
+        &anchors,
     )?;
 
     let out_path = output_dir.join("index.html");
