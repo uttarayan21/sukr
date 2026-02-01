@@ -185,10 +185,19 @@ fn run(config_path: &Path) -> Result<()> {
     }
 
     // 3. Process standalone pages (discovered dynamically)
-    process_pages(&content_dir, &output_dir, &config, &nav, &engine)?;
+    let standalone_pages = process_pages(&content_dir, &output_dir, &config, &nav, &engine)?;
 
     // 4. Generate homepage
     generate_homepage(&content_dir, &output_dir, &config, &nav, &engine)?;
+
+    // 5. Generate sitemap
+    generate_sitemap_file(
+        &output_dir,
+        &sections,
+        &standalone_pages,
+        &config,
+        &content_dir,
+    )?;
 
     eprintln!("done!");
     Ok(())
@@ -215,14 +224,39 @@ fn generate_feed(
     Ok(())
 }
 
+/// Generate the XML sitemap
+fn generate_sitemap_file(
+    output_dir: &Path,
+    sections: &[content::Section],
+    pages: &[Content],
+    config: &config::SiteConfig,
+    content_dir: &Path,
+) -> Result<()> {
+    let out_path = output_dir.join("sitemap.xml");
+    eprintln!("generating: {}", out_path.display());
+
+    let sitemap_xml = sitemap::generate_sitemap(sections, pages, config, content_dir);
+
+    fs::write(&out_path, sitemap_xml).map_err(|e| Error::WriteFile {
+        path: out_path.clone(),
+        source: e,
+    })?;
+
+    eprintln!("  → {}", out_path.display());
+    Ok(())
+}
+
 /// Process standalone pages in content/ (top-level .md files excluding _index.md)
+/// Returns the discovered pages for use by sitemap generation.
 fn process_pages(
     content_dir: &Path,
     output_dir: &Path,
     config: &config::SiteConfig,
     nav: &[NavItem],
     engine: &TemplateEngine,
-) -> Result<()> {
+) -> Result<Vec<Content>> {
+    let mut pages = Vec::new();
+
     // Dynamically discover top-level .md files (except _index.md)
     let entries = fs::read_dir(content_dir).map_err(|e| Error::ReadFile {
         path: content_dir.to_path_buf(),
@@ -243,9 +277,10 @@ fn process_pages(
             let html = engine.render_page(&content, &html_body, &page_path, config, nav)?;
 
             write_output(output_dir, content_dir, &content, html)?;
+            pages.push(content);
         }
     }
-    Ok(())
+    Ok(pages)
 }
 
 /// Generate the homepage from content/_index.md
