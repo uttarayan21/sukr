@@ -98,9 +98,13 @@ body {
   margin-left: 1rem;
   padding-left: 0.5rem;
   border-left: 1px solid var(--border);
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 0.25rem;
+}
+
+.sidebar .nav-children.expanded {
+  display: flex;
 }
 
 .sidebar .nav-children a {

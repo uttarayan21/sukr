@@ -35,9 +35,11 @@
     </header>
     <nav>
       {% for item in nav %}
+      {% set section_prefix = item.path | replace(from="index.html", to="") %}
+      {% set is_current_section = page_path is starting_with(section_prefix) %}
       <a href="{{ prefix }}{{ item.path }}" {% if page_path==item.path %}class="active" {% endif %}>{{ item.label }}</a>
       {% if config.nested_nav and item.children %}
-      <div class="nav-children">
+      <div class="nav-children{% if is_current_section %} expanded{% endif %}">
         {% for child in item.children %}
         <a href="{{ prefix }}{{ child.path }}" {% if page_path==child.path %}class="active" {% endif %}>{{ child.label
           }}</a>
