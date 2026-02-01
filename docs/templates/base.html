@@ -4,10 +4,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {% if page.description %}<meta name="description" content="{{ page.description }}" />{% endif %}
   <title>{{ title }} | {{ config.title }}</title>
   <link rel="canonical" href="{{ base_url }}{{ page_path }}" />
   <link rel="stylesheet" href="{{ prefix }}/style.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" crossorigin="anonymous" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css" crossorigin="anonymous" /></noscript>
   <link rel="icon" type="image/png" href="{{ prefix }}/logo.png" />
 </head>
 
@@ -15,7 +17,7 @@
   <aside class="sidebar">
     <header>
       <a href="{{ prefix }}/index.html" class="logo">
-        <img src="{{ prefix }}/logo.png" alt="sukr" class="logo-img" />
+        <img src="{{ prefix }}/logo.png" alt="" class="logo-img" />
         sukr
       </a>
       <span class="tagline">suckless static sites</span>
