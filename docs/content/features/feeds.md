@@ -4,8 +4,6 @@ description: Build-time feed generation for blog posts
 weight: 6
 ---
 
-# Atom Feeds
-
 sukr generates an Atom 1.0 feed for blog posts at build time.
 
 ## Output

@@ -4,8 +4,6 @@ description: Automatic CSS optimization at build time
 weight: 7
 ---
 
-# CSS Minification
-
 sukr automatically minifies CSS files in your static directory during the build.
 
 ## How It Works

@@ -4,8 +4,6 @@ description: Build-time LaTeX math with KaTeX
 weight: 5
 ---
 
-# Math Rendering
-
 sukr renders LaTeX math expressions at build time using KaTeX, producing static HTML and CSS. No client-side JavaScript required.
 
 ## Inline Math

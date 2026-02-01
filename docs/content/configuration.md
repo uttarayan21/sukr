@@ -4,8 +4,6 @@ description: Complete reference for site.toml configuration
 weight: 2
 ---
 
-# Configuration
-
 sukr is configured via `site.toml`. All settings have sensible defaults.
 
 ## Basic Configuration

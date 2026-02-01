@@ -4,8 +4,6 @@ description: Automatic section discovery and processing
 weight: 2
 ---
 
-# Sections
-
 sukr automatically discovers sections from your content directory structure.
 
 ## What is a Section?

@@ -4,8 +4,6 @@ description: Install sukr and build your first site
 weight: 0
 ---
 
-# Getting Started
-
 This guide walks you through installing sukr and creating your first static site.
 
 ## Installation

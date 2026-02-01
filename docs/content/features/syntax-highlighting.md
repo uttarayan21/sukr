@@ -4,8 +4,6 @@ description: Build-time code highlighting with Tree-sitter
 weight: 3
 ---
 
-# Syntax Highlighting
-
 sukr highlights code blocks at build time using Tree-sitter. No client-side JavaScript required.
 
 ## Usage
