@@ -37,6 +37,117 @@ fn main() {
 | HTML       | `html`                |
 | CSS        | `css`                 |
 | Markdown   | `markdown`, `md`      |
+| C          | `c`                   |
+
+## Examples
+
+### Rust
+
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+### Python
+
+```python
+def greet(name: str) -> str:
+    return f"Hello, {name}!"
+```
+
+### JavaScript
+
+```javascript
+const greet = (name) => `Hello, ${name}!`;
+```
+
+### TypeScript
+
+```typescript
+function greet(name: string): string {
+  return `Hello, ${name}!`;
+}
+```
+
+### Go
+
+```go
+func main() {
+    fmt.Println("Hello, world!")
+}
+```
+
+### Bash
+
+```bash
+#!/bin/bash
+echo "Hello, $USER!"
+```
+
+### Nix
+
+```nix
+{ pkgs }:
+pkgs.mkShell { buildInputs = [ pkgs.hello ]; }
+```
+
+### TOML
+
+```toml
+[package]
+name = "sukr"
+version = "0.1.0"
+```
+
+### YAML
+
+```yaml
+name: Build
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+```
+
+### JSON
+
+```json
+{
+  "name": "sukr",
+  "version": "0.1.0"
+}
+```
+
+### HTML
+
+```html
+<!DOCTYPE html>
+<html>
+  <body>
+    Hello!
+  </body>
+</html>
+```
+
+### CSS
+
+```css
+.container {
+  display: flex;
+  color: #ff79c6;
+}
+```
+
+### C
+
+```c
+#include <stdio.h>
+int main() {
+    printf("Hello!\n");
+    return 0;
+}
+```
 
 ## How It Works
 
@@ -69,9 +180,9 @@ Highlighted code uses semantic CSS classes:
 
 The exact classes depend on the language grammar.
 
-## Nix Language Support
+## Injection Support
 
-sukr includes full Nix highlighting with injection support. Bash code inside `buildPhase` and similar attributes is highlighted correctly:
+Some languages support injection—highlighting embedded languages. For example, Bash inside Nix strings:
 
 ```nix
 stdenv.mkDerivation {
@@ -81,6 +192,8 @@ stdenv.mkDerivation {
   '';
 }
 ```
+
+Markdown also supports injection—code blocks inside markdown fences are highlighted with their respective languages.
 
 ## Fallback
 
