@@ -1,9 +1,5 @@
-; Nix syntax highlighting queries (adapted from Helix editor)
-; Maps to standard tree-sitter capture names for compatibility with tree-sitter-highlight
-
 (comment) @comment
 
-; Punctuation
 [
   ";"
   "."
@@ -22,16 +18,15 @@
   "}"
 ] @punctuation.bracket
 
-; Keywords
-"assert" @keyword
-"or" @keyword
-"rec" @keyword
+"assert" @keyword.control.exception
+"or" @keyword.operator
+"rec" @keyword.control.repeat
 
 [
   "if" 
   "then"
   "else"
-] @keyword
+] @keyword.control.conditional
 
 [
   "let"
@@ -40,14 +35,11 @@
   "with" 
 ] @keyword
 
-; Variables and identifiers
 (variable_expression name: (identifier) @variable)
 
-; Attribute access (properties)
 (select_expression
-  attrpath: (attrpath attr: (identifier)) @property)
+  attrpath: (attrpath attr: (identifier)) @variable.other.member)
 
-; Function calls
 (apply_expression
   function: [
     (variable_expression name: (identifier) @function)
@@ -55,23 +47,19 @@
       attrpath: (attrpath
         attr: (identifier) @function .))])
 
-; Builtin variables
 ((identifier) @variable.builtin
  (#match? @variable.builtin "^(__currentSystem|__currentTime|__nixPath|__nixVersion|__storeDir|builtins)$")
  (#is-not? local))
 
-; Builtin functions
 ((identifier) @function.builtin
  (#match? @function.builtin "^(__add|__addErrorContext|__all|__any|__appendContext|__attrNames|__attrValues|__bitAnd|__bitOr|__bitXor|__catAttrs|__compareVersions|__concatLists|__concatMap|__concatStringsSep|__deepSeq|__div|__elem|__elemAt|__fetchurl|__filter|__filterSource|__findFile|__foldl'|__fromJSON|__functionArgs|__genList|__genericClosure|__getAttr|__getContext|__getEnv|__hasAttr|__hasContext|__hashFile|__hashString|__head|__intersectAttrs|__isAttrs|__isBool|__isFloat|__isFunction|__isInt|__isList|__isPath|__isString|__langVersion|__length|__lessThan|__listToAttrs|__mapAttrs|__match|__mul|__parseDrvName|__partition|__path|__pathExists|__readDir|__readFile|__replaceStrings|__seq|__sort|__split|__splitVersion|__storePath|__stringLength|__sub|__substring|__tail|__toFile|__toJSON|__toPath|__toXML|__trace|__tryEval|__typeOf|__unsafeDiscardOutputDependency|__unsafeDiscardStringContext|__unsafeGetAttrPos|__valueSize|abort|baseNameOf|derivation|derivationStrict|dirOf|fetchGit|fetchMercurial|fetchTarball|fromTOML|import|isNull|map|placeholder|removeAttrs|scopedImport|throw|toString)$")
  (#is-not? local))
 
-; Strings
 [
   (string_expression)
   (indented_string_expression)
 ] @string
 
-; Special string types (paths, URIs)
 [
   (path_expression)
   (hpath_expression)
@@ -80,21 +68,17 @@
 
 (uri_expression) @string.special.uri
 
-; Boolean constants
-((identifier) @constant.builtin (#match? @constant.builtin "^(true|false)$"))
+; boolean
+((identifier) @constant.builtin.boolean (#match? @constant.builtin.boolean "^(true|false)$")) @constant.builtin.boolean
+; null
+((identifier) @constant.builtin (#eq? @constant.builtin "null")) @constant.builtin
 
-; Null constant
-((identifier) @constant.builtin (#eq? @constant.builtin "null"))
+(integer_expression) @constant.numeric.integer
+(float_expression) @constant.numeric.float
 
-; Numbers
-(integer_expression) @number
-(float_expression) @number
+(escape_sequence) @constant.character.escape
+(dollar_escape) @constant.character.escape
 
-; Escape sequences
-(escape_sequence) @escape
-(dollar_escape) @escape
-
-; Function parameters
 (function_expression
   "@"? @punctuation.delimiter
   universal: (identifier) @variable.parameter
@@ -105,29 +89,24 @@
   name: (identifier) @variable.parameter
   "?"? @punctuation.delimiter)
 
-; String interpolation
 (interpolation
   "${" @punctuation.special
   "}" @punctuation.special) @embedded
 
-; Operators
 (unary_expression
   operator: _ @operator)
 
 (binary_expression
   operator: _ @operator)
 
-; Attribute bindings
 (binding
-  attrpath: (attrpath attr: (identifier)) @property)
+  attrpath: (attrpath attr: (identifier)) @variable.other.member)
 
-; Inherit expressions
-(inherit_from attrs: (inherited_attrs attr: (identifier) @property))
+(inherit_from attrs: (inherited_attrs attr: (identifier) @variable.other.member))
 (inherited_attrs attr: (identifier) @variable)
 
-; Has attribute expression
 (has_attr_expression
   expression: (_)
   "?" @operator
   attrpath: (attrpath
-    attr: (identifier) @property))
+    attr: (identifier) @variable.other.member))
