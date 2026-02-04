@@ -105,3 +105,14 @@ The `SiteManifest` struct aggregates all content in one filesystem traversal:
 - Navigation tree (derived from structure + frontmatter weights)
 
 This avoids repeated directory scans during template rendering.
+
+## Implementation Notes
+
+Sukr prioritizes **output quality** over minimal build-time footprint. Current dependency choices reflect this:
+
+| Feature  | Library    | Trade-off                                                                |
+| :------- | :--------- | :----------------------------------------------------------------------- |
+| Math     | KaTeX      | Full LaTeX coverage; heavier than minimal alternatives like latex2mathml |
+| Diagrams | mermaid-rs | High-fidelity SVG; uses headless rendering under the hood                |
+
+Lighter alternatives exist and may be evaluated as they mature. The goal is browser-native output with zero client-side JavaScript—build-time weight is a secondary concern.
