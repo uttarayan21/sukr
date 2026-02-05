@@ -1,5 +1,6 @@
 //! Markdown to HTML rendering via pulldown-cmark with syntax highlighting.
 
+use crate::escape::html_escape;
 use crate::highlight::{highlight_code, Language};
 use pulldown_cmark::{CodeBlockKind, Event, HeadingLevel, Options, Parser, Tag, TagEnd};
 use serde::Serialize;
@@ -245,13 +246,6 @@ pub fn markdown_to_html(markdown: &str) -> (String, Vec<Anchor>) {
     }
 
     (html_output, anchors)
-}
-
-fn html_escape(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
 }
 
 /// Convert heading text to a URL-friendly slug ID.

@@ -2,6 +2,7 @@
 
 use crate::config::SiteConfig;
 use crate::content::SiteManifest;
+use crate::escape::xml_escape;
 use std::path::Path;
 
 /// Generate an Atom 1.0 feed from blog posts in the manifest.
@@ -78,15 +79,6 @@ pub fn generate_atom_feed(
         xml_escape(&config.author),
         entries,
     )
-}
-
-/// Escape XML special characters.
-fn xml_escape(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-        .replace('\'', "&apos;")
 }
 
 #[cfg(test)]

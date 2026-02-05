@@ -8,6 +8,7 @@ use std::collections::HashMap;
 use std::sync::LazyLock;
 use std::time::Duration;
 
+use crate::escape::{html_escape, html_escape_into};
 use ropey::RopeSlice;
 use tree_house::highlighter::{Highlight, HighlightEvent, Highlighter};
 use tree_house::{
@@ -622,26 +623,6 @@ fn render_html<'a>(source: &str, mut highlighter: Highlighter<'a, 'a, SukrLoader
     }
 
     html
-}
-
-/// Simple HTML escape for fallback.
-fn html_escape(s: &str) -> String {
-    let mut result = String::with_capacity(s.len());
-    html_escape_into(&mut result, s);
-    result
-}
-
-/// Escape HTML characters into an existing string.
-fn html_escape_into(out: &mut String, s: &str) {
-    for c in s.chars() {
-        match c {
-            '&' => out.push_str("&amp;"),
-            '<' => out.push_str("&lt;"),
-            '>' => out.push_str("&gt;"),
-            '"' => out.push_str("&quot;"),
-            _ => out.push(c),
-        }
-    }
 }
 
 #[cfg(test)]

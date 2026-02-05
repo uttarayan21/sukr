@@ -6,6 +6,7 @@ mod config;
 mod content;
 mod css;
 mod error;
+mod escape;
 mod feed;
 mod highlight;
 mod math;
@@ -14,7 +15,7 @@ mod render;
 mod sitemap;
 mod template_engine;
 
-use crate::content::{Content, ContentKind, NavItem};
+use crate::content::{Content, ContentKind, DEFAULT_WEIGHT, DEFAULT_WEIGHT_HIGH, NavItem};
 use crate::error::{Error, Result};
 use crate::template_engine::{ContentContext, TemplateEngine};
 use std::fs;
@@ -123,8 +124,8 @@ fn run(config_path: &Path) -> Result<()> {
                 items.sort_by(|a, b| {
                     a.frontmatter
                         .weight
-                        .unwrap_or(99)
-                        .cmp(&b.frontmatter.weight.unwrap_or(99))
+                        .unwrap_or(DEFAULT_WEIGHT_HIGH)
+                        .cmp(&b.frontmatter.weight.unwrap_or(DEFAULT_WEIGHT_HIGH))
                 });
             }
             _ => {
@@ -132,8 +133,8 @@ fn run(config_path: &Path) -> Result<()> {
                 items.sort_by(|a, b| {
                     a.frontmatter
                         .weight
-                        .unwrap_or(50)
-                        .cmp(&b.frontmatter.weight.unwrap_or(50))
+                        .unwrap_or(DEFAULT_WEIGHT)
+                        .cmp(&b.frontmatter.weight.unwrap_or(DEFAULT_WEIGHT))
                         .then_with(|| a.frontmatter.title.cmp(&b.frontmatter.title))
                 });
             }
