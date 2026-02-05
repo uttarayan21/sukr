@@ -7,10 +7,10 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 /// Default weight for content items in navigation and listings.
-pub const DEFAULT_WEIGHT: i64 = 50;
+pub(crate) const DEFAULT_WEIGHT: i64 = 50;
 
 /// High default weight for content that should appear last (e.g., projects).
-pub const DEFAULT_WEIGHT_HIGH: i64 = 99;
+pub(crate) const DEFAULT_WEIGHT_HIGH: i64 = 99;
 
 /// The type of content being processed.
 #[derive(Debug, Clone, PartialEq)]

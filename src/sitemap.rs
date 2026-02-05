@@ -6,7 +6,7 @@ use crate::escape::xml_escape;
 use std::path::Path;
 
 /// A URL entry for the sitemap.
-pub struct SitemapEntry {
+pub(crate) struct SitemapEntry {
     /// Absolute URL (e.g., "https://example.com/blog/post.html")
     pub loc: String,
     /// Optional last modification date in W3C format (YYYY-MM-DD)
