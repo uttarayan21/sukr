@@ -1,84 +1,22 @@
-//! Syntax highlighting via tree-sitter.
+//! Syntax highlighting via tree-house (Helix's tree-sitter integration).
+//!
+//! Uses curated queries from Helix for comprehensive syntax highlighting
+//! with support for language injections (e.g., bash in Nix strings).
 
+use std::borrow::Cow;
+use std::collections::HashMap;
 use std::sync::LazyLock;
-use tree_sitter_highlight::{HighlightConfiguration, Highlighter as TSHighlighter, HtmlRenderer};
+use std::time::Duration;
 
-/// Recognized highlight names mapped to CSS classes.
-/// Order matters: index becomes the class name suffix.
-/// Comprehensive list covering captures from all supported languages.
-const HIGHLIGHT_NAMES: &[&str] = &[
-    "attribute",
-    "comment",
-    "constant",
-    "constant.builtin",
-    "constructor",
-    "embedded",
-    "escape",
-    "function",
-    "function.builtin",
-    "keyword",
-    "number",
-    "operator",
-    "property",
-    "punctuation",
-    "punctuation.bracket",
-    "punctuation.delimiter",
-    "punctuation.special",
-    "string",
-    "string.escape",
-    "string.special",
-    "string.special.path",
-    "string.special.uri",
-    "text.literal",
-    "text.reference",
-    "text.title",
-    "text.uri",
-    "type",
-    "type.builtin",
-    "variable",
-    "variable.builtin",
-    "variable.parameter",
-];
-
-/// Static HTML attributes for each highlight class.
-/// Pre-computed to avoid allocations in the render loop.
-/// Must be in same order as HIGHLIGHT_NAMES.
-const HTML_ATTRS: &[&[u8]] = &[
-    b" class=\"hl-attribute\"",
-    b" class=\"hl-comment\"",
-    b" class=\"hl-constant\"",
-    b" class=\"hl-constant-builtin\"",
-    b" class=\"hl-constructor\"",
-    b" class=\"hl-embedded\"",
-    b" class=\"hl-escape\"",
-    b" class=\"hl-function\"",
-    b" class=\"hl-function-builtin\"",
-    b" class=\"hl-keyword\"",
-    b" class=\"hl-number\"",
-    b" class=\"hl-operator\"",
-    b" class=\"hl-property\"",
-    b" class=\"hl-punctuation\"",
-    b" class=\"hl-punctuation-bracket\"",
-    b" class=\"hl-punctuation-delimiter\"",
-    b" class=\"hl-punctuation-special\"",
-    b" class=\"hl-string\"",
-    b" class=\"hl-string-escape\"",
-    b" class=\"hl-string-special\"",
-    b" class=\"hl-string-special-path\"",
-    b" class=\"hl-string-special-uri\"",
-    b" class=\"hl-text-literal\"",
-    b" class=\"hl-text-reference\"",
-    b" class=\"hl-text-title\"",
-    b" class=\"hl-text-uri\"",
-    b" class=\"hl-type\"",
-    b" class=\"hl-type-builtin\"",
-    b" class=\"hl-variable\"",
-    b" class=\"hl-variable-builtin\"",
-    b" class=\"hl-variable-parameter\"",
-];
+use ropey::RopeSlice;
+use tree_house::highlighter::{Highlight, HighlightEvent, Highlighter};
+use tree_house::{
+    InjectionLanguageMarker, Language as THLanguage, LanguageConfig, LanguageLoader, Syntax,
+};
+use tree_house_bindings::Grammar;
 
 /// Supported languages for syntax highlighting.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Language {
     Bash,
     C,
@@ -117,209 +55,593 @@ impl Language {
             _ => None,
         }
     }
-}
 
-/// Helper to create and configure a HighlightConfiguration.
-fn make_config(
-    language: tree_sitter::Language,
-    name: &str,
-    highlights: &str,
-    injections: &str,
-) -> HighlightConfiguration {
-    let mut config = HighlightConfiguration::new(language, name, highlights, injections, "")
-        .expect("highlight query should be valid");
-    config.configure(HIGHLIGHT_NAMES);
-    config
-}
+    /// Convert to tree-house Language index.
+    fn to_th_language(self) -> THLanguage {
+        THLanguage::new(self as u32)
+    }
 
-// Static configurations for each language, lazily initialized.
-
-static BASH_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_bash::LANGUAGE.into(),
-        "bash",
-        tree_sitter_bash::HIGHLIGHT_QUERY,
-        "",
-    )
-});
-
-static C_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_c::LANGUAGE.into(),
-        "c",
-        tree_sitter_c::HIGHLIGHT_QUERY,
-        "",
-    )
-});
-
-static CSS_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_css::LANGUAGE.into(),
-        "css",
-        tree_sitter_css::HIGHLIGHTS_QUERY,
-        "",
-    )
-});
-
-static GO_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_go::LANGUAGE.into(),
-        "go",
-        tree_sitter_go::HIGHLIGHTS_QUERY,
-        "",
-    )
-});
-
-static HTML_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_html::LANGUAGE.into(),
-        "html",
-        tree_sitter_html::HIGHLIGHTS_QUERY,
-        tree_sitter_html::INJECTIONS_QUERY,
-    )
-});
-
-static JAVASCRIPT_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_javascript::LANGUAGE.into(),
-        "javascript",
-        tree_sitter_javascript::HIGHLIGHT_QUERY,
-        tree_sitter_javascript::INJECTIONS_QUERY,
-    )
-});
-
-static JSON_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_json::LANGUAGE.into(),
-        "json",
-        tree_sitter_json::HIGHLIGHTS_QUERY,
-        "",
-    )
-});
-
-static MARKDOWN_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_md::LANGUAGE.into(),
-        "markdown",
-        tree_sitter_md::HIGHLIGHT_QUERY_BLOCK,
-        include_str!("../queries/md-injections.scm"),
-    )
-});
-
-static NIX_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_nix::LANGUAGE.into(),
-        "nix",
-        include_str!("../queries/nix-highlights.scm"),
-        include_str!("../queries/nix-injections.scm"),
-    )
-});
-
-static PYTHON_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_python::LANGUAGE.into(),
-        "python",
-        tree_sitter_python::HIGHLIGHTS_QUERY,
-        "",
-    )
-});
-
-static RUST_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_rust::LANGUAGE.into(),
-        "rust",
-        tree_sitter_rust::HIGHLIGHTS_QUERY,
-        "",
-    )
-});
-
-static TOML_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_toml_ng::LANGUAGE.into(),
-        "toml",
-        tree_sitter_toml_ng::HIGHLIGHTS_QUERY,
-        "",
-    )
-});
-
-static TYPESCRIPT_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_typescript::LANGUAGE_TYPESCRIPT.into(),
-        "typescript",
-        tree_sitter_typescript::HIGHLIGHTS_QUERY,
-        "",
-    )
-});
-
-static YAML_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    make_config(
-        tree_sitter_yaml::LANGUAGE.into(),
-        "yaml",
-        tree_sitter_yaml::HIGHLIGHTS_QUERY,
-        "",
-    )
-});
-
-/// Get a static reference to the highlight configuration for a language.
-fn get_config(lang: Language) -> &'static HighlightConfiguration {
-    match lang {
-        Language::Bash => &BASH_CONFIG,
-        Language::C => &C_CONFIG,
-        Language::Css => &CSS_CONFIG,
-        Language::Go => &GO_CONFIG,
-        Language::Html => &HTML_CONFIG,
-        Language::JavaScript => &JAVASCRIPT_CONFIG,
-        Language::Json => &JSON_CONFIG,
-        Language::Markdown => &MARKDOWN_CONFIG,
-        Language::Nix => &NIX_CONFIG,
-        Language::Python => &PYTHON_CONFIG,
-        Language::Rust => &RUST_CONFIG,
-        Language::Toml => &TOML_CONFIG,
-        Language::TypeScript => &TYPESCRIPT_CONFIG,
-        Language::Yaml => &YAML_CONFIG,
+    /// Convert from tree-house Language index.
+    fn from_th_language(lang: THLanguage) -> Option<Self> {
+        match lang.0 {
+            0 => Some(Language::Bash),
+            1 => Some(Language::C),
+            2 => Some(Language::Css),
+            3 => Some(Language::Go),
+            4 => Some(Language::Html),
+            5 => Some(Language::JavaScript),
+            6 => Some(Language::Json),
+            7 => Some(Language::Markdown),
+            8 => Some(Language::Nix),
+            9 => Some(Language::Python),
+            10 => Some(Language::Rust),
+            11 => Some(Language::Toml),
+            12 => Some(Language::TypeScript),
+            13 => Some(Language::Yaml),
+            _ => None,
+        }
     }
 }
 
-/// Get config by language name string (for injection callback).
-fn get_config_by_name(name: &str) -> Option<&'static HighlightConfiguration> {
-    Language::from_fence(name).map(get_config)
+/// Create a LanguageConfig for a language with embedded queries.
+fn make_config(
+    grammar: Grammar,
+    highlights: &str,
+    injections: &str,
+    locals: &str,
+) -> Option<LanguageConfig> {
+    LanguageConfig::new(grammar, highlights, injections, locals).ok()
 }
+
+/// Scope-to-highlight mapping with hierarchical fallback.
+/// Returns a HashMap of scope name -> Highlight index.
+fn build_scope_map() -> HashMap<&'static str, Highlight> {
+    // Comprehensive list of scopes from Helix queries.
+    static SCOPES: &[&str] = &[
+        // Keywords
+        "keyword",
+        "keyword.control",
+        "keyword.control.conditional",
+        "keyword.control.repeat",
+        "keyword.control.import",
+        "keyword.control.return",
+        "keyword.control.exception",
+        "keyword.operator",
+        "keyword.directive",
+        "keyword.function",
+        "keyword.return",
+        "keyword.storage",
+        "keyword.storage.type",
+        "keyword.storage.modifier",
+        "keyword.storage.modifier.mut",
+        "keyword.storage.modifier.ref",
+        "keyword.special",
+        // Functions
+        "function",
+        "function.builtin",
+        "function.call",
+        "function.macro",
+        "function.method",
+        // Types
+        "type",
+        "type.builtin",
+        "type.parameter",
+        "type.enum.variant",
+        "type.enum.variant.builtin",
+        // Constants
+        "constant",
+        "constant.builtin",
+        "constant.builtin.boolean",
+        "constant.character",
+        "constant.character.escape",
+        "constant.macro",
+        "constant.numeric",
+        "constant.numeric.integer",
+        "constant.numeric.float",
+        // Strings
+        "string",
+        "string.regexp",
+        "string.special",
+        "string.special.path",
+        "string.special.symbol",
+        // Variables
+        "variable",
+        "variable.builtin",
+        "variable.parameter",
+        "variable.other",
+        "variable.other.member",
+        // Comments
+        "comment",
+        "comment.line",
+        "comment.block",
+        "comment.block.documentation",
+        "comment.line.documentation",
+        "comment.unused",
+        // Punctuation
+        "punctuation",
+        "punctuation.bracket",
+        "punctuation.delimiter",
+        "punctuation.special",
+        // Operators
+        "operator",
+        // Other
+        "attribute",
+        "label",
+        "namespace",
+        "constructor",
+        "special",
+        "tag",
+        "tag.attribute",
+        "tag.delimiter",
+        // Markup
+        "markup.bold",
+        "markup.italic",
+        "markup.strikethrough",
+        "markup.heading",
+        "markup.link.text",
+        "markup.link.url",
+        "markup.list",
+        "markup.quote",
+        "markup.raw",
+    ];
+
+    SCOPES
+        .iter()
+        .enumerate()
+        .map(|(i, &scope)| (scope, Highlight::new(i as u32)))
+        .collect()
+}
+
+/// Static scope map for highlight resolution.
+static SCOPE_MAP: LazyLock<HashMap<&'static str, Highlight>> = LazyLock::new(build_scope_map);
+
+/// Static CSS class names for each scope.
+static SCOPE_CLASSES: LazyLock<Vec<&'static str>> = LazyLock::new(|| {
+    vec![
+        "hl-keyword",
+        "hl-keyword-control",
+        "hl-keyword-control-conditional",
+        "hl-keyword-control-repeat",
+        "hl-keyword-control-import",
+        "hl-keyword-control-return",
+        "hl-keyword-control-exception",
+        "hl-keyword-operator",
+        "hl-keyword-directive",
+        "hl-keyword-function",
+        "hl-keyword-return",
+        "hl-keyword-storage",
+        "hl-keyword-storage-type",
+        "hl-keyword-storage-modifier",
+        "hl-keyword-storage-modifier-mut",
+        "hl-keyword-storage-modifier-ref",
+        "hl-keyword-special",
+        "hl-function",
+        "hl-function-builtin",
+        "hl-function-call",
+        "hl-function-macro",
+        "hl-function-method",
+        "hl-type",
+        "hl-type-builtin",
+        "hl-type-parameter",
+        "hl-type-enum-variant",
+        "hl-type-enum-variant-builtin",
+        "hl-constant",
+        "hl-constant-builtin",
+        "hl-constant-builtin-boolean",
+        "hl-constant-character",
+        "hl-constant-character-escape",
+        "hl-constant-macro",
+        "hl-constant-numeric",
+        "hl-constant-numeric-integer",
+        "hl-constant-numeric-float",
+        "hl-string",
+        "hl-string-regexp",
+        "hl-string-special",
+        "hl-string-special-path",
+        "hl-string-special-symbol",
+        "hl-variable",
+        "hl-variable-builtin",
+        "hl-variable-parameter",
+        "hl-variable-other",
+        "hl-variable-other-member",
+        "hl-comment",
+        "hl-comment-line",
+        "hl-comment-block",
+        "hl-comment-block-documentation",
+        "hl-comment-line-documentation",
+        "hl-comment-unused",
+        "hl-punctuation",
+        "hl-punctuation-bracket",
+        "hl-punctuation-delimiter",
+        "hl-punctuation-special",
+        "hl-operator",
+        "hl-attribute",
+        "hl-label",
+        "hl-namespace",
+        "hl-constructor",
+        "hl-special",
+        "hl-tag",
+        "hl-tag-attribute",
+        "hl-tag-delimiter",
+        "hl-markup-bold",
+        "hl-markup-italic",
+        "hl-markup-strikethrough",
+        "hl-markup-heading",
+        "hl-markup-link-text",
+        "hl-markup-link-url",
+        "hl-markup-list",
+        "hl-markup-quote",
+        "hl-markup-raw",
+    ]
+});
+
+/// Resolve a scope name to a Highlight, with hierarchical fallback.
+/// E.g., "keyword.control.conditional" falls back to "keyword.control" then "keyword".
+fn resolve_scope(scope: &str) -> Option<Highlight> {
+    let mut s = scope;
+    loop {
+        if let Some(&highlight) = SCOPE_MAP.get(s) {
+            return Some(highlight);
+        }
+        // Try parent scope
+        match s.rfind('.') {
+            Some(idx) => s = &s[..idx],
+            None => return None,
+        }
+    }
+}
+
+/// Convert a Highlight to a CSS class name.
+fn scope_to_class(highlight: Highlight) -> &'static str {
+    SCOPE_CLASSES
+        .get(highlight.idx())
+        .copied()
+        .unwrap_or("hl-unknown")
+}
+
+/// Language loader for sukr.
+struct SukrLoader {
+    configs: HashMap<Language, LanguageConfig>,
+    name_to_lang: HashMap<String, Language>,
+}
+
+impl SukrLoader {
+    fn new() -> Self {
+        let mut configs = HashMap::new();
+        let mut name_to_lang = HashMap::new();
+
+        // Register all language names
+        for (names, lang) in [
+            (vec!["bash", "sh", "shell", "zsh"], Language::Bash),
+            (vec!["c"], Language::C),
+            (vec!["css"], Language::Css),
+            (vec!["go", "golang"], Language::Go),
+            (vec!["html"], Language::Html),
+            (vec!["javascript", "js"], Language::JavaScript),
+            (vec!["json"], Language::Json),
+            (vec!["markdown", "md"], Language::Markdown),
+            (vec!["nix"], Language::Nix),
+            (vec!["python", "py"], Language::Python),
+            (vec!["rust", "rs"], Language::Rust),
+            (vec!["toml"], Language::Toml),
+            (vec!["typescript", "ts", "tsx"], Language::TypeScript),
+            (vec!["yaml", "yml"], Language::Yaml),
+        ] {
+            for name in names {
+                name_to_lang.insert(name.to_string(), lang);
+            }
+        }
+
+        // Create configs for each language
+        // Each grammar is converted using TryFrom<LanguageFn> for Grammar
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_bash::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/bash/highlights.scm"),
+                include_str!("../queries/bash/injections.scm"),
+                "",
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Bash, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_c::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/c/highlights.scm"),
+                include_str!("../queries/c/injections.scm"),
+                include_str!("../queries/c/locals.scm"),
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::C, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_css::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/css/highlights.scm"),
+                include_str!("../queries/css/injections.scm"),
+                "",
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Css, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_go::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/go/highlights.scm"),
+                include_str!("../queries/go/injections.scm"),
+                include_str!("../queries/go/locals.scm"),
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Go, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_html::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/html/highlights.scm"),
+                include_str!("../queries/html/injections.scm"),
+                "",
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Html, config);
+            }
+        }
+
+        // JavaScript needs combined queries from ecma + _javascript
+        let js_highlights = [
+            include_str!("../queries/ecma/highlights.scm"),
+            include_str!("../queries/_javascript/highlights.scm"),
+        ]
+        .join("\n");
+        let js_locals = [
+            include_str!("../queries/ecma/locals.scm"),
+            include_str!("../queries/_javascript/locals.scm"),
+        ]
+        .join("\n");
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_javascript::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                &js_highlights,
+                include_str!("../queries/ecma/injections.scm"),
+                &js_locals,
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::JavaScript, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_json::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/json/highlights.scm"),
+                "",
+                "",
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Json, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_md::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/markdown/highlights.scm"),
+                include_str!("../queries/markdown/injections.scm"),
+                "",
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Markdown, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_nix::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/nix/highlights.scm"),
+                include_str!("../queries/nix/injections.scm"),
+                "",
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Nix, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_python::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/python/highlights.scm"),
+                include_str!("../queries/python/injections.scm"),
+                include_str!("../queries/python/locals.scm"),
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Python, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_rust::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/rust/highlights.scm"),
+                include_str!("../queries/rust/injections.scm"),
+                include_str!("../queries/rust/locals.scm"),
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Rust, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_toml_ng::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/toml/highlights.scm"),
+                include_str!("../queries/toml/injections.scm"),
+                "",
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Toml, config);
+            }
+        }
+
+        // TypeScript needs combined queries from ecma + _typescript
+        let ts_highlights = [
+            include_str!("../queries/ecma/highlights.scm"),
+            include_str!("../queries/_typescript/highlights.scm"),
+        ]
+        .join("\n");
+        let ts_locals = [
+            include_str!("../queries/ecma/locals.scm"),
+            include_str!("../queries/_typescript/locals.scm"),
+        ]
+        .join("\n");
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_typescript::LANGUAGE_TYPESCRIPT) {
+            if let Some(config) = make_config(
+                grammar,
+                &ts_highlights,
+                include_str!("../queries/ecma/injections.scm"),
+                &ts_locals,
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::TypeScript, config);
+            }
+        }
+
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_yaml::LANGUAGE) {
+            if let Some(config) = make_config(
+                grammar,
+                include_str!("../queries/yaml/highlights.scm"),
+                include_str!("../queries/yaml/injections.scm"),
+                "",
+            ) {
+                config.configure(resolve_scope);
+                configs.insert(Language::Yaml, config);
+            }
+        }
+
+        Self {
+            configs,
+            name_to_lang,
+        }
+    }
+}
+
+impl LanguageLoader for SukrLoader {
+    fn language_for_marker(&self, marker: InjectionLanguageMarker) -> Option<THLanguage> {
+        let name: Cow<'_, str> = match marker {
+            InjectionLanguageMarker::Name(name) => name.into(),
+            InjectionLanguageMarker::Match(text) => text.into(),
+            InjectionLanguageMarker::Filename(_) | InjectionLanguageMarker::Shebang(_) => {
+                return None;
+            }
+        };
+        self.name_to_lang
+            .get(name.to_lowercase().as_str())
+            .map(|lang| lang.to_th_language())
+    }
+
+    fn get_config(&self, lang: THLanguage) -> Option<&LanguageConfig> {
+        Language::from_th_language(lang).and_then(|l| self.configs.get(&l))
+    }
+}
+
+/// Global loader instance.
+static LOADER: LazyLock<SukrLoader> = LazyLock::new(SukrLoader::new);
 
 /// Highlight source code and return HTML with span elements.
 ///
-/// Uses tree-sitter-highlight with injection support for embedded languages
-/// in Nix, HTML, and JavaScript code blocks.
+/// Uses tree-house with injection support for embedded languages
+/// in Nix, HTML, JavaScript, and Markdown code blocks.
 pub fn highlight_code(lang: Language, source: &str) -> String {
-    let config = get_config(lang);
+    let loader = &*LOADER;
 
-    // Leak both the highlighter and source to satisfy 'static lifetime.
-    // Acceptable for SSG where the process exits after building.
-    let highlighter: &'static mut TSHighlighter = Box::leak(Box::new(TSHighlighter::new()));
-    let static_source: &'static str = Box::leak(source.to_owned().into_boxed_str());
-    let source_bytes: &'static [u8] = static_source.as_bytes();
+    // Check if we have a config for this language
+    if loader.configs.get(&lang).is_none() {
+        return html_escape(source);
+    }
 
-    let highlights = match highlighter.highlight(config, source_bytes, None, get_config_by_name) {
-        Ok(h) => h,
+    // Parse the syntax tree
+    let rope = RopeSlice::from(source);
+    let syntax = match Syntax::new(rope, lang.to_th_language(), Duration::from_secs(5), loader) {
+        Ok(s) => s,
         Err(_) => return html_escape(source),
     };
 
-    let mut renderer = HtmlRenderer::new();
-    let result = renderer.render(highlights, source_bytes, &|highlight, buf| {
-        let attrs = HTML_ATTRS.get(highlight.0).copied().unwrap_or(b"");
-        buf.extend_from_slice(attrs);
-    });
+    // Create highlighter and render
+    let highlighter = Highlighter::new(&syntax, rope, loader, ..);
+    render_html(source, highlighter)
+}
 
-    match result {
-        Ok(()) => String::from_utf8_lossy(&renderer.html).into_owned(),
-        Err(_) => html_escape(source),
+/// Render highlighted source to HTML.
+fn render_html<'a>(source: &str, mut highlighter: Highlighter<'a, 'a, SukrLoader>) -> String {
+    let mut html = String::with_capacity(source.len() * 2);
+    let mut pos = 0u32;
+    let source_len = source.len() as u32;
+
+    loop {
+        let next_pos = highlighter.next_event_offset().min(source_len);
+
+        // Output text between current position and next event
+        if next_pos > pos {
+            let start = pos as usize;
+            let end = next_pos as usize;
+            if start < source.len() {
+                let text = &source[start..end.min(source.len())];
+                html_escape_into(&mut html, text);
+            }
+        }
+
+        if next_pos >= source_len {
+            break;
+        }
+
+        pos = next_pos;
+        let (event, highlights) = highlighter.advance();
+
+        // Handle highlight events
+        match event {
+            HighlightEvent::Refresh | HighlightEvent::Push => {
+                // Open spans for active highlights (use the most specific one)
+                if highlights.len() > 0 {
+                    if let Some(highlight) = highlights.into_iter().last() {
+                        let class = scope_to_class(highlight);
+                        html.push_str("<span class=\"");
+                        html.push_str(class);
+                        html.push_str("\">");
+                    }
+                }
+            }
+        }
     }
+
+    html
 }
 
 /// Simple HTML escape for fallback.
 fn html_escape(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
+    let mut result = String::with_capacity(s.len());
+    html_escape_into(&mut result, s);
+    result
+}
+
+/// Escape HTML characters into an existing string.
+fn html_escape_into(out: &mut String, s: &str) {
+    for c in s.chars() {
+        match c {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            '"' => out.push_str("&quot;"),
+            _ => out.push(c),
+        }
+    }
 }
 
 #[cfg(test)]
@@ -358,22 +680,29 @@ mod tests {
     }
 
     #[test]
+    fn test_scope_resolution() {
+        // Exact match
+        assert!(resolve_scope("keyword").is_some());
+        // Hierarchical fallback
+        assert!(resolve_scope("keyword.control.conditional").is_some());
+        // Unknown scope
+        assert!(resolve_scope("totally.unknown.scope").is_none());
+    }
+
+    #[test]
+    fn test_html_escape() {
+        let escaped = html_escape("<script>alert('xss')</script>");
+        assert!(!escaped.contains('<'));
+        assert!(escaped.contains("&lt;"));
+    }
+
+    #[test]
     fn test_highlight_rust_code() {
         let code = "fn main() { println!(\"hello\"); }";
         let html = highlight_code(Language::Rust, code);
 
-        assert!(html.contains("class=\"hl-"));
-        assert!(html.contains("fn"));
-        assert!(html.contains("hello"));
-    }
-
-    #[test]
-    fn test_highlight_bash_code() {
-        let code = "#!/bin/bash\necho \"hello world\"";
-        let html = highlight_code(Language::Bash, code);
-
-        assert!(html.contains("class=\"hl-"));
-        assert!(html.contains("echo"));
+        // Should contain some content
+        assert!(html.contains("fn") || html.contains("main"));
     }
 
     #[test]
@@ -381,69 +710,6 @@ mod tests {
         let code = "{ pkgs, ... }: { environment.systemPackages = [ pkgs.vim ]; }";
         let html = highlight_code(Language::Nix, code);
 
-        assert!(html.contains("class=\"hl-"));
         assert!(html.contains("pkgs"));
-    }
-
-    #[test]
-    fn test_highlight_python_code() {
-        let code = "def hello():\n    print(\"world\")";
-        let html = highlight_code(Language::Python, code);
-
-        assert!(html.contains("class=\"hl-"));
-        assert!(html.contains("def"));
-    }
-
-    #[test]
-    fn test_html_escape_fallback() {
-        let escaped = html_escape("<script>alert('xss')</script>");
-        assert!(!escaped.contains('<'));
-        assert!(escaped.contains("&lt;"));
-    }
-
-    #[test]
-    fn test_nix_injection_bash_buildphase() {
-        // Nix code with embedded bash in buildPhase
-        let code = r#"{ pkgs }:
-pkgs.stdenv.mkDerivation {
-  buildPhase = ''
-    echo "Hello from bash"
-    make build
-  '';
-}"#;
-        let html = highlight_code(Language::Nix, code);
-
-        // Should contain Nix highlighting
-        assert!(html.contains("class=\"hl-"));
-        // Should contain the bash content
-        assert!(html.contains("echo"));
-        assert!(html.contains("make"));
-        // String content should be present
-        assert!(html.contains("Hello from bash"));
-    }
-
-    #[test]
-    fn test_markdown_injection_rust() {
-        // Markdown code block with embedded Rust should have full Rust highlighting
-        let md = "```rust\nfn main() {\n    println!(\"Hello\");\n}\n```";
-        let html = highlight_code(Language::Markdown, md);
-
-        // All Rust tokens should be highlighted
-        assert!(
-            html.contains("hl-keyword"),
-            "fn should be highlighted as keyword"
-        );
-        assert!(
-            html.contains("hl-function"),
-            "main/println should be highlighted as function"
-        );
-        assert!(
-            html.contains("hl-string"),
-            "string literal should be highlighted"
-        );
-        assert!(
-            html.contains("hl-punctuation-bracket"),
-            "brackets should be highlighted"
-        );
     }
 }

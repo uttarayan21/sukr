@@ -12,21 +12,24 @@ thiserror      = "2"
 walkdir        = "2"
 
 # Syntax highlighting
-ropey                  = "1.6"
-tree-house             = { git = "https://github.com/helix-editor/tree-house", package = "tree-house" }
-tree-sitter            = "0.26"
-tree-sitter-bash       = "0.23"
-tree-sitter-c          = "0.24"
-tree-sitter-css        = "0.25"
-tree-sitter-go         = "0.25"
-tree-sitter-html       = "0.23"
+ropey = "1.6"
+tree-house = { git = "https://github.com/helix-editor/tree-house", package = "tree-house", default-features = false }
+tree-house-bindings = { git = "https://github.com/helix-editor/tree-house", package = "tree-house-bindings", features = [
+  "tree-sitter-language",
+] }
+tree-sitter = "0.26"
+tree-sitter-bash = "0.23"
+tree-sitter-c = "0.24"
+tree-sitter-css = "0.25"
+tree-sitter-go = "0.25"
+tree-sitter-html = "0.23"
 tree-sitter-javascript = "0.25"
-tree-sitter-json       = "0.24"
-tree-sitter-nix        = "0.3"
-tree-sitter-python     = "0.25"
-tree-sitter-rust       = "0.23"
+tree-sitter-json = "0.24"
+tree-sitter-nix = "0.3"
+tree-sitter-python = "0.25"
+tree-sitter-rust = "0.23"
 tree-sitter-typescript = "0.23"
-tree-sitter-yaml       = "0.7"
+tree-sitter-yaml = "0.7"
 
 # CSS processing
 lightningcss = "1.0.0-alpha.70"
