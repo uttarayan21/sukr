@@ -192,12 +192,16 @@ sukr uses [lightningcss](https://lightningcss.dev/) which inlines `@import` rule
 
 sukr includes several themes in the `themes/` directory:
 
-- **default.css** — Dracula-inspired dark theme (batteries included)
 - **dracula.css** — Classic Dracula colors
 - **gruvbox.css** — Warm retro palette
 - **nord.css** — Cool arctic colors
 - **github_dark.css** — GitHub's dark mode
 - **github_light.css** — GitHub's light mode
+- **snazzy.css** — Vibrant modern colors
+- **catppuccin_mocha.css** — Warm pastel dark theme
+- **tokyonight.css** — Japanese-inspired dark theme
+- **rose_pine.css** — Elegant soho-inspired theme
+- **onedark.css** — Classic Atom editor theme
 
 Copy the theme files to your project and import as shown above.
 

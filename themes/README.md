@@ -4,14 +4,18 @@ This directory contains CSS themes for sukr's syntax highlighting system.
 
 ## Available Themes
 
-| Theme              | Description                 |
-| ------------------ | --------------------------- |
-| `default.css`      | Dracula-inspired dark theme |
-| `dracula.css`      | Classic Dracula colors      |
-| `gruvbox.css`      | Warm retro palette          |
-| `nord.css`         | Cool arctic colors          |
-| `github_dark.css`  | GitHub's dark mode          |
-| `github_light.css` | GitHub's light mode         |
+| Theme                  | Description                  |
+| ---------------------- | ---------------------------- |
+| `dracula.css`          | Classic Dracula colors       |
+| `gruvbox.css`          | Warm retro palette           |
+| `nord.css`             | Cool arctic colors           |
+| `github_dark.css`      | GitHub's dark mode           |
+| `github_light.css`     | GitHub's light mode          |
+| `snazzy.css`           | Vibrant modern colors        |
+| `catppuccin_mocha.css` | Warm pastel dark theme       |
+| `tokyonight.css`       | Japanese-inspired dark theme |
+| `rose_pine.css`        | Elegant soho-inspired theme  |
+| `onedark.css`          | Classic Atom editor theme    |
 
 ## Usage
 
@@ -19,7 +23,7 @@ This directory contains CSS themes for sukr's syntax highlighting system.
 2. **Import it** in your main CSS file:
 
 ```css
-@import "themes/default.css";
+@import "themes/dracula.css";
 ```
 
 sukr uses [lightningcss](https://lightningcss.dev/) which bundles `@import` rules at build time—your final CSS will be a single minified file.
@@ -29,7 +33,7 @@ sukr uses [lightningcss](https://lightningcss.dev/) which bundles `@import` rule
 Themes use CSS custom properties for easy customization. Override any variable in your own CSS:
 
 ```css
-@import "themes/default.css";
+@import "themes/dracula.css";
 
 /* Override just the keyword color */
 :root {
@@ -83,7 +87,7 @@ If a specific class isn't styled, highlighting falls back up the hierarchy.
 
 ## Creating Custom Themes
 
-Start with `default.css` and modify the `:root` variables to create your own color scheme. The class rules reference these variables, so changing values updates the entire theme.
+Start with any theme (e.g., `dracula.css`) and modify the `:root` variables to create your own color scheme. The class rules reference these variables, so changing values updates the entire theme.
 
 ## Note
 

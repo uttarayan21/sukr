@@ -1,0 +1,357 @@
+/**
+ * Catppuccin Mocha Theme for sukr
+ * A warm, pastel dark theme
+ * Ported from Helix editor theme
+ * Upstream: https://github.com/catppuccin/helix
+ */
+
+:root {
+  /* Catppuccin Mocha Palette */
+  --hl-rosewater: #f5e0dc;
+  --hl-flamingo: #f2cdcd;
+  --hl-pink: #f5c2e7;
+  --hl-mauve: #cba6f7;
+  --hl-red: #f38ba8;
+  --hl-maroon: #eba0ac;
+  --hl-peach: #fab387;
+  --hl-yellow: #f9e2af;
+  --hl-green: #a6e3a1;
+  --hl-teal: #94e2d5;
+  --hl-sky: #89dceb;
+  --hl-sapphire: #74c7ec;
+  --hl-blue: #89b4fa;
+  --hl-lavender: #b4befe;
+  --hl-text: #cdd6f4;
+  --hl-subtext1: #bac2de;
+  --hl-subtext0: #a6adc8;
+  --hl-overlay2: #9399b2;
+  --hl-overlay1: #7f849c;
+  --hl-overlay0: #6c7086;
+  --hl-surface2: #585b70;
+  --hl-surface1: #45475a;
+  --hl-surface0: #313244;
+  --hl-base: #1e1e2e;
+  --hl-mantle: #181825;
+  --hl-crust: #11111b;
+}
+
+/* === Keywords === */
+.hl-keyword {
+  color: var(--hl-mauve);
+}
+
+.hl-keyword-control {
+  color: var(--hl-mauve);
+}
+
+.hl-keyword-control-conditional {
+  color: var(--hl-mauve);
+  font-style: italic;
+}
+
+.hl-keyword-control-repeat {
+  color: var(--hl-mauve);
+}
+
+.hl-keyword-control-import {
+  color: var(--hl-mauve);
+}
+
+.hl-keyword-control-return {
+  color: var(--hl-mauve);
+}
+
+.hl-keyword-control-exception {
+  color: var(--hl-mauve);
+}
+
+.hl-keyword-function {
+  color: var(--hl-mauve);
+}
+
+.hl-keyword-operator {
+  color: var(--hl-sky);
+}
+
+.hl-keyword-storage {
+  color: var(--hl-mauve);
+}
+
+.hl-keyword-storage-type {
+  color: var(--hl-mauve);
+}
+
+.hl-keyword-storage-modifier {
+  color: var(--hl-mauve);
+}
+
+/* === Functions === */
+.hl-function {
+  color: var(--hl-blue);
+}
+
+.hl-function-builtin {
+  color: var(--hl-blue);
+}
+
+.hl-function-method {
+  color: var(--hl-blue);
+}
+
+.hl-function-macro {
+  color: var(--hl-mauve);
+}
+
+.hl-function-special {
+  color: var(--hl-blue);
+}
+
+/* === Types === */
+.hl-type {
+  color: var(--hl-yellow);
+}
+
+.hl-type-builtin {
+  color: var(--hl-yellow);
+}
+
+.hl-type-enum-variant {
+  color: var(--hl-teal);
+}
+
+/* === Constants === */
+.hl-constant {
+  color: var(--hl-peach);
+}
+
+.hl-constant-builtin {
+  color: var(--hl-peach);
+}
+
+.hl-constant-builtin-boolean {
+  color: var(--hl-peach);
+}
+
+.hl-constant-character {
+  color: var(--hl-teal);
+}
+
+.hl-constant-character-escape {
+  color: var(--hl-pink);
+}
+
+.hl-constant-numeric {
+  color: var(--hl-peach);
+}
+
+.hl-constant-numeric-integer {
+  color: var(--hl-peach);
+}
+
+.hl-constant-numeric-float {
+  color: var(--hl-peach);
+}
+
+/* === Strings === */
+.hl-string {
+  color: var(--hl-green);
+}
+
+.hl-string-regexp {
+  color: var(--hl-pink);
+}
+
+.hl-string-special {
+  color: var(--hl-blue);
+}
+
+.hl-string-special-path {
+  color: var(--hl-blue);
+}
+
+.hl-string-special-url {
+  color: var(--hl-blue);
+}
+
+.hl-string-special-symbol {
+  color: var(--hl-red);
+}
+
+/* === Variables === */
+.hl-variable {
+  color: var(--hl-text);
+}
+
+.hl-variable-builtin {
+  color: var(--hl-red);
+}
+
+.hl-variable-parameter {
+  color: var(--hl-maroon);
+  font-style: italic;
+}
+
+.hl-variable-other {
+  color: var(--hl-text);
+}
+
+.hl-variable-other-member {
+  color: var(--hl-blue);
+}
+
+/* === Comments === */
+.hl-comment {
+  color: var(--hl-overlay2);
+  font-style: italic;
+}
+
+.hl-comment-line {
+  color: var(--hl-overlay2);
+  font-style: italic;
+}
+
+.hl-comment-block {
+  color: var(--hl-overlay2);
+  font-style: italic;
+}
+
+.hl-comment-block-documentation {
+  color: var(--hl-overlay2);
+  font-style: italic;
+}
+
+.hl-comment-line-documentation {
+  color: var(--hl-overlay2);
+  font-style: italic;
+}
+
+/* === Punctuation === */
+.hl-punctuation {
+  color: var(--hl-overlay2);
+}
+
+.hl-punctuation-bracket {
+  color: var(--hl-overlay2);
+}
+
+.hl-punctuation-delimiter {
+  color: var(--hl-overlay2);
+}
+
+.hl-punctuation-special {
+  color: var(--hl-sky);
+}
+
+/* === Operators === */
+.hl-operator {
+  color: var(--hl-sky);
+}
+
+/* === Other === */
+.hl-attribute {
+  color: var(--hl-yellow);
+}
+
+.hl-label {
+  color: var(--hl-sapphire);
+}
+
+.hl-namespace {
+  color: var(--hl-yellow);
+  font-style: italic;
+}
+
+.hl-constructor {
+  color: var(--hl-sapphire);
+}
+
+.hl-special {
+  color: var(--hl-blue);
+}
+
+.hl-tag {
+  color: var(--hl-blue);
+}
+
+/* === Markup === */
+.hl-markup-heading {
+  color: var(--hl-red);
+  font-weight: bold;
+}
+
+.hl-markup-heading-1 {
+  color: var(--hl-red);
+}
+
+.hl-markup-heading-2 {
+  color: var(--hl-peach);
+}
+
+.hl-markup-heading-3 {
+  color: var(--hl-yellow);
+}
+
+.hl-markup-heading-4 {
+  color: var(--hl-green);
+}
+
+.hl-markup-heading-5 {
+  color: var(--hl-sapphire);
+}
+
+.hl-markup-heading-6 {
+  color: var(--hl-lavender);
+}
+
+.hl-markup-bold {
+  color: var(--hl-red);
+  font-weight: bold;
+}
+
+.hl-markup-italic {
+  color: var(--hl-red);
+  font-style: italic;
+}
+
+.hl-markup-strikethrough {
+  text-decoration: line-through;
+}
+
+.hl-markup-link-text {
+  color: var(--hl-lavender);
+}
+
+.hl-markup-link-url {
+  color: var(--hl-blue);
+  font-style: italic;
+  text-decoration: underline;
+}
+
+.hl-markup-link-label {
+  color: var(--hl-sapphire);
+}
+
+.hl-markup-list {
+  color: var(--hl-teal);
+}
+
+.hl-markup-quote {
+  color: var(--hl-pink);
+}
+
+.hl-markup-raw {
+  color: var(--hl-green);
+}
+
+/* === Diff === */
+.hl-diff-plus {
+  color: var(--hl-green);
+}
+
+.hl-diff-minus {
+  color: var(--hl-red);
+}
+
+.hl-diff-delta {
+  color: var(--hl-blue);
+}

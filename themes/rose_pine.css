@@ -1,0 +1,351 @@
+/**
+ * Rosé Pine Theme for sukr
+ * An elegant, soho-inspired dark theme
+ * Author: Rosé Pine <hi@rosepinetheme.com>
+ * Ported from Helix editor theme
+ * Upstream: https://github.com/rose-pine/helix
+ */
+
+:root {
+  /* Rosé Pine Palette */
+  --hl-base: #191724;
+  --hl-surface: #1f1d2e;
+  --hl-overlay: #26233a;
+  --hl-muted: #6e6a86;
+  --hl-subtle: #908caa;
+  --hl-text: #e0def4;
+  --hl-love: #eb6f92;
+  --hl-gold: #f6c177;
+  --hl-rose: #ebbcba;
+  --hl-pine: #31748f;
+  --hl-foam: #9ccfd8;
+  --hl-iris: #c4a7e7;
+  --hl-highlight-low: #21202e;
+  --hl-highlight-med: #403d52;
+  --hl-highlight-high: #524f67;
+}
+
+/* === Keywords === */
+.hl-keyword {
+  color: var(--hl-pine);
+}
+
+.hl-keyword-control {
+  color: var(--hl-pine);
+}
+
+.hl-keyword-control-conditional {
+  color: var(--hl-pine);
+}
+
+.hl-keyword-control-repeat {
+  color: var(--hl-pine);
+}
+
+.hl-keyword-control-import {
+  color: var(--hl-pine);
+}
+
+.hl-keyword-control-return {
+  color: var(--hl-pine);
+}
+
+.hl-keyword-control-exception {
+  color: var(--hl-pine);
+}
+
+.hl-keyword-function {
+  color: var(--hl-pine);
+}
+
+.hl-keyword-operator {
+  color: var(--hl-subtle);
+}
+
+.hl-keyword-storage {
+  color: var(--hl-pine);
+}
+
+.hl-keyword-storage-type {
+  color: var(--hl-pine);
+}
+
+.hl-keyword-storage-modifier {
+  color: var(--hl-pine);
+}
+
+/* === Functions === */
+.hl-function {
+  color: var(--hl-rose);
+}
+
+.hl-function-builtin {
+  color: var(--hl-love);
+}
+
+.hl-function-method {
+  color: var(--hl-rose);
+}
+
+.hl-function-macro {
+  color: var(--hl-rose);
+}
+
+.hl-function-special {
+  color: var(--hl-rose);
+}
+
+/* === Types === */
+.hl-type {
+  color: var(--hl-foam);
+}
+
+.hl-type-builtin {
+  color: var(--hl-foam);
+}
+
+.hl-type-enum-variant {
+  color: var(--hl-foam);
+}
+
+/* === Constants === */
+.hl-constant {
+  color: var(--hl-foam);
+}
+
+.hl-constant-builtin {
+  color: var(--hl-love);
+}
+
+.hl-constant-builtin-boolean {
+  color: var(--hl-rose);
+}
+
+.hl-constant-character {
+  color: var(--hl-gold);
+}
+
+.hl-constant-character-escape {
+  color: var(--hl-pine);
+}
+
+.hl-constant-numeric {
+  color: var(--hl-gold);
+}
+
+.hl-constant-numeric-integer {
+  color: var(--hl-gold);
+}
+
+.hl-constant-numeric-float {
+  color: var(--hl-gold);
+}
+
+/* === Strings === */
+.hl-string {
+  color: var(--hl-gold);
+}
+
+.hl-string-regexp {
+  color: var(--hl-gold);
+}
+
+.hl-string-special {
+  color: var(--hl-gold);
+}
+
+.hl-string-special-path {
+  color: var(--hl-gold);
+}
+
+.hl-string-special-url {
+  color: var(--hl-gold);
+}
+
+.hl-string-special-symbol {
+  color: var(--hl-gold);
+}
+
+/* === Variables === */
+.hl-variable {
+  color: var(--hl-text);
+}
+
+.hl-variable-builtin {
+  color: var(--hl-love);
+}
+
+.hl-variable-parameter {
+  color: var(--hl-iris);
+}
+
+.hl-variable-other {
+  color: var(--hl-text);
+}
+
+.hl-variable-other-member {
+  color: var(--hl-foam);
+}
+
+/* === Comments === */
+.hl-comment {
+  color: var(--hl-muted);
+  font-style: italic;
+}
+
+.hl-comment-line {
+  color: var(--hl-muted);
+  font-style: italic;
+}
+
+.hl-comment-block {
+  color: var(--hl-muted);
+  font-style: italic;
+}
+
+.hl-comment-block-documentation {
+  color: var(--hl-muted);
+  font-style: italic;
+}
+
+.hl-comment-line-documentation {
+  color: var(--hl-muted);
+  font-style: italic;
+}
+
+/* === Punctuation === */
+.hl-punctuation {
+  color: var(--hl-subtle);
+}
+
+.hl-punctuation-bracket {
+  color: var(--hl-subtle);
+}
+
+.hl-punctuation-delimiter {
+  color: var(--hl-subtle);
+}
+
+.hl-punctuation-special {
+  color: var(--hl-subtle);
+}
+
+/* === Operators === */
+.hl-operator {
+  color: var(--hl-subtle);
+}
+
+/* === Other === */
+.hl-attribute {
+  color: var(--hl-iris);
+}
+
+.hl-label {
+  color: var(--hl-foam);
+}
+
+.hl-namespace {
+  color: var(--hl-text);
+}
+
+.hl-constructor {
+  color: var(--hl-foam);
+}
+
+.hl-special {
+  color: var(--hl-rose);
+}
+
+.hl-tag {
+  color: var(--hl-foam);
+}
+
+/* === Markup === */
+.hl-markup-heading {
+  color: var(--hl-iris);
+  font-weight: bold;
+}
+
+.hl-markup-heading-1 {
+  color: var(--hl-iris);
+  font-weight: bold;
+}
+
+.hl-markup-heading-2 {
+  color: var(--hl-foam);
+  font-weight: bold;
+}
+
+.hl-markup-heading-3 {
+  color: var(--hl-rose);
+  font-weight: bold;
+}
+
+.hl-markup-heading-4 {
+  color: var(--hl-gold);
+  font-weight: bold;
+}
+
+.hl-markup-heading-5 {
+  color: var(--hl-pine);
+  font-weight: bold;
+}
+
+.hl-markup-heading-6 {
+  color: var(--hl-foam);
+  font-weight: bold;
+}
+
+.hl-markup-bold {
+  font-weight: bold;
+}
+
+.hl-markup-italic {
+  font-style: italic;
+}
+
+.hl-markup-strikethrough {
+  text-decoration: line-through;
+}
+
+.hl-markup-link {
+  color: var(--hl-iris);
+}
+
+.hl-markup-link-text {
+  color: var(--hl-text);
+}
+
+.hl-markup-link-url {
+  color: var(--hl-iris);
+  text-decoration: underline;
+}
+
+.hl-markup-link-label {
+  color: var(--hl-subtle);
+}
+
+.hl-markup-list {
+  color: var(--hl-muted);
+}
+
+.hl-markup-quote {
+  color: var(--hl-subtle);
+}
+
+.hl-markup-raw {
+  color: var(--hl-subtle);
+}
+
+/* === Diff === */
+.hl-diff-plus {
+  color: var(--hl-foam);
+}
+
+.hl-diff-minus {
+  color: var(--hl-love);
+}
+
+.hl-diff-delta {
+  color: var(--hl-highlight-high);
+}
