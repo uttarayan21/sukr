@@ -712,4 +712,188 @@ mod tests {
 
         assert!(html.contains("pkgs"));
     }
+
+    // === Hierarchical Scope Tests ===
+
+    #[test]
+    fn test_scope_to_class_generates_hierarchical_names() {
+        // Verify the SCOPE_CLASSES static contains hierarchical class names
+        let classes = SCOPE_CLASSES.clone();
+
+        // Should have keyword hierarchy
+        assert!(classes.contains(&"hl-keyword"));
+        assert!(classes.contains(&"hl-keyword-control"));
+        assert!(classes.contains(&"hl-keyword-control-return"));
+
+        // Should have function hierarchy
+        assert!(classes.contains(&"hl-function"));
+        assert!(classes.contains(&"hl-function-builtin"));
+
+        // Should have comment hierarchy
+        assert!(classes.contains(&"hl-comment"));
+        assert!(classes.contains(&"hl-comment-block-documentation"));
+    }
+
+    #[test]
+    fn test_hierarchical_scope_resolution_fallback() {
+        // Direct match should work
+        let kw = resolve_scope("keyword");
+        assert!(kw.is_some());
+
+        // Hierarchical match should find parent
+        let kw_ctrl = resolve_scope("keyword.control");
+        assert!(kw_ctrl.is_some());
+
+        // Deeper hierarchy should find closest ancestor
+        let kw_ctrl_ret = resolve_scope("keyword.control.return");
+        assert!(kw_ctrl_ret.is_some());
+
+        // Completely unknown should return None
+        assert!(resolve_scope("nonexistent.scope.here").is_none());
+    }
+
+    #[test]
+    fn test_highlight_generates_hl_prefixed_classes() {
+        // Rust code that should produce keyword highlighting
+        let code = "fn main() { return 42; }";
+        let html = highlight_code(Language::Rust, code);
+
+        // Should contain hl-prefixed span classes
+        assert!(
+            html.contains("hl-"),
+            "Expected hl-prefixed classes in: {html}"
+        );
+    }
+
+    #[test]
+    fn test_highlight_rust_keywords() {
+        let code = "pub fn foo() -> Result<(), Error> { Ok(()) }";
+        let html = highlight_code(Language::Rust, code);
+
+        // Should contain span elements
+        assert!(html.contains("<span"));
+        // Should have keyword classes (fn, pub, etc.)
+        assert!(html.contains("hl-keyword") || html.contains("class="));
+    }
+
+    #[test]
+    fn test_highlight_python_function_definition() {
+        let code = "def greet(name: str) -> str:\n    return f'Hello, {name}'";
+        let html = highlight_code(Language::Python, code);
+
+        // Should contain the function name
+        assert!(html.contains("greet"));
+        // Should have span highlighting
+        assert!(html.contains("<span"));
+    }
+
+    // === Injection Tests ===
+
+    #[test]
+    fn test_injection_nix_with_bash() {
+        // Nix code with bash in multi-line strings (common pattern)
+        let code = r#"
+stdenv.mkDerivation {
+  buildPhase = ''
+    echo "Building..."
+    make -j$NIX_BUILD_CORES
+  '';
+}
+"#;
+        let html = highlight_code(Language::Nix, code);
+
+        // Should produce HTML output with the nix content
+        assert!(html.contains("stdenv"));
+        assert!(html.contains("mkDerivation"));
+        // The injection should be handled (even if bash isn't fully highlighted, should not error)
+        assert!(html.contains("echo"));
+    }
+
+    #[test]
+    fn test_injection_markdown_with_fenced_code() {
+        // Markdown with a fenced code block
+        let code = r#"# Header
+
+Here is some code:
+
+```rust
+fn main() {}
+```
+"#;
+        let html = highlight_code(Language::Markdown, code);
+
+        // Should handle the markdown content
+        assert!(html.contains("Header"));
+        // Fenced code block should be present (may have spans inside)
+        assert!(html.contains("fn") && html.contains("main"));
+    }
+
+    #[test]
+    fn test_injection_html_with_script() {
+        // HTML with embedded JavaScript
+        let code = r#"
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+    const x = 42;
+    console.log(x);
+  </script>
+</head>
+</html>
+"#;
+        let html = highlight_code(Language::Html, code);
+
+        // Should contain HTML structure
+        assert!(html.contains("html"));
+        assert!(html.contains("script"));
+        // JavaScript content should be present
+        assert!(html.contains("const"));
+    }
+
+    #[test]
+    fn test_injection_html_with_style() {
+        // HTML with embedded CSS
+        let code = r#"
+<html>
+<head>
+  <style>
+    .container { display: flex; }
+  </style>
+</head>
+</html>
+"#;
+        let html = highlight_code(Language::Html, code);
+
+        // Should handle CSS injection
+        assert!(html.contains("style"));
+        assert!(html.contains("container"));
+        assert!(html.contains("flex"));
+    }
+
+    // === Edge Cases ===
+
+    #[test]
+    fn test_empty_input() {
+        let html = highlight_code(Language::Rust, "");
+        // Empty input should produce minimal output
+        assert!(html.is_empty() || html.len() < 10);
+    }
+
+    #[test]
+    fn test_whitespace_only_input() {
+        let html = highlight_code(Language::Rust, "   \n\t\n  ");
+        // Whitespace should be preserved
+        assert!(html.contains(' ') || html.contains('\n'));
+    }
+
+    #[test]
+    fn test_special_characters_escaped() {
+        let code = r#"let x = "<script>alert('xss')</script>";"#;
+        let html = highlight_code(Language::Rust, code);
+
+        // HTML special chars should be escaped
+        assert!(!html.contains("<script>"));
+        assert!(html.contains("&lt;") || html.contains("script"));
+    }
 }

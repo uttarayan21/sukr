@@ -1,10 +1,10 @@
 ---
 title: Syntax Highlighting
-description: Build-time code highlighting with Tree-sitter
+description: Build-time code highlighting with Tree-sitter and tree-house
 weight: 3
 ---
 
-sukr highlights code blocks at build time using Tree-sitter. No client-side JavaScript required.
+sukr highlights code blocks at build time using [tree-house](https://github.com/helix-editor/tree-house) (Helix editor's Tree-sitter integration). No client-side JavaScript required.
 
 ## Usage
 
@@ -150,37 +150,81 @@ int main() {
 ## How It Works
 
 1. During Markdown parsing, code blocks are intercepted
-2. Tree-sitter parses the code and generates a syntax tree
-3. Spans are generated with semantic CSS classes
-4. All work happens at build time
+2. tree-house parses the code and generates a syntax tree
+3. Spans are generated with **hierarchical CSS classes** (e.g., `.hl-keyword-control-return`)
+4. All work happens at build time—zero JavaScript in the browser
 
-## Styling
+## Theme System
 
-Highlighted code uses semantic CSS classes:
+sukr uses a **decoupled theme system** with CSS custom properties. Themes are separate CSS files that define colors for syntax highlighting classes.
+
+### Hierarchical Scopes
+
+Highlighting uses fine-grained scope classes with hierarchical fallback:
+
+| Scope Class                       | Description           |
+| --------------------------------- | --------------------- |
+| `.hl-keyword`                     | Generic keywords      |
+| `.hl-keyword-control`             | Control flow          |
+| `.hl-keyword-control-return`      | return/break/continue |
+| `.hl-function`                    | Function names        |
+| `.hl-function-builtin`            | Built-in functions    |
+| `.hl-type`                        | Type names            |
+| `.hl-variable`                    | Variables             |
+| `.hl-variable-parameter`          | Function parameters   |
+| `.hl-string`                      | String literals       |
+| `.hl-comment`                     | Comments              |
+| `.hl-comment-block-documentation` | Doc comments          |
+
+If a theme only defines `.hl-keyword`, it will apply to all keyword subtypes.
+
+### Using a Theme
+
+Themes are CSS files that define the color palette. Import a theme at the top of your stylesheet:
 
 ```css
-.keyword {
-  color: #ff79c6;
-}
-.string {
-  color: #f1fa8c;
-}
-.function {
-  color: #50fa7b;
-}
-.comment {
-  color: #6272a4;
-}
-.number {
-  color: #bd93f9;
-}
+@import "path/to/theme.css";
 ```
 
-The exact classes depend on the language grammar.
+sukr uses [lightningcss](https://lightningcss.dev/) which inlines `@import` rules at build time, producing a single bundled CSS file.
+
+### Available Themes
+
+sukr includes several themes in the `themes/` directory:
+
+- **default.css** — Dracula-inspired dark theme (batteries included)
+- **dracula.css** — Classic Dracula colors
+- **gruvbox.css** — Warm retro palette
+- **nord.css** — Cool arctic colors
+- **github_dark.css** — GitHub's dark mode
+- **github_light.css** — GitHub's light mode
+
+Copy the theme files to your project and import as shown above.
+
+### Theme Structure
+
+Themes use CSS custom properties for easy customization:
+
+```css
+:root {
+  --hl-keyword: #ff79c6;
+  --hl-string: #f1fa8c;
+  --hl-function: #50fa7b;
+  --hl-comment: #6272a4;
+}
+
+.hl-keyword {
+  color: var(--hl-keyword);
+}
+.hl-string {
+  color: var(--hl-string);
+}
+/* ... */
+```
 
 ## Injection Support
 
-Some languages support injection—highlighting embedded languages. For example, Bash inside Nix strings:
+Some languages support **injection**—highlighting embedded languages. For example, bash inside Nix strings:
 
 ```nix
 stdenv.mkDerivation {
@@ -192,6 +236,8 @@ stdenv.mkDerivation {
 ```
 
 Markdown also supports injection—code blocks inside markdown fences are highlighted with their respective languages.
+
+Languages with injection support: Bash, C, CSS, Go, HTML, JavaScript, Markdown, Nix, Python, Rust, TOML, TypeScript, YAML.
 
 ## Fallback
 
