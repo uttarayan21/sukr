@@ -778,8 +778,8 @@ mod tests {
         );
 
         // Create blog posts with dates
-        let post1 = format!("---\ntitle: \"Post 1\"\ndate: \"2026-01-15\"\n---\nContent.");
-        let post2 = format!("---\ntitle: \"Post 2\"\ndate: \"2026-01-20\"\n---\nContent.");
+        let post1 = "---\ntitle: \"Post 1\"\ndate: \"2026-01-15\"\n---\nContent.".to_string();
+        let post2 = "---\ntitle: \"Post 2\"\ndate: \"2026-01-20\"\n---\nContent.".to_string();
         fs::write(content_dir.join("blog/post1.md"), &post1).unwrap();
         fs::write(content_dir.join("blog/post2.md"), &post2).unwrap();
 

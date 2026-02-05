@@ -334,64 +334,64 @@ impl SukrLoader {
 
         // Create configs for each language
         // Each grammar is converted using TryFrom<LanguageFn> for Grammar
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_bash::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_bash::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/bash/highlights.scm"),
                 include_str!("../queries/bash/injections.scm"),
                 "",
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Bash, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Bash, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_c::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_c::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/c/highlights.scm"),
                 include_str!("../queries/c/injections.scm"),
                 include_str!("../queries/c/locals.scm"),
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::C, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::C, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_css::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_css::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/css/highlights.scm"),
                 include_str!("../queries/css/injections.scm"),
                 "",
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Css, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Css, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_go::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_go::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/go/highlights.scm"),
                 include_str!("../queries/go/injections.scm"),
                 include_str!("../queries/go/locals.scm"),
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Go, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Go, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_html::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_html::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/html/highlights.scm"),
                 include_str!("../queries/html/injections.scm"),
                 "",
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Html, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Html, config);
         }
 
         // JavaScript needs combined queries from ecma + _javascript
@@ -406,88 +406,88 @@ impl SukrLoader {
         ]
         .join("\n");
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_javascript::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_javascript::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 &js_highlights,
                 include_str!("../queries/ecma/injections.scm"),
                 &js_locals,
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::JavaScript, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::JavaScript, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_json::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_json::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/json/highlights.scm"),
                 "",
                 "",
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Json, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Json, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_md::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_md::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/markdown/highlights.scm"),
                 include_str!("../queries/markdown/injections.scm"),
                 "",
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Markdown, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Markdown, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_nix::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_nix::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/nix/highlights.scm"),
                 include_str!("../queries/nix/injections.scm"),
                 "",
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Nix, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Nix, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_python::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_python::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/python/highlights.scm"),
                 include_str!("../queries/python/injections.scm"),
                 include_str!("../queries/python/locals.scm"),
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Python, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Python, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_rust::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_rust::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/rust/highlights.scm"),
                 include_str!("../queries/rust/injections.scm"),
                 include_str!("../queries/rust/locals.scm"),
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Rust, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Rust, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_toml_ng::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_toml_ng::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/toml/highlights.scm"),
                 include_str!("../queries/toml/injections.scm"),
                 "",
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Toml, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Toml, config);
         }
 
         // TypeScript needs combined queries from ecma + _typescript
@@ -502,28 +502,28 @@ impl SukrLoader {
         ]
         .join("\n");
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_typescript::LANGUAGE_TYPESCRIPT) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_typescript::LANGUAGE_TYPESCRIPT)
+            && let Some(config) = make_config(
                 grammar,
                 &ts_highlights,
                 include_str!("../queries/ecma/injections.scm"),
                 &ts_locals,
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::TypeScript, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::TypeScript, config);
         }
 
-        if let Ok(grammar) = Grammar::try_from(tree_sitter_yaml::LANGUAGE) {
-            if let Some(config) = make_config(
+        if let Ok(grammar) = Grammar::try_from(tree_sitter_yaml::LANGUAGE)
+            && let Some(config) = make_config(
                 grammar,
                 include_str!("../queries/yaml/highlights.scm"),
                 include_str!("../queries/yaml/injections.scm"),
                 "",
-            ) {
-                config.configure(resolve_scope);
-                configs.insert(Language::Yaml, config);
-            }
+            )
+        {
+            config.configure(resolve_scope);
+            configs.insert(Language::Yaml, config);
         }
 
         Self {
@@ -563,7 +563,7 @@ pub fn highlight_code(lang: Language, source: &str) -> String {
     let loader = &*LOADER;
 
     // Check if we have a config for this language
-    if loader.configs.get(&lang).is_none() {
+    if !loader.configs.contains_key(&lang) {
         return html_escape(source);
     }
 
@@ -609,13 +609,13 @@ fn render_html<'a>(source: &str, mut highlighter: Highlighter<'a, 'a, SukrLoader
         match event {
             HighlightEvent::Refresh | HighlightEvent::Push => {
                 // Open spans for active highlights (use the most specific one)
-                if highlights.len() > 0 {
-                    if let Some(highlight) = highlights.into_iter().last() {
-                        let class = scope_to_class(highlight);
-                        html.push_str("<span class=\"");
-                        html.push_str(class);
-                        html.push_str("\">");
-                    }
+                if highlights.len() > 0
+                    && let Some(highlight) = highlights.into_iter().next_back()
+                {
+                    let class = scope_to_class(highlight);
+                    html.push_str("<span class=\"");
+                    html.push_str(class);
+                    html.push_str("\">");
                 }
             }
         }
