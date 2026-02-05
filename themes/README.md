@@ -2,6 +2,12 @@
 
 This directory contains CSS themes for sukr's syntax highlighting system.
 
+## Attribution
+
+These themes are adapted from the [Helix editor](https://github.com/helix-editor/helix) theme collection.
+
+Helix is licensed under the Mozilla Public License 2.0 (MPL-2.0). We are grateful to the Helix maintainers and contributors, as well as the original theme authors, for their excellent work.
+
 ## Available Themes
 
 | Theme                  | Description                  |
