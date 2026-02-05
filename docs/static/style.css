@@ -1,5 +1,5 @@
 /* sukr docs — clean documentation theme */
-@import "../../themes/dracula.css";
+@import "../../themes/snazzy.css";
 /* Syntax highlighting theme - lightningcss inlines this at build time */
 
 :root {
