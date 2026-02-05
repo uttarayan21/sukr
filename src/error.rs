@@ -52,6 +52,10 @@ pub enum Error {
         #[source]
         source: tera::Error,
     },
+
+    /// Failed to bundle CSS.
+    #[error("CSS bundle error: {0}")]
+    CssBundle(String),
 }
 
 /// Result type alias for compiler operations.

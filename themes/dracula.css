@@ -1,0 +1,341 @@
+/* Dracula Theme for Sukr
+ * Based on https://draculatheme.com/
+ * Ported from Helix editor theme
+ */
+
+:root {
+  --hl-bg: #282a36;
+  --hl-fg: #f8f8f2;
+  --hl-comment: #6272a4;
+  --hl-cyan: #8be9fd;
+  --hl-green: #50fa7b;
+  --hl-orange: #ffb86c;
+  --hl-pink: #ff79c6;
+  --hl-purple: #bd93f9;
+  --hl-red: #ff5555;
+  --hl-yellow: #f1fa8c;
+}
+
+/* Keywords */
+.hl-keyword {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-control {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-control-conditional {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-control-repeat {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-control-import {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-control-return {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-control-exception {
+  color: var(--hl-purple);
+}
+
+.hl-keyword-operator {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-directive {
+  color: var(--hl-green);
+}
+
+.hl-keyword-function {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-return {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-storage {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-storage-type {
+  color: var(--hl-cyan);
+  font-style: italic;
+}
+
+.hl-keyword-storage-modifier {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-storage-modifier-mut {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-storage-modifier-ref {
+  color: var(--hl-pink);
+}
+
+.hl-keyword-special {
+  color: var(--hl-pink);
+}
+
+/* Functions */
+.hl-function {
+  color: var(--hl-green);
+}
+
+.hl-function-builtin {
+  color: var(--hl-green);
+}
+
+.hl-function-call {
+  color: var(--hl-green);
+}
+
+.hl-function-macro {
+  color: var(--hl-purple);
+}
+
+.hl-function-method {
+  color: var(--hl-green);
+}
+
+/* Types */
+.hl-type {
+  color: var(--hl-cyan);
+  font-style: italic;
+}
+
+.hl-type-builtin {
+  color: var(--hl-cyan);
+}
+
+.hl-type-parameter {
+  color: var(--hl-cyan);
+  font-style: italic;
+}
+
+.hl-type-enum-variant {
+  color: var(--hl-fg);
+  font-style: italic;
+}
+
+.hl-type-enum-variant-builtin {
+  color: var(--hl-fg);
+  font-style: italic;
+}
+
+/* Constants */
+.hl-constant {
+  color: var(--hl-purple);
+}
+
+.hl-constant-builtin {
+  color: var(--hl-purple);
+}
+
+.hl-constant-builtin-boolean {
+  color: var(--hl-purple);
+}
+
+.hl-constant-character {
+  color: var(--hl-cyan);
+}
+
+.hl-constant-character-escape {
+  color: var(--hl-pink);
+}
+
+.hl-constant-macro {
+  color: var(--hl-purple);
+}
+
+.hl-constant-numeric {
+  color: var(--hl-purple);
+}
+
+.hl-constant-numeric-integer {
+  color: var(--hl-purple);
+}
+
+.hl-constant-numeric-float {
+  color: var(--hl-purple);
+}
+
+/* Strings */
+.hl-string {
+  color: var(--hl-yellow);
+}
+
+.hl-string-regexp {
+  color: var(--hl-red);
+}
+
+.hl-string-special {
+  color: var(--hl-orange);
+}
+
+.hl-string-special-path {
+  color: var(--hl-orange);
+}
+
+.hl-string-special-symbol {
+  color: var(--hl-yellow);
+}
+
+/* Variables */
+.hl-variable {
+  color: var(--hl-fg);
+}
+
+.hl-variable-builtin {
+  color: var(--hl-purple);
+  font-style: italic;
+}
+
+.hl-variable-parameter {
+  color: var(--hl-orange);
+  font-style: italic;
+}
+
+.hl-variable-other {
+  color: var(--hl-fg);
+}
+
+.hl-variable-other-member {
+  color: var(--hl-fg);
+}
+
+/* Comments */
+.hl-comment {
+  color: var(--hl-comment);
+}
+
+.hl-comment-line {
+  color: var(--hl-comment);
+}
+
+.hl-comment-block {
+  color: var(--hl-comment);
+}
+
+.hl-comment-block-documentation {
+  color: var(--hl-comment);
+}
+
+.hl-comment-line-documentation {
+  color: var(--hl-comment);
+}
+
+.hl-comment-unused {
+  color: var(--hl-comment);
+  opacity: 0.6;
+}
+
+/* Punctuation */
+.hl-punctuation {
+  color: var(--hl-fg);
+}
+
+.hl-punctuation-bracket {
+  color: var(--hl-fg);
+}
+
+.hl-punctuation-delimiter {
+  color: var(--hl-fg);
+}
+
+.hl-punctuation-special {
+  color: var(--hl-pink);
+}
+
+/* Operators */
+.hl-operator {
+  color: var(--hl-pink);
+}
+
+/* Other */
+.hl-attribute {
+  color: var(--hl-green);
+  font-style: italic;
+}
+
+.hl-label {
+  color: var(--hl-cyan);
+}
+
+.hl-namespace {
+  color: var(--hl-fg);
+}
+
+.hl-constructor {
+  color: var(--hl-purple);
+}
+
+.hl-special {
+  color: var(--hl-pink);
+}
+
+.hl-tag {
+  color: var(--hl-pink);
+}
+
+.hl-tag-attribute {
+  color: var(--hl-purple);
+}
+
+.hl-tag-delimiter {
+  color: var(--hl-fg);
+}
+
+/* Markup */
+.hl-markup-bold {
+  color: var(--hl-orange);
+  font-weight: bold;
+}
+
+.hl-markup-italic {
+  color: var(--hl-yellow);
+  font-style: italic;
+}
+
+.hl-markup-strikethrough {
+  text-decoration: line-through;
+}
+
+.hl-markup-heading {
+  color: var(--hl-purple);
+  font-weight: bold;
+}
+
+.hl-markup-link-text {
+  color: var(--hl-pink);
+}
+
+.hl-markup-link-url {
+  color: var(--hl-cyan);
+}
+
+.hl-markup-list {
+  color: var(--hl-cyan);
+}
+
+.hl-markup-quote {
+  color: var(--hl-yellow);
+  font-style: italic;
+}
+
+.hl-markup-raw {
+  color: var(--hl-fg);
+}
+
+.hl-unknown {
+  color: var(--hl-fg);
+}

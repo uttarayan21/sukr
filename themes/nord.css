@@ -1,0 +1,355 @@
+/* Nord Theme for Sukr
+ * Based on https://www.nordtheme.com/
+ * Ported from Helix editor theme
+ */
+
+:root {
+  /* Polar Night */
+  --hl-nord0: #2e3440;
+  --hl-nord1: #3b4252;
+  --hl-nord2: #434c5e;
+  --hl-nord3: #4c566a;
+  --hl-nord3-bright: #616e88;
+
+  /* Snow Storm */
+  --hl-nord4: #d8dee9;
+  --hl-nord5: #e5e9f0;
+  --hl-nord6: #eceff4;
+
+  /* Frost */
+  --hl-nord7: #8fbcbb;
+  --hl-nord8: #88c0d0;
+  --hl-nord9: #81a1c1;
+  --hl-nord10: #5e81ac;
+
+  /* Aurora */
+  --hl-nord11: #bf616a;
+  --hl-nord12: #d08770;
+  --hl-nord13: #ebcb8b;
+  --hl-nord14: #a3be8c;
+  --hl-nord15: #b48ead;
+
+  /* Semantic aliases */
+  --hl-bg: var(--hl-nord0);
+  --hl-fg: var(--hl-nord4);
+  --hl-comment: var(--hl-nord3-bright);
+}
+
+/* Keywords */
+.hl-keyword {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-control {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-control-conditional {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-control-repeat {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-control-import {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-control-return {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-control-exception {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-operator {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-directive {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-function {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-return {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-storage {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-storage-type {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-storage-modifier {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-storage-modifier-mut {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-storage-modifier-ref {
+  color: var(--hl-nord9);
+}
+
+.hl-keyword-special {
+  color: var(--hl-nord9);
+}
+
+/* Functions */
+.hl-function {
+  color: var(--hl-nord8);
+}
+
+.hl-function-builtin {
+  color: var(--hl-nord7);
+}
+
+.hl-function-call {
+  color: var(--hl-nord8);
+}
+
+.hl-function-macro {
+  color: var(--hl-nord9);
+}
+
+.hl-function-method {
+  color: var(--hl-nord8);
+}
+
+/* Types */
+.hl-type {
+  color: var(--hl-nord7);
+}
+
+.hl-type-builtin {
+  color: var(--hl-nord7);
+}
+
+.hl-type-parameter {
+  color: var(--hl-nord7);
+}
+
+.hl-type-enum-variant {
+  color: var(--hl-nord4);
+  font-style: italic;
+}
+
+.hl-type-enum-variant-builtin {
+  color: var(--hl-nord4);
+  font-style: italic;
+}
+
+/* Constants */
+.hl-constant {
+  color: var(--hl-nord4);
+}
+
+.hl-constant-builtin {
+  color: var(--hl-nord9);
+}
+
+.hl-constant-builtin-boolean {
+  color: var(--hl-nord9);
+}
+
+.hl-constant-character {
+  color: var(--hl-nord15);
+}
+
+.hl-constant-character-escape {
+  color: var(--hl-nord13);
+}
+
+.hl-constant-macro {
+  color: var(--hl-nord9);
+}
+
+.hl-constant-numeric {
+  color: var(--hl-nord15);
+}
+
+.hl-constant-numeric-integer {
+  color: var(--hl-nord15);
+}
+
+.hl-constant-numeric-float {
+  color: var(--hl-nord15);
+}
+
+/* Strings */
+.hl-string {
+  color: var(--hl-nord14);
+}
+
+.hl-string-regexp {
+  color: var(--hl-nord13);
+}
+
+.hl-string-special {
+  color: var(--hl-nord13);
+}
+
+.hl-string-special-path {
+  color: var(--hl-nord13);
+}
+
+.hl-string-special-symbol {
+  color: var(--hl-nord13);
+}
+
+/* Variables */
+.hl-variable {
+  color: var(--hl-nord4);
+}
+
+.hl-variable-builtin {
+  color: var(--hl-nord9);
+}
+
+.hl-variable-parameter {
+  color: var(--hl-nord8);
+}
+
+.hl-variable-other {
+  color: var(--hl-nord4);
+}
+
+.hl-variable-other-member {
+  color: var(--hl-nord4);
+}
+
+/* Comments */
+.hl-comment {
+  color: var(--hl-nord3-bright);
+  font-style: italic;
+}
+
+.hl-comment-line {
+  color: var(--hl-nord3-bright);
+  font-style: italic;
+}
+
+.hl-comment-block {
+  color: var(--hl-nord3-bright);
+  font-style: italic;
+}
+
+.hl-comment-block-documentation {
+  color: var(--hl-nord3-bright);
+  font-style: italic;
+}
+
+.hl-comment-line-documentation {
+  color: var(--hl-nord3-bright);
+  font-style: italic;
+}
+
+.hl-comment-unused {
+  color: var(--hl-nord3-bright);
+  opacity: 0.6;
+}
+
+/* Punctuation */
+.hl-punctuation {
+  color: var(--hl-nord6);
+}
+
+.hl-punctuation-bracket {
+  color: var(--hl-nord6);
+}
+
+.hl-punctuation-delimiter {
+  color: var(--hl-nord6);
+}
+
+.hl-punctuation-special {
+  color: var(--hl-nord9);
+}
+
+/* Operators */
+.hl-operator {
+  color: var(--hl-nord9);
+}
+
+/* Other */
+.hl-attribute {
+  color: var(--hl-nord9);
+}
+
+.hl-label {
+  color: var(--hl-nord7);
+}
+
+.hl-namespace {
+  color: var(--hl-nord4);
+}
+
+.hl-constructor {
+  color: var(--hl-nord8);
+}
+
+.hl-special {
+  color: var(--hl-nord9);
+}
+
+.hl-tag {
+  color: var(--hl-nord7);
+}
+
+.hl-tag-attribute {
+  color: var(--hl-nord9);
+}
+
+.hl-tag-delimiter {
+  color: var(--hl-nord6);
+}
+
+/* Markup */
+.hl-markup-bold {
+  font-weight: bold;
+}
+
+.hl-markup-italic {
+  font-style: italic;
+}
+
+.hl-markup-strikethrough {
+  text-decoration: line-through;
+}
+
+.hl-markup-heading {
+  color: var(--hl-nord8);
+}
+
+.hl-markup-link-text {
+  color: var(--hl-nord8);
+}
+
+.hl-markup-link-url {
+  color: var(--hl-nord9);
+}
+
+.hl-markup-list {
+  color: var(--hl-nord9);
+}
+
+.hl-markup-quote {
+  font-style: italic;
+}
+
+.hl-markup-raw {
+  color: var(--hl-nord7);
+}
+
+.hl-unknown {
+  color: var(--hl-nord4);
+}

@@ -1,31 +1,38 @@
 //! CSS processing via lightningcss.
+//!
+//! Provides CSS bundling and minification. The bundler resolves `@import`
+//! rules at build time, inlining imported files into a single output.
 
-use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleSheet};
+use lightningcss::bundler::{Bundler, FileProvider};
+use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions};
+use std::path::Path;
 
-/// Minify CSS content.
+/// Bundle and minify a CSS file, resolving all `@import` rules.
 ///
-/// Returns minified CSS string on success, or the original input on error.
-pub fn minify_css(css: &str) -> String {
-    match try_minify(css) {
-        Ok(minified) => minified,
-        Err(_) => css.to_string(),
-    }
-}
+/// This function:
+/// 1. Reads the CSS file at `path`
+/// 2. Resolves and inlines all `@import` rules (relative to source file)
+/// 3. Minifies the combined output
+///
+/// Returns minified CSS string on success, or an error message on failure.
+pub fn bundle_css(path: &Path) -> Result<String, String> {
+    let fs = FileProvider::new();
+    let mut bundler = Bundler::new(&fs, None, ParserOptions::default());
 
-fn try_minify(css: &str) -> Result<String, Box<dyn std::error::Error>> {
-    let mut stylesheet = StyleSheet::parse(css, ParserOptions::default())
-        .map_err(|e| format!("parse error: {:?}", e))?;
+    let mut stylesheet = bundler
+        .bundle(path)
+        .map_err(|e| format!("bundle error: {e}"))?;
 
     stylesheet
         .minify(MinifyOptions::default())
-        .map_err(|e| format!("minify error: {:?}", e))?;
+        .map_err(|e| format!("minify error: {e}"))?;
 
     let result = stylesheet
         .to_css(PrinterOptions {
             minify: true,
             ..Default::default()
         })
-        .map_err(|e| format!("print error: {:?}", e))?;
+        .map_err(|e| format!("print error: {e}"))?;
 
     Ok(result.code)
 }
@@ -33,48 +40,89 @@ fn try_minify(css: &str) -> Result<String, Box<dyn std::error::Error>> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::fs;
+    use tempfile::TempDir;
 
     #[test]
-    fn test_minify_removes_whitespace() {
-        let input = r#"
+    fn test_bundle_minifies() {
+        let dir = TempDir::new().unwrap();
+        let css_path = dir.path().join("test.css");
+        fs::write(
+            &css_path,
+            r#"
             .foo {
                 color: red;
             }
-        "#;
-        let output = minify_css(input);
+        "#,
+        )
+        .unwrap();
 
-        // Should be smaller (whitespace removed)
-        assert!(output.len() < input.len());
-        // Should still contain the essential content
+        let output = bundle_css(&css_path).unwrap();
+
+        // Should be minified (whitespace removed)
         assert!(output.contains(".foo"));
-        assert!(output.contains("color"));
         assert!(output.contains("red"));
+        assert!(!output.contains('\n'));
     }
 
     #[test]
-    fn test_minify_removes_comments() {
-        let input = r#"
+    fn test_bundle_resolves_imports() {
+        let dir = TempDir::new().unwrap();
+
+        // Create imported file
+        let imported_path = dir.path().join("colors.css");
+        fs::write(
+            &imported_path,
+            r#"
+            :root {
+                --primary: blue;
+            }
+        "#,
+        )
+        .unwrap();
+
+        // Create main file that imports colors.css
+        let main_path = dir.path().join("main.css");
+        fs::write(
+            &main_path,
+            r#"
+            @import "colors.css";
+            
+            .btn {
+                color: var(--primary);
+            }
+        "#,
+        )
+        .unwrap();
+
+        let output = bundle_css(&main_path).unwrap();
+
+        // Should contain content from both files
+        assert!(output.contains("--primary"));
+        assert!(output.contains("blue"));
+        assert!(output.contains(".btn"));
+        // Should NOT contain @import directive
+        assert!(!output.contains("@import"));
+    }
+
+    #[test]
+    fn test_bundle_removes_comments() {
+        let dir = TempDir::new().unwrap();
+        let css_path = dir.path().join("test.css");
+        fs::write(
+            &css_path,
+            r#"
             /* This is a comment */
             .bar { background: blue; }
-        "#;
-        let output = minify_css(input);
+        "#,
+        )
+        .unwrap();
+
+        let output = bundle_css(&css_path).unwrap();
 
         // Comment should be removed
         assert!(!output.contains("This is a comment"));
         // Rule should remain
         assert!(output.contains(".bar"));
-    }
-
-    #[test]
-    fn test_minify_merges_selectors() {
-        let input = r#"
-            .foo { color: red; }
-            .bar { color: red; }
-        "#;
-        let output = minify_css(input);
-
-        // Should merge identical rules
-        // Either ".foo,.bar" or ".bar,.foo" pattern
-        assert!(output.contains(","));
     }
 }

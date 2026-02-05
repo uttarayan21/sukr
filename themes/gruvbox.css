@@ -1,0 +1,340 @@
+/* Gruvbox Theme for Sukr
+ * Based on https://github.com/morhetz/gruvbox
+ * Ported from Helix editor theme
+ */
+
+:root {
+  --hl-bg: #282828;
+  --hl-fg: #ebdbb2;
+  --hl-gray: #928374;
+  --hl-red: #fb4934;
+  --hl-green: #b8bb26;
+  --hl-yellow: #fabd2f;
+  --hl-blue: #83a598;
+  --hl-purple: #d3869b;
+  --hl-aqua: #8ec07c;
+  --hl-orange: #fe8019;
+}
+
+/* Keywords */
+.hl-keyword {
+  color: var(--hl-red);
+}
+
+.hl-keyword-control {
+  color: var(--hl-red);
+}
+
+.hl-keyword-control-conditional {
+  color: var(--hl-red);
+}
+
+.hl-keyword-control-repeat {
+  color: var(--hl-red);
+}
+
+.hl-keyword-control-import {
+  color: var(--hl-aqua);
+}
+
+.hl-keyword-control-return {
+  color: var(--hl-red);
+}
+
+.hl-keyword-control-exception {
+  color: var(--hl-red);
+}
+
+.hl-keyword-operator {
+  color: var(--hl-red);
+}
+
+.hl-keyword-directive {
+  color: var(--hl-aqua);
+}
+
+.hl-keyword-function {
+  color: var(--hl-red);
+}
+
+.hl-keyword-return {
+  color: var(--hl-red);
+}
+
+.hl-keyword-storage {
+  color: var(--hl-red);
+}
+
+.hl-keyword-storage-type {
+  color: var(--hl-yellow);
+}
+
+.hl-keyword-storage-modifier {
+  color: var(--hl-red);
+}
+
+.hl-keyword-storage-modifier-mut {
+  color: var(--hl-red);
+}
+
+.hl-keyword-storage-modifier-ref {
+  color: var(--hl-red);
+}
+
+.hl-keyword-special {
+  color: var(--hl-red);
+}
+
+/* Functions */
+.hl-function {
+  color: var(--hl-green);
+}
+
+.hl-function-builtin {
+  color: var(--hl-yellow);
+}
+
+.hl-function-call {
+  color: var(--hl-green);
+}
+
+.hl-function-macro {
+  color: var(--hl-blue);
+}
+
+.hl-function-method {
+  color: var(--hl-green);
+}
+
+/* Types */
+.hl-type {
+  color: var(--hl-yellow);
+}
+
+.hl-type-builtin {
+  color: var(--hl-yellow);
+}
+
+.hl-type-parameter {
+  color: var(--hl-yellow);
+}
+
+.hl-type-enum-variant {
+  color: var(--hl-fg);
+  font-style: italic;
+}
+
+.hl-type-enum-variant-builtin {
+  color: var(--hl-fg);
+  font-style: italic;
+}
+
+/* Constants */
+.hl-constant {
+  color: var(--hl-purple);
+}
+
+.hl-constant-builtin {
+  color: var(--hl-purple);
+}
+
+.hl-constant-builtin-boolean {
+  color: var(--hl-purple);
+}
+
+.hl-constant-character {
+  color: var(--hl-aqua);
+}
+
+.hl-constant-character-escape {
+  color: var(--hl-orange);
+}
+
+.hl-constant-macro {
+  color: var(--hl-aqua);
+}
+
+.hl-constant-numeric {
+  color: var(--hl-purple);
+}
+
+.hl-constant-numeric-integer {
+  color: var(--hl-purple);
+}
+
+.hl-constant-numeric-float {
+  color: var(--hl-purple);
+}
+
+/* Strings */
+.hl-string {
+  color: var(--hl-green);
+}
+
+.hl-string-regexp {
+  color: var(--hl-orange);
+}
+
+.hl-string-special {
+  color: var(--hl-orange);
+}
+
+.hl-string-special-path {
+  color: var(--hl-orange);
+}
+
+.hl-string-special-symbol {
+  color: var(--hl-yellow);
+}
+
+/* Variables */
+.hl-variable {
+  color: var(--hl-fg);
+}
+
+.hl-variable-builtin {
+  color: var(--hl-orange);
+  font-style: italic;
+}
+
+.hl-variable-parameter {
+  color: var(--hl-blue);
+  font-style: italic;
+}
+
+.hl-variable-other {
+  color: var(--hl-fg);
+}
+
+.hl-variable-other-member {
+  color: var(--hl-blue);
+}
+
+/* Comments */
+.hl-comment {
+  color: var(--hl-gray);
+  font-style: italic;
+}
+
+.hl-comment-line {
+  color: var(--hl-gray);
+  font-style: italic;
+}
+
+.hl-comment-block {
+  color: var(--hl-gray);
+  font-style: italic;
+}
+
+.hl-comment-block-documentation {
+  color: var(--hl-gray);
+  font-style: italic;
+}
+
+.hl-comment-line-documentation {
+  color: var(--hl-gray);
+  font-style: italic;
+}
+
+.hl-comment-unused {
+  color: var(--hl-gray);
+  opacity: 0.6;
+}
+
+/* Punctuation */
+.hl-punctuation {
+  color: var(--hl-orange);
+}
+
+.hl-punctuation-bracket {
+  color: var(--hl-orange);
+}
+
+.hl-punctuation-delimiter {
+  color: var(--hl-orange);
+}
+
+.hl-punctuation-special {
+  color: var(--hl-orange);
+}
+
+/* Operators */
+.hl-operator {
+  color: var(--hl-purple);
+}
+
+/* Other */
+.hl-attribute {
+  color: var(--hl-aqua);
+  font-style: italic;
+}
+
+.hl-label {
+  color: var(--hl-red);
+}
+
+.hl-namespace {
+  color: var(--hl-fg);
+}
+
+.hl-constructor {
+  color: var(--hl-purple);
+}
+
+.hl-special {
+  color: var(--hl-purple);
+}
+
+.hl-tag {
+  color: var(--hl-aqua);
+}
+
+.hl-tag-attribute {
+  color: var(--hl-aqua);
+}
+
+.hl-tag-delimiter {
+  color: var(--hl-fg);
+}
+
+/* Markup */
+.hl-markup-bold {
+  font-weight: bold;
+}
+
+.hl-markup-italic {
+  font-style: italic;
+}
+
+.hl-markup-strikethrough {
+  text-decoration: line-through;
+}
+
+.hl-markup-heading {
+  color: var(--hl-aqua);
+}
+
+.hl-markup-link-text {
+  color: var(--hl-red);
+}
+
+.hl-markup-link-url {
+  color: var(--hl-green);
+  text-decoration: underline;
+}
+
+.hl-markup-list {
+  color: var(--hl-aqua);
+}
+
+.hl-markup-quote {
+  font-style: italic;
+}
+
+.hl-markup-raw {
+  color: var(--hl-red);
+}
+
+.hl-unknown {
+  color: var(--hl-fg);
+}

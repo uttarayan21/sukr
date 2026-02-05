@@ -338,7 +338,7 @@ fn write_output(
 /// Copy static assets (CSS, images, etc.) to output directory.
 /// CSS files are minified before writing.
 fn copy_static_assets(static_dir: &Path, output_dir: &Path) -> Result<()> {
-    use crate::css::minify_css;
+    use crate::css::bundle_css;
 
     if !static_dir.exists() {
         return Ok(()); // No static dir is fine
@@ -365,23 +365,20 @@ fn copy_static_assets(static_dir: &Path, output_dir: &Path) -> Result<()> {
             })?;
         }
 
-        // Minify CSS files, copy others directly
+        // Bundle CSS files (resolves @imports), copy others directly
         if src.extension().is_some_and(|ext| ext == "css") {
-            let css = fs::read_to_string(src).map_err(|e| Error::ReadFile {
-                path: src.to_path_buf(),
-                source: e,
-            })?;
-            let minified = minify_css(&css);
-            fs::write(&dest, &minified).map_err(|e| Error::WriteFile {
+            let original_size = fs::metadata(src).map(|m| m.len()).unwrap_or(0);
+            let bundled = bundle_css(src).map_err(Error::CssBundle)?;
+            fs::write(&dest, &bundled).map_err(|e| Error::WriteFile {
                 path: dest.clone(),
                 source: e,
             })?;
             eprintln!(
-                "minifying: {} → {} ({} → {} bytes)",
+                "bundling: {} → {} ({} → {} bytes)",
                 src.display(),
                 dest.display(),
-                css.len(),
-                minified.len()
+                original_size,
+                bundled.len()
             );
         } else {
             fs::copy(src, &dest).map_err(|e| Error::WriteFile {
