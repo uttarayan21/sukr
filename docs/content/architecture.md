@@ -5,7 +5,7 @@ weight: 5
 toc: true
 ---
 
-Sukr is a 12-module static site compiler. Every feature that would typically require client-side JavaScript is moved to build-time.
+Sukr is a 13-module static site compiler. Every feature that would typically require client-side JavaScript is moved to build-time.
 
 ## Pipeline Overview
 
@@ -37,6 +37,7 @@ flowchart LR
 | `template_engine.rs` | Tera template loading and rendering                 |
 | `feed.rs`            | Atom feed generation                                |
 | `sitemap.rs`         | XML sitemap generation                              |
+| `escape.rs`          | HTML/XML text escaping utilities                    |
 | `error.rs`           | Structured error types with source chaining         |
 
 ## The Interception Pattern
@@ -78,19 +79,31 @@ The result: **zero bytes of JavaScript** in the output. Pages load instantly, wo
 
 ## Static Configuration Pattern
 
-Tree-sitter grammars are expensive to initialize. Sukr uses `LazyLock` to create each language configuration exactly once:
+Tree-sitter grammars are expensive to initialize. Sukr uses [tree-house](https://github.com/helix-editor/tree-house) (Helix editor's Tree-sitter integration) with `LazyLock` to create language configurations exactly once:
 
 ```rust
-static RUST_CONFIG: LazyLock<HighlightConfiguration> = LazyLock::new(|| {
-    let mut config = HighlightConfiguration::new(
-        tree_sitter_rust::LANGUAGE.into(),
-        "rust",
-        tree_sitter_rust::HIGHLIGHTS_QUERY,
-        "",
-    ).expect("query should be valid");
-    config.configure(HIGHLIGHT_NAMES);
-    config
-});
+/// Create a LanguageConfig for a language with embedded queries.
+fn make_config(
+    grammar: Grammar,
+    highlights: &str,
+    injections: &str,
+    locals: &str,
+) -> Option<LanguageConfig> {
+    LanguageConfig::new(grammar, highlights, injections, locals).ok()
+}
+
+// Register Rust with embedded Helix queries
+if let Ok(grammar) = Grammar::try_from(tree_sitter_rust::LANGUAGE)
+    && let Some(config) = make_config(
+        grammar,
+        include_str!("../queries/rust/highlights.scm"),
+        include_str!("../queries/rust/injections.scm"),
+        include_str!("../queries/rust/locals.scm"),
+    )
+{
+    config.configure(resolve_scope);
+    configs.insert(Language::Rust, config);
+}
 ```
 
 This pattern ensures O(1) lookup per language regardless of how many code blocks exist in the site.
