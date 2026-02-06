@@ -149,13 +149,13 @@ pub fn markdown_to_html(markdown: &str) -> (String, Vec<Anchor>) {
                     if title.is_empty() {
                         html_output.push_str(&format!(
                             "<img src=\"{}\" alt=\"{}\" />",
-                            src,
+                            html_escape(&src),
                             html_escape(&alt)
                         ));
                     } else {
                         html_output.push_str(&format!(
                             "<img src=\"{}\" alt=\"{}\" title=\"{}\" />",
-                            src,
+                            html_escape(&src),
                             html_escape(&alt),
                             html_escape(&title)
                         ));
@@ -283,9 +283,13 @@ fn start_tag_to_html(tag: &Tag) -> String {
             dest_url, title, ..
         } => {
             if title.is_empty() {
-                format!("<a href=\"{}\">", dest_url)
+                format!("<a href=\"{}\">", html_escape(&dest_url))
             } else {
-                format!("<a href=\"{}\" title=\"{}\">", dest_url, title)
+                format!(
+                    "<a href=\"{}\" title=\"{}\">",
+                    html_escape(&dest_url),
+                    html_escape(&title)
+                )
             }
         }
         Tag::Image { .. } => String::new(), // Handled separately in main loop
@@ -458,5 +462,38 @@ Config details.
 
         // Consecutive special chars → single hyphen
         assert_eq!(slugify("A -- B"), "a-b");
+    }
+
+    #[test]
+    fn test_link_url_escaping() {
+        // Quote-breaking attack
+        let md = r#"[click]("><script>alert(1)</script>)"#;
+        let (html, _) = markdown_to_html(md);
+        assert!(!html.contains("<script>"), "script tags should be escaped");
+        assert!(html.contains("&gt;"), "angle brackets should be escaped");
+
+        // JavaScript URL (should be escaped, not executed)
+        let md = r#"[click](javascript:alert(1))"#;
+        let (html, _) = markdown_to_html(md);
+        assert!(html.contains("href=\"javascript:alert(1)\""));
+    }
+
+    #[test]
+    fn test_link_title_escaping() {
+        let md = r#"[text](url "title with \"quotes\"")"#;
+        let (html, _) = markdown_to_html(md);
+        assert!(html.contains("&quot;"), "quotes in title should be escaped");
+    }
+
+    #[test]
+    fn test_image_src_escaping() {
+        // Quote-breaking attack in image src
+        let md = r#"![alt]("><script>alert(1)</script>)"#;
+        let (html, _) = markdown_to_html(md);
+        assert!(!html.contains("<script>"), "script tags should be escaped");
+        assert!(
+            html.contains("&quot;") || html.contains("&gt;"),
+            "special chars in src should be escaped"
+        );
     }
 }
