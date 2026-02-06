@@ -90,6 +90,23 @@ content/
 
 Full documentation at [sukr.io](https://sukr.io) (built with sukr).
 
+## Security
+
+sukr processes content at **build time only** — there is no runtime attack surface.
+
+**Trust Model:**
+
+- **Untrusted:** Markdown content, frontmatter, third-party templates
+- **Trusted:** The compiled sukr binary, Tree-sitter grammars
+
+**Security Implications:**
+
+- Raw HTML in Markdown is passed through (CommonMark spec). If your content comes from untrusted sources, review it before building.
+- URLs in links and images are escaped to prevent attribute injection.
+- Templates use Tera's auto-escaping for variables; `{{ content | safe }}` is used intentionally for pre-rendered HTML.
+
+For deployment-time security (CSP headers, etc.), see the [Security docs](https://sukr.io/security.html).
+
 ## License
 
 MIT
