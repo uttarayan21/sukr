@@ -2,7 +2,7 @@
 
 /// Escape HTML special characters for safe embedding in HTML content.
 ///
-/// Escapes: `&`, `<`, `>`, `"`
+/// Escapes: `&`, `<`, `>`, `"`, `'`
 pub fn html_escape(s: &str) -> String {
     let mut result = String::with_capacity(s.len());
     html_escape_into(&mut result, s);
@@ -19,6 +19,7 @@ pub fn html_escape_into(out: &mut String, s: &str) {
             '<' => out.push_str("&lt;"),
             '>' => out.push_str("&gt;"),
             '"' => out.push_str("&quot;"),
+            '\'' => out.push_str("&#39;"),
             _ => out.push(c),
         }
     }
@@ -44,6 +45,7 @@ mod tests {
         assert_eq!(html_escape("Hello & World"), "Hello &amp; World");
         assert_eq!(html_escape("<tag>"), "&lt;tag&gt;");
         assert_eq!(html_escape("\"quoted\""), "&quot;quoted&quot;");
+        assert_eq!(html_escape("it's"), "it&#39;s");
     }
 
     #[test]
