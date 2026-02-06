@@ -1,39 +1,17 @@
 # Project Agent Configuration
 
-## Predicates
+## Predicate System
 
 This project uses [predicate](https://github.com/nrdxp/predicate) for agent configuration.
 
-**Installation Location:** `.agent/predicates/`
-
-The agent MUST read and adhere to the global engineering ruleset and any active fragments:
-
-```
-.agent/
-├── predicates/
-│   ├── engineering.md         # Base engineering ruleset (always active)
-│   └── fragments/             # Context-specific extensions (opt-in)
-│       ├── rust.md            # Rust idioms
-│       ├── depmap.md          # DepMap MCP tools
-│       ├── integral.md        # Holistic problem-solving
-│       └── personalization.md # User preferences
-└── workflows/
-    └── ...                    # Task-specific workflows
-```
+> [!IMPORTANT]
+> You **must** review [.agent/PREDICATE.md](.agent/PREDICATE.md) and follow its instructions before beginning work.
 
 **Active Fragments:**
 
 - Rust idioms (`.agent/predicates/fragments/rust.md`)
 - DepMap MCP tools (`.agent/predicates/fragments/depmap.md`)
-- Integral problem-solving (`.agent/predicates/fragments/integral.md`)
 - Personalization (`.agent/predicates/fragments/personalization.md`)
-
-**Available Workflows:**
-
-- `/ai-audit` — Audit code for AI-generated patterns
-- `/core` — C.O.R.E. structured interaction protocol
-- `/predicate` — Re-read global rules; combats context drift
-- `/humanizer` — Remove AI writing patterns from text
 
 ---
 
