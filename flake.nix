@@ -62,10 +62,6 @@
         src = ./.;
         buildInputs = [toolchain];
         cargoHash = "sha256-mPm8Pe4W9TyDuuXLHWqA9DzbkTyR1kkfLZ3SmEt+dUc=";
-        # installPhase = ''
-        #   mkdir -p $out/bin
-        #   cp target/release/sukr $out/bin/
-        # '';
       };
       default = sukr;
     });
