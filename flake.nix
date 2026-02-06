@@ -60,7 +60,6 @@
         pname = cargoToml.package.name;
         version = cargoToml.package.version;
         src = ./.;
-        buildInputs = [toolchain];
         cargoHash = "sha256-mPm8Pe4W9TyDuuXLHWqA9DzbkTyR1kkfLZ3SmEt+dUc=";
       };
       default = sukr;
