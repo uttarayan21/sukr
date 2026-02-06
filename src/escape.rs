@@ -25,6 +25,27 @@ pub fn html_escape_into(out: &mut String, s: &str) {
     }
 }
 
+/// Escape characters for safe embedding in code blocks.
+///
+/// Only escapes `&`, `<`, `>` — quotes are safe inside `<pre><code>`.
+pub fn code_escape(s: &str) -> String {
+    let mut result = String::with_capacity(s.len());
+    code_escape_into(&mut result, s);
+    result
+}
+
+/// Escape code block characters into an existing string.
+pub fn code_escape_into(out: &mut String, s: &str) {
+    for c in s.chars() {
+        match c {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            _ => out.push(c),
+        }
+    }
+}
+
 /// Escape XML special characters for safe embedding in XML documents.
 ///
 /// Escapes: `&`, `<`, `>`, `"`, `'`

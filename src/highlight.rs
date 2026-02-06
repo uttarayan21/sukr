@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use std::sync::LazyLock;
 use std::time::Duration;
 
-use crate::escape::{html_escape, html_escape_into};
+use crate::escape::{code_escape, code_escape_into};
 use ropey::RopeSlice;
 use tree_house::highlighter::{Highlight, HighlightEvent, Highlighter};
 use tree_house::{
@@ -565,14 +565,14 @@ pub fn highlight_code(lang: Language, source: &str) -> String {
 
     // Check if we have a config for this language
     if !loader.configs.contains_key(&lang) {
-        return html_escape(source);
+        return code_escape(source);
     }
 
     // Parse the syntax tree
     let rope = RopeSlice::from(source);
     let syntax = match Syntax::new(rope, lang.to_th_language(), Duration::from_secs(5), loader) {
         Ok(s) => s,
-        Err(_) => return html_escape(source),
+        Err(_) => return code_escape(source),
     };
 
     // Create highlighter and render
@@ -595,7 +595,7 @@ fn render_html<'a>(source: &str, mut highlighter: Highlighter<'a, 'a, SukrLoader
             let end = next_pos as usize;
             if start < source.len() {
                 let text = &source[start..end.min(source.len())];
-                html_escape_into(&mut html, text);
+                code_escape_into(&mut html, text);
             }
         }
 
@@ -672,7 +672,7 @@ mod tests {
 
     #[test]
     fn test_html_escape() {
-        let escaped = html_escape("<script>alert('xss')</script>");
+        let escaped = code_escape("<script>alert('xss')</script>");
         assert!(!escaped.contains('<'));
         assert!(escaped.contains("&lt;"));
     }

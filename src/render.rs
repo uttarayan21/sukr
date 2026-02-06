@@ -1,6 +1,6 @@
 //! Markdown to HTML rendering via pulldown-cmark with syntax highlighting.
 
-use crate::escape::html_escape;
+use crate::escape::{code_escape, html_escape};
 use crate::highlight::{highlight_code, Language};
 use pulldown_cmark::{CodeBlockKind, Event, HeadingLevel, Options, Parser, Tag, TagEnd};
 use serde::Serialize;
@@ -30,6 +30,7 @@ pub fn markdown_to_html(markdown: &str) -> (String, Vec<Anchor>) {
     let mut anchors = Vec::new();
     let mut code_block_lang: Option<String> = None;
     let mut code_block_content = String::new();
+    let mut in_code_block = false;
 
     // Image alt text accumulation state
     let mut image_alt_content: Option<String> = None;
@@ -54,9 +55,10 @@ pub fn markdown_to_html(markdown: &str) -> (String, Vec<Anchor>) {
                     }
                     CodeBlockKind::Indented => None,
                 };
+                in_code_block = true;
                 code_block_content.clear();
             }
-            Event::Text(text) if code_block_lang.is_some() => {
+            Event::Text(text) if in_code_block => {
                 // Accumulate code block content
                 code_block_content.push_str(&text);
             }
@@ -100,13 +102,14 @@ pub fn markdown_to_html(markdown: &str) -> (String, Vec<Anchor>) {
                         } else {
                             html_output.push('>');
                         }
-                        html_output.push_str(&html_escape(&code_block_content));
+                        html_output.push_str(&code_escape(&code_block_content));
                     }
 
                     html_output.push_str("</code></pre>\n");
                 }
 
                 code_block_lang = None;
+                in_code_block = false;
                 code_block_content.clear();
             }
             Event::Text(text) if heading_level.is_some() => {
@@ -283,12 +286,12 @@ fn start_tag_to_html(tag: &Tag) -> String {
             dest_url, title, ..
         } => {
             if title.is_empty() {
-                format!("<a href=\"{}\">", html_escape(&dest_url))
+                format!("<a href=\"{}\">", html_escape(dest_url))
             } else {
                 format!(
                     "<a href=\"{}\" title=\"{}\">",
-                    html_escape(&dest_url),
-                    html_escape(&title)
+                    html_escape(dest_url),
+                    html_escape(title)
                 )
             }
         }
@@ -494,6 +497,26 @@ Config details.
         assert!(
             html.contains("&quot;") || html.contains("&gt;"),
             "special chars in src should be escaped"
+        );
+    }
+
+    #[test]
+    fn test_unlabeled_code_block_preserves_quotes() {
+        // Code block without language specifier should preserve quotes
+        let md = "```\nContent-Security-Policy: default-src 'self';\n```";
+        let (html, _) = markdown_to_html(md);
+
+        // Should be inside <pre><code>
+        assert!(html.contains("<pre><code>"), "should have code block");
+        // Quotes should NOT be escaped (only <, >, & need escaping in code)
+        assert!(
+            html.contains("'self'"),
+            "single quotes should be preserved in code blocks"
+        );
+        // Should NOT have escaped quotes
+        assert!(
+            !html.contains("&#39;"),
+            "quotes should not be HTML-escaped in code blocks"
         );
     }
 }
